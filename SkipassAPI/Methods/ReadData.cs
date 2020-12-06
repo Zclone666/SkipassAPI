@@ -8,10 +8,10 @@ namespace SkipassAPI.Methods
 {
     public static class ReadData
     {
-        public static Models.GetBalanceOut GetBalance(Models.GetBalanceIn data)
+        public static Models.GetBalanceOut GetBalance(Models.GetBalanceIn data, string SQLPath=Const.Paths.SQLPath)
         {
             Models.GetBalanceOut ret = new Models.GetBalanceOut();
-            using (SqlConnection conn = new SqlConnection(Const.Paths.SQLPath))
+            using (SqlConnection conn = new SqlConnection(SQLPath))
             {
                 conn.Open();
                 string code = data.key;
@@ -44,10 +44,10 @@ namespace SkipassAPI.Methods
             return ret;
         }
 
-        public static List<Models.GetBalanceOut> CheckKey(Models.GetBalanceIn data)
+        public static List<Models.GetBalanceOut> CheckKey(Models.GetBalanceIn data, string SQLPath = Const.Paths.SQLPath)
         {
             List<Models.GetBalanceOut> ret = new List<Models.GetBalanceOut>();
-            using (SqlConnection conn = new SqlConnection(Const.Paths.SQLPath))
+            using (SqlConnection conn = new SqlConnection(SQLPath))
             {
                 conn.Open();
                 string code = '%'+data.key+'%';

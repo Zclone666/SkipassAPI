@@ -11,28 +11,31 @@ namespace SkipassAPI.Methods
         public static bool Test()
         {
             bool ret = false;
-
-            using (SqlConnection conn = new SqlConnection(Const.Paths.SQLPath))
+            try
             {
-                conn.Open();
-                using(SqlCommand cmd=new SqlCommand(@"SELECT AccountStockId FROM [Ski2Db_2015-2016].[dbo].[AccountStock_test]", conn))
+                using (SqlConnection conn = new SqlConnection(Const.Paths.SQLPath))
                 {
-                    try
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand(@"SELECT AccountStockId FROM [Ski2Db_2015-2016].[dbo].[AccountStock_test]", conn))
                     {
-                        string res="";
-                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        try
                         {
-                            while (reader.Read())
+                            string res = "";
+                            using (SqlDataReader reader = cmd.ExecuteReader())
                             {
-                                res += reader[0].ToString();
+                                while (reader.Read())
+                                {
+                                    res += reader[0].ToString();
+                                }
                             }
+                            if (res != "") ret = true;
                         }
-                        if (res!="") ret = true;
-                    }catch(Exception e) { return ret; }
+                        catch (Exception e) { return ret; }
+                    }
+                    conn.Close();
                 }
-                conn.Close();
             }
-
+            catch (Exception e) { }
             return ret;
         }
     }
