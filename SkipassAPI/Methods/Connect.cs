@@ -13,10 +13,10 @@ namespace SkipassAPI.Methods
             bool ret = false;
             try
             {
-                using (SqlConnection conn = new SqlConnection(Const.Paths.SQLPath))
+                using (SqlConnection conn = new SqlConnection(Const.Paths.LocalSQLPath))
                 {
                     conn.Open();
-                    using (SqlCommand cmd = new SqlCommand(@"SELECT AccountStockId FROM [Ski2Db_2015-2016].[dbo].[AccountStock_test]", conn))
+                    using (SqlCommand cmd = new SqlCommand(@"SELECT top 1 AccountStockId FROM [Ski2Db_2015-2016].[dbo].[AccountStock_test]", conn))
                     {
                         try
                         {

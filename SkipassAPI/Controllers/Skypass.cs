@@ -23,26 +23,35 @@ namespace SkipassAPI.Controllers
             List<Models.GetBalanceOut> ret = new List<Models.GetBalanceOut>();
             try
             {
-                tst = Methods.Connect.Test();
-
-                if (tst)
-                {
-                    ret = Methods.ReadData.CheckKey(data);
-                    JsonResult res = new JsonResult(ret);
-                    return res;
-                }
-                else
-                {
-                    ret = Methods.ReadData.CheckKey(data, Const.Paths.LocalSQLPath);
-                    JsonResult res = new JsonResult(ret);
-                    return res;
-                }
-            }
-            catch (Exception e) 
-            {
-                ret.Add(new Models.GetBalanceOut() { ErrorMessage = e.Message });
+                ret = Methods.ReadData.CheckKey(data);
                 JsonResult res = new JsonResult(ret);
                 return res;
+            }
+            catch (Exception e)
+            {
+                try
+                {
+                    tst = Methods.Connect.Test();
+
+                    if (tst)
+                    {
+                        ret = Methods.ReadData.CheckKey(data);
+                        JsonResult res = new JsonResult(ret);
+                        return res;
+                    }
+                    else
+                    {
+                        ret = Methods.ReadData.CheckKey(data, Const.Paths.SQLPath);
+                        JsonResult res = new JsonResult(ret);
+                        return res;
+                    }
+                }
+                catch (Exception e2)
+                {
+                    ret.Add(new Models.GetBalanceOut() { ErrorMessage = e2.Message });
+                    JsonResult res = new JsonResult(ret);
+                    return res;
+                }
             }
         }
 
@@ -51,26 +60,38 @@ namespace SkipassAPI.Controllers
         {
             bool tst;
             Models.GetBalanceOut ret = new Models.GetBalanceOut();
+            JsonResult res;
             try
             {
-                tst = Methods.Connect.Test();
-
-                if (tst)
-                {
-                    ret = Methods.ReadData.GetBalance(data);
-                    JsonResult res = new JsonResult(ret);
-                    return res;
-                }
-                else
-                {
-                    ret = Methods.ReadData.GetBalance(data, Const.Paths.LocalSQLPath);
-                    JsonResult res = new JsonResult(ret);
-                    return res;
-                }
+                ret = Methods.ReadData.GetBalance(data);
+                res = new JsonResult(ret);
+                return res;
             }
             catch (Exception e)
             {
-                JsonResult res = new JsonResult(new Models.GetBalanceOut() { ErrorMessage = e.Message });
+                try
+                {
+                    tst = Methods.Connect.Test();
+                    
+                    if (tst)
+                    {
+                        ret = Methods.ReadData.GetBalance(data);
+                        res = new JsonResult(ret);
+                        return res;
+                    }
+                    else
+                    {
+                        ret = Methods.ReadData.GetBalance(data, Const.Paths.SQLPath);
+                        res = new JsonResult(ret);
+                        return res;
+                    }
+                }
+                catch (Exception e2)
+                {
+                    res = new JsonResult(new Models.GetBalanceOut() { ErrorMessage = e2.Message });
+                    return res;
+                }
+                res = new JsonResult(new Models.GetBalanceOut() { ErrorMessage = e.Message });
                 return res;
             }
         }
