@@ -50,7 +50,7 @@ namespace SkipassAPI.Methods
             using (SqlConnection conn = new SqlConnection(SQLPath))
             {
                 conn.Open();
-                string code = '%'+data.key+'%';
+                string code = data.key;
                 using (SqlCommand cmd = new SqlCommand(Const.SQLCommands.GetKeyPass, conn))
                 {
                     cmd.Parameters.Add("@key", System.Data.SqlDbType.VarChar);

@@ -57,5 +57,8 @@ FROM  (select Amount,code,Name,CategoryId,SuperAccountId,StockType,AccountStockI
     from PersonalInfo pri
     inner join AccountStock acs on pri.SuperAccountId=acs.SuperAccountId
     where code=@key";
+
+        public const string SaveHistory = @"insert into internet_payments
+values(@key,@add_sum,@successed,@email,@phone,@payment_id,@payment_system,@payment_source, @comment)";
     }
 }

@@ -99,40 +99,90 @@ namespace SkipassAPI.Controllers
         [HttpPost("/AddSum")]
         public JsonResult AddSum(Models.FillBalanceIn data)
         {
-            bool tst;
-            Models.GetBalanceOut ret = new Models.GetBalanceOut();
             try
             {
-                ret = Methods.WriteData.FillBalance(data);
-                JsonResult res = new JsonResult(ret);
-                return res;
-            }
-            catch (Exception e)
-            {
-                try
+                if (data.successed==1)
                 {
-                    tst = Methods.Connect.Test();
-
-                    if (tst)
+                    bool tst;
+                    Models.GetBalanceOut ret = new Models.GetBalanceOut();
+                    try
                     {
                         ret = Methods.WriteData.FillBalance(data);
+                        Methods.WriteData.LogHistory(data);
                         JsonResult res = new JsonResult(ret);
                         return res;
                     }
-                    else
+                    catch (Exception e)
                     {
-                        ret = Methods.WriteData.FillBalance(data, Const.Paths.SQLPath);
+                        try
+                        {
+                            tst = Methods.Connect.Test();
+
+                            if (tst)
+                            {
+                                ret = Methods.WriteData.FillBalance(data);
+                                Methods.WriteData.LogHistory(data);
+                                JsonResult res = new JsonResult(ret);
+                                return res;
+                            }
+                            else
+                            {
+                                ret = Methods.WriteData.FillBalance(data, Const.Paths.SQLPath);
+                                Methods.WriteData.LogHistory(data, Const.Paths.SQLPath);
+                                JsonResult res = new JsonResult(ret);
+                                return res;
+                            }
+                        }
+                        catch (Exception e2)
+                        {
+                            JsonResult res = new JsonResult(new Models.GetBalanceOut() { ErrorMessage = e2.Message });
+                            return res;
+                        }
+                    }
+                }
+                else
+                {
+                    bool tst;
+                    Models.GetBalanceOut ret = new Models.GetBalanceOut();
+                    try
+                    {
+                        ret = Methods.WriteData.LogHistory(data);
                         JsonResult res = new JsonResult(ret);
                         return res;
                     }
+                    catch (Exception e)
+                    {
+                        try
+                        {
+                            tst = Methods.Connect.Test();
+
+                            if (tst)
+                            {
+                                ret = Methods.WriteData.LogHistory(data);
+                                JsonResult res = new JsonResult(ret);
+                                return res;
+                            }
+                            else
+                            {
+                                ret = Methods.WriteData.LogHistory(data, Const.Paths.SQLPath);
+                                JsonResult res = new JsonResult(ret);
+                                return res;
+                            }
+                        }
+                        catch (Exception e2)
+                        {
+                            JsonResult res = new JsonResult(new Models.GetBalanceOut() { ErrorMessage = e2.Message });
+                            return res;
+                        }
+                    }
                 }
-                catch (Exception e2)
-                {
-                    JsonResult res = new JsonResult(new Models.GetBalanceOut() { ErrorMessage = e2.Message });
-                    return res;
-                }
+            }catch(Exception er)
+            {
+                JsonResult res = new JsonResult(new Models.GetBalanceOut() { ErrorMessage = er.Message });
+                return res;
             }
         }
+
 
         [HttpPost("/Ping")]
         public string Ping()
