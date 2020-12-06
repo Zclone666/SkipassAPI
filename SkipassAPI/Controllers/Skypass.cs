@@ -33,5 +33,11 @@ namespace SkipassAPI.Controllers
             JsonResult res = new JsonResult(ret);
             return res;
         }
+
+        [HttpPost("/Ping")]
+        public string Ping()
+        {
+            return "Pong!";
+        }
     }
 }
