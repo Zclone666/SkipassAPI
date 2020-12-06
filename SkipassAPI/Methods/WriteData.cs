@@ -150,10 +150,10 @@ namespace SkipassAPI.Methods
                     cmd.Parameters["@successed"].Value = data.successed;
                     cmd.Parameters["@email"].Value = data.email;
                     cmd.Parameters["@phone"].Value = data.phone;
-                    cmd.Parameters["@payment_id"].Value = data.payment_id;
-                    cmd.Parameters["@payment_source"].Value = data.payment_source;
-                    cmd.Parameters["@payment_system"].Value = data.payment_system;
-                    cmd.Parameters["@comment"].Value = data.comment;
+                    cmd.Parameters["@payment_id"].Value = (data.payment_id is null)?"":data.payment_id;
+                    cmd.Parameters["@payment_source"].Value = (data.payment_source is null)?"":data.payment_source;
+                    cmd.Parameters["@payment_system"].Value = (data.payment_system is null)?"":data.payment_system;
+                    cmd.Parameters["@comment"].Value = (data.comment is null)?"":data.comment;
                     try
                     {
                         cmd.ExecuteNonQuery();
