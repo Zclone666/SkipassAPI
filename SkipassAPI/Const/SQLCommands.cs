@@ -36,6 +36,26 @@ FROM  (select Amount,code,Name,CategoryId,SuperAccountId,StockType,AccountStockI
 		) MasterTransaction ON f1.SuperAccountId = MasterTransaction.SuperAccountTo
 	WHERE
 	f1.StockType = 21 and SuperAccount.Type = 0 and f1.Code=@key";
-        public const string GetKeyPass = @"SELECT Code FROM [Ski2Db_2015-2016].[dbo].[AccountStock] WHERE code like @key";
+
+        public const string GetKeyPass = @"SELECT Code FROM [AccountStock] WHERE code like @key";
+
+        public const string UpdateBalance = @"update [AccountStock]
+    set Amount=@add_sum+(select Amount from AccountStock where StockType=1 and SuperAccountId=(select SuperAccountId from AccountStock where StockType=21 and Code=@key))
+    where StockType=1 and SuperAccountId=(select SuperAccountId from AccountStock where StockType=21 and Code=@key)
+    select Amount from AccountStock where StockType = 1 and SuperAccountId=(select SuperAccountId from AccountStock where StockType=21 and Code=@key)";
+
+        public const string UpdateEmail = @"update pri set Email=@email, Phone=@phone
+    from PersonalInfo pri
+    inner join AccountStock acs on pri.SuperAccountId=acs.SuperAccountId
+    where code=@key
+    select Email, Phone
+    from PersonalInfo pri
+    inner join AccountStock acs on pri.SuperAccountId=acs.SuperAccountId
+    where code=@key";
+
+        public const string CheckEmail = @"select Email, Phone
+    from PersonalInfo pri
+    inner join AccountStock acs on pri.SuperAccountId=acs.SuperAccountId
+    where code=@key";
     }
 }

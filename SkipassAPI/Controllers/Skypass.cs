@@ -24,7 +24,7 @@ namespace SkipassAPI.Controllers
             try
             {
                 ret = Methods.ReadData.CheckKey(data);
-                JsonResult res = new JsonResult(ret);
+                JsonResult res = new JsonResult((ret.Count>0)?new Models.KeyFound() { Founded = true }: new Models.KeyFound() { Founded = false });
                 return res;
             }
             catch (Exception e)
@@ -36,13 +36,13 @@ namespace SkipassAPI.Controllers
                     if (tst)
                     {
                         ret = Methods.ReadData.CheckKey(data);
-                        JsonResult res = new JsonResult(ret);
+                        JsonResult res = new JsonResult((ret.Count > 0) ? new Models.KeyFound() { Founded = true } : new Models.KeyFound() { Founded = false });
                         return res;
                     }
                     else
                     {
                         ret = Methods.ReadData.CheckKey(data, Const.Paths.SQLPath);
-                        JsonResult res = new JsonResult(ret);
+                        JsonResult res = new JsonResult((ret.Count > 0) ? new Models.KeyFound() { Founded = true } : new Models.KeyFound() { Founded = false });
                         return res;
                     }
                 }
@@ -93,6 +93,44 @@ namespace SkipassAPI.Controllers
                 }
                 res = new JsonResult(new Models.GetBalanceOut() { ErrorMessage = e.Message });
                 return res;
+            }
+        }
+
+        [HttpPost("/AddSum")]
+        public JsonResult AddSum(Models.FillBalanceIn data)
+        {
+            bool tst;
+            Models.GetBalanceOut ret = new Models.GetBalanceOut();
+            try
+            {
+                ret = Methods.WriteData.FillBalance(data);
+                JsonResult res = new JsonResult(ret);
+                return res;
+            }
+            catch (Exception e)
+            {
+                try
+                {
+                    tst = Methods.Connect.Test();
+
+                    if (tst)
+                    {
+                        ret = Methods.WriteData.FillBalance(data);
+                        JsonResult res = new JsonResult(ret);
+                        return res;
+                    }
+                    else
+                    {
+                        ret = Methods.WriteData.FillBalance(data, Const.Paths.SQLPath);
+                        JsonResult res = new JsonResult(ret);
+                        return res;
+                    }
+                }
+                catch (Exception e2)
+                {
+                    JsonResult res = new JsonResult(new Models.GetBalanceOut() { ErrorMessage = e2.Message });
+                    return res;
+                }
             }
         }
 
