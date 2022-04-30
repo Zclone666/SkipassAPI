@@ -8,8 +8,9 @@ namespace SkipassAPI.Methods
 {
     public static class WriteData
     {
-        public static Models.GetBalanceOut FillBalance(Models.FillBalanceIn data, string SQLPath = Const.Paths.LocalSQLPath)
+        public static Models.GetBalanceOut FillBalance(Models.FillBalanceIn data, string SQLPath = null)
         {
+            if (SQLPath is null) SQLPath = Const.Paths.LocalSQLPath;
             Models.GetBalanceOut ret = new Models.GetBalanceOut();
             using (SqlConnection conn = new SqlConnection(SQLPath))
             {
@@ -56,8 +57,9 @@ namespace SkipassAPI.Methods
         }
 
 
-        private static Models.FillBalanceIn IsThereEmailPhone(Models.FillBalanceIn data, string SQLPath = Const.Paths.LocalSQLPath)
+        private static Models.FillBalanceIn IsThereEmailPhone(Models.FillBalanceIn data, string SQLPath = null)
         {
+            if (SQLPath is null) SQLPath = Const.Paths.LocalSQLPath;
             Models.FillBalanceIn ret = new Models.FillBalanceIn();
             using (SqlConnection conn = new SqlConnection(SQLPath))
             {
@@ -90,8 +92,9 @@ namespace SkipassAPI.Methods
         }
 
 
-        private static Models.FillBalanceIn UpdateEmail(Models.FillBalanceIn data, string SQLPath = Const.Paths.LocalSQLPath)
+        private static Models.FillBalanceIn UpdateEmail(Models.FillBalanceIn data, string SQLPath = null)
         {
+            if (SQLPath is null) SQLPath = Const.Paths.LocalSQLPath;
             Models.FillBalanceIn ret = new Models.FillBalanceIn();
             using (SqlConnection conn = new SqlConnection(SQLPath))
             {
@@ -127,8 +130,9 @@ namespace SkipassAPI.Methods
             return ret;
         }
 
-        public static Models.GetBalanceOut LogHistory(Models.FillBalanceIn data, string SQLPath = Const.Paths.LocalSQLPath)
+        public static Models.GetBalanceOut LogHistory(Models.FillBalanceIn data, string SQLPath = null)
         {
+            if (SQLPath is null) SQLPath = Const.Paths.LocalSQLPath;
             Models.GetBalanceOut ret = new Models.GetBalanceOut();
             using (SqlConnection conn = new SqlConnection(SQLPath))
             {

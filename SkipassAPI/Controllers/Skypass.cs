@@ -55,6 +55,23 @@ namespace SkipassAPI.Controllers
             }
         }
 
+        [HttpPost("/GetServices")]
+        public JsonResult GetServices(Models.GetBalanceIn data)
+        {
+            JsonResult res;
+            try
+            {
+                res = new JsonResult(Methods.ReadData.GetAllServices(data));
+            }
+            catch(Exception e)
+            {
+                res = new JsonResult(e.Message);
+            }
+
+
+            return res;
+        }
+
         [HttpPost("/GetBalance")]
         public JsonResult GetBalance(Models.GetBalanceIn data)
         {

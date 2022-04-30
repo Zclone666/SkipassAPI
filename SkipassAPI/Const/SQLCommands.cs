@@ -43,6 +43,13 @@ FROM  (select Amount,code,Name,CategoryId,SuperAccountId,StockType,AccountStockI
     set Amount=@add_sum+(select Amount from AccountStock where StockType=1 and SuperAccountId=(select SuperAccountId from AccountStock where StockType=21 and Code=@key))
     where StockType=1 and SuperAccountId=(select SuperAccountId from AccountStock where StockType=21 and Code=@key)
     select Amount from AccountStock where StockType = 1 and SuperAccountId=(select SuperAccountId from AccountStock where StockType=21 and Code=@key)";
+        public const string AddAccountStock = @"insert into [AccountStock] ([AccountStockId],[SuperAccountId],[StockType],[IsActive],[CategoryId],[Amount],[Start],[End],[IsTimePatternApplied],[PassesDone]) 
+    values (((select MAX(AccountStock) from AccountStock)+1, (select SuperAccountId from AccountStock where StockType=21 and Code=@key), 6, 1, @date_start, @date_end, 1, 0)";
+
+        public const string GetAllServices = @"SELECT [CategoryId]
+      ,[StockType]
+      ,[Name]
+  FROM [Fwp].[dbo].[Category]";
 
         public const string UpdateEmail = @"update pri set Email=@email, Phone=@phone
     from PersonalInfo pri

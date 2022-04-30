@@ -8,5 +8,6 @@ namespace SkipassAPI.Models
     public class Alarm
     {
         public string ErrorMessage { get; set; }
+        public string authkey { get; set; }
     }
 }
