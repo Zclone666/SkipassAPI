@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -25,6 +26,17 @@ namespace SkipassAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSwaggerGen();
+            services.AddSwaggerGen(options => { options.CustomSchemaIds(type => type.ToString()); options.EnableAnnotations(); });
+
+            var directory = Directory.GetCurrentDirectory();
+            if (!string.IsNullOrEmpty(directory))
+            {
+                var descriptions = Directory.EnumerateFiles(directory, "*.xml", SearchOption.AllDirectories).ToList();
+                if (descriptions != null) { foreach (var item in descriptions) { services.AddSwaggerGen(options => { options.IncludeXmlComments(item); }); } }
+            }
+
+
             services.AddControllers();
         }
 
@@ -36,7 +48,10 @@ namespace SkipassAPI
                 app.UseDeveloperExceptionPage();
             }
 
-       //     app.UseHttpsRedirection();
+            //     app.UseHttpsRedirection();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(setupAction => { setupAction.RoutePrefix = String.Empty; setupAction.SwaggerEndpoint("/swagger/v1/swagger.json", "SkiPass API v1.2"); });
 
             app.UseRouting();
 

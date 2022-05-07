@@ -38,13 +38,18 @@ FROM  (select Amount,code,Name,CategoryId,SuperAccountId,StockType,AccountStockI
 	f1.StockType = 21 and SuperAccount.Type = 0 and f1.Code=@key";
 
         public const string GetKeyPass = @"SELECT Code FROM [AccountStock] WHERE code like @key";
+        public const string GetKeyPassAndName = @"SELECT a.Code, i.LastName, i.FirstName, i.SecondName FROM Fwp.dbo.AccountStock as a inner join Fwp.dbo.PersonalInfo as i on i.SuperAccountId=a.SuperAccountId WHERE a.Code like @key";
 
         public const string UpdateBalance = @"update [AccountStock]
     set Amount=@add_sum+(select Amount from AccountStock where StockType=1 and SuperAccountId=(select SuperAccountId from AccountStock where StockType=21 and Code=@key))
     where StockType=1 and SuperAccountId=(select SuperAccountId from AccountStock where StockType=21 and Code=@key)
     select Amount from AccountStock where StockType = 1 and SuperAccountId=(select SuperAccountId from AccountStock where StockType=21 and Code=@key)";
-        public const string AddAccountStock = @"insert into [AccountStock] ([AccountStockId],[SuperAccountId],[StockType],[IsActive],[CategoryId],[Amount],[Start],[End],[IsTimePatternApplied],[PassesDone]) 
-    values (((select MAX(AccountStock) from AccountStock)+1, (select SuperAccountId from AccountStock where StockType=21 and Code=@key), 6, 1, @date_start, @date_end, 1, 0)";
+        public const string AddAccountStock = @"insert into Fwp.dbo.AccountStock (AccountStockId,SuperAccountId,StockType,IsActive,CategoryId,Amount,Start,[End],IsTimePatternApplied,PassesDone) 
+    values (((select MAX(AccountStockId) from Fwp.dbo.AccountStock)+1), (select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key), 6, 1, @catId, @amount, @date_start, @date_end, 1, 0);
+    insert into Fwp.dbo.MasterTransaction (TransTime,SuperAccountFrom,UserId,ServicePointId,ServerTime,IsOffline,CheckDetailId,Machine,SecSubjectId)
+    values (GETDATE(),3,'CASHDESK2@admin',3,GETDATE(),0,157862,'CASHDESK2@Bars.CashDesk',12);
+    insert into Fwp.dbo.TransactionDetail (MasterTransactionId,StockInfoIdFrom,StockInfoIdTo,Amount,SuperAccountIdFrom, SuperAccountIdTo)
+    values ((select MAX(MasterTransactionId) from Fwp.dbo.MasterTransaction),(select MAX(AccountStockId) from Fwp.dbo.AccountStock),(select MAX(AccountStockId) from Fwp.dbo.AccountStock),@amount,3,(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key));";
 
         public const string GetAllServices = @"SELECT [CategoryId]
       ,[StockType]

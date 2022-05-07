@@ -48,13 +48,61 @@ namespace SkipassAPI.Controllers
                 }
                 catch (Exception e2)
                 {
-                    ret.Add(new Models.GetBalanceOut() { ErrorMessage = e2.Message });
+                    ret.Add(new Models.GetBalanceOut() { errors = new Models.Error() { code=500, message = e2.Message } });
                     JsonResult res = new JsonResult(ret);
                     return res;
                 }
             }
         }
 
+        [HttpPost("/CheckKeyGetUserInfo")]
+        public JsonResult CheckKeyGetUserInfo(Models.GetBalanceIn data)
+        {
+            bool tst;
+            List<Models.User> ret = new List<Models.User>();
+            try
+            {
+                ret = Methods.ReadData.CheckUserRetName(data);
+                JsonResult res = new JsonResult(ret);
+                return res;
+            }
+            catch (Exception e)
+            {
+                try
+                {
+                    tst = Methods.Connect.Test();
+
+                    if (tst)
+                    {
+                        ret = Methods.ReadData.CheckUserRetName(data);
+                        JsonResult res = new JsonResult((ret.Count > 0) ? new Models.KeyFound() { Founded = true } : new Models.KeyFound() { Founded = false });
+                        return res;
+                    }
+                    else
+                    {
+                        ret = Methods.ReadData.CheckUserRetName(data, Const.Paths.SQLPath);
+                        JsonResult res = new JsonResult((ret.Count > 0) ? new Models.KeyFound() { Founded = true } : new Models.KeyFound() { Founded = false });
+                        return res;
+                    }
+                }
+                catch (Exception e2)
+                {
+                    ret.Add(new Models.User() { errors = new Models.Error() { code = 400, message = e2.Message } });
+                    JsonResult res = new JsonResult(ret);
+                    return res;
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Получение списка услуг. Ключ авторизации = mn5tq8ZTJSmLA6FJ
+        /// </summary>
+        /// <remarks>
+        /// Получение списка услуг. Ключ авторизации = mn5tq8ZTJSmLA6FJ
+        /// </remarks>
+        /// <param name="data"></param>
+        /// <returns></returns>
         [HttpPost("/GetServices")]
         public JsonResult GetServices(Models.GetBalanceIn data)
         {
@@ -72,6 +120,7 @@ namespace SkipassAPI.Controllers
             return res;
         }
 
+        
         [HttpPost("/GetBalance")]
         public JsonResult GetBalance(Models.GetBalanceIn data)
         {
@@ -105,13 +154,14 @@ namespace SkipassAPI.Controllers
                 }
                 catch (Exception e2)
                 {
-                    res = new JsonResult(new Models.GetBalanceOut() { ErrorMessage = e2.Message });
+                    res = new JsonResult(new Models.GetBalanceOut() { errors = new Models.Error() { code = 500, message = e2.Message } });
                     return res;
                 }
-                res = new JsonResult(new Models.GetBalanceOut() { ErrorMessage = e.Message });
+                res = new JsonResult(new Models.GetBalanceOut() { errors = new Models.Error() { code = 400, message = e.Message } });
                 return res;
             }
         }
+
 
         [HttpPost("/AddSum")]
         public JsonResult AddSum(Models.FillBalanceIn data)
@@ -152,7 +202,7 @@ namespace SkipassAPI.Controllers
                         }
                         catch (Exception e2)
                         {
-                            JsonResult res = new JsonResult(new Models.GetBalanceOut() { ErrorMessage = e2.Message });
+                            JsonResult res = new JsonResult(new Models.GetBalanceOut() { errors = new Models.Error() { code = 400, message = e2.Message } });
                             return res;
                         }
                     }
@@ -188,15 +238,37 @@ namespace SkipassAPI.Controllers
                         }
                         catch (Exception e2)
                         {
-                            JsonResult res = new JsonResult(new Models.GetBalanceOut() { ErrorMessage = e2.Message });
+                            JsonResult res = new JsonResult(new Models.GetBalanceOut() { errors = new Models.Error() { code = 400, message = e2.Message } });
                             return res;
                         }
                     }
                 }
             }catch(Exception er)
             {
-                JsonResult res = new JsonResult(new Models.GetBalanceOut() { ErrorMessage = er.Message });
+                JsonResult res = new JsonResult(new Models.GetBalanceOut() { errors = new Models.Error() { code = 500, message = er.Message } });
                 return res;
+            }
+        }
+
+        /// <summary>
+        /// Добавление услуг на номер скипасса. Ключ авторизации = mn5tq8ZTJSmLA6FJ
+        /// </summary>
+        /// <remarks>
+        /// Получение списка услуг. Ключ авторизации = mn5tq8ZTJSmLA6FJ
+        /// </remarks>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        [HttpPost("/AddServiceToUser")]
+        public JsonResult AddService(Models.AddService data)
+        {
+            try
+            {
+                JsonResult res = new JsonResult(Methods.WriteData.AddServices(data));
+                return res;
+            }
+            catch(Exception e)
+            {
+                return new JsonResult(new Models.AddServiceResp() { errors = new Models.Error() { code = 400, message = e.Message }, isSuccess = false });
             }
         }
 

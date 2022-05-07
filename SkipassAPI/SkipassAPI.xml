@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SkipassAPI</name>
+    </assembly>
+    <members>
+        <member name="M:SkipassAPI.Controllers.Skypass.GetServices(SkipassAPI.Models.GetBalanceIn)">
+            <summary>
+            Получение списка услуг. Ключ авторизации = mn5tq8ZTJSmLA6FJ
+            </summary>
+            <remarks>
+            Получение списка услуг. Ключ авторизации = mn5tq8ZTJSmLA6FJ
+            </remarks>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SkipassAPI.Controllers.Skypass.AddService(SkipassAPI.Models.AddService)">
+            <summary>
+            Добавление услуг на номер скипасса. Ключ авторизации = mn5tq8ZTJSmLA6FJ
+            </summary>
+            <remarks>
+            Получение списка услуг. Ключ авторизации = mn5tq8ZTJSmLA6FJ
+            </remarks>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="P:SkipassAPI.Models.Alarm.authkey">
+            <summary>
+            Ключ авторизации = mn5tq8ZTJSmLA6FJ
+            </summary>
+        </member>
+        <member name="P:SkipassAPI.Models.FillBalanceIn.key">
+            <summary>
+            ID скипасса или браслета
+            </summary>
+        </member>
+        <member name="P:SkipassAPI.Models.GetBalanceIn.key">
+            <summary>
+            ID скипасса или браслета
+            </summary>
+        </member>
+        <member name="P:SkipassAPI.Models.GetBalanceOut.key">
+            <summary>
+            ID скипасса или браслета
+            </summary>
+        </member>
+        <member name="P:SkipassAPI.Models.AddService.key">
+            <summary>
+            ID скипасса или браслета
+            </summary>
+        </member>
+    </members>
+</doc>

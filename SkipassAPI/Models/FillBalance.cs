@@ -7,6 +7,9 @@ namespace SkipassAPI.Models
 {
     public class FillBalanceIn : Alarm
     {
+        /// <summary>
+        /// ID скипасса или браслета
+        /// </summary>
         public string key { get; set; }
         public decimal add_sum { get; set; }
         public string email { get; set; }
