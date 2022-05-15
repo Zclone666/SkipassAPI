@@ -7,7 +7,7 @@ namespace SkipassAPI.Models
 {
     public class Alarm
     {
-        public Error errors { get; set; }
+        public Error errors { get; set; } = new Error();
         /// <summary>
         /// Ключ авторизации = mn5tq8ZTJSmLA6FJ
         /// </summary>
