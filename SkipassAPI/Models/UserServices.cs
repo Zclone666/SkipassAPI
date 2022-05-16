@@ -13,7 +13,7 @@ namespace SkipassAPI.Models
 
     public class UserServicesResp:Alarm
     {
-        public List<UserServices> services { get; set; }
+        public List<UserServices> services { get; set; } = new List<UserServices>();
     }
 
     public class UserServices 

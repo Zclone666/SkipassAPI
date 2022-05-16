@@ -27,7 +27,7 @@ namespace SkipassAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSwaggerGen();
-            services.AddSwaggerGen(options => { options.CustomSchemaIds(type => type.ToString()); options.EnableAnnotations(); });
+            services.AddSwaggerGen(options => { options.CustomSchemaIds(type => type.ToString()); options.EnableAnnotations();});
 
             var directory = Directory.GetCurrentDirectory();
             if (!string.IsNullOrEmpty(directory))

@@ -70,7 +70,19 @@ namespace SkipassAPI.Controllers
         /// </summary>
         /// <remarks>
         ///  Ключ авторизации = mn5tq8ZTJSmLA6FJ
+        ///  
+        ///  Пример запроса:
+        ///   {
+        ///     "authkey": "mn5tq8ZTJSmLA6FJ",
+        ///     "key": "09809809"
+        ///   }
         /// </remarks>
+        /// <example>
+        ///   {
+        ///     "authkey": "mn5tq8ZTJSmLA6FJ",
+        ///     "key": "09809809"
+        ///   }
+        /// </example>
         /// <param name="data"></param>
         /// <returns></returns>
         [HttpPost("/CheckKeyGetUserInfo")]
@@ -117,7 +129,17 @@ namespace SkipassAPI.Controllers
         /// </summary>
         /// <remarks>
         ///  Получение списка услуг. Ключ авторизации = mn5tq8ZTJSmLA6FJ
+        ///  
+        ///  Пример запроса:
+        ///   {
+        ///     "authkey": "mn5tq8ZTJSmLA6FJ"
+        ///   }
         /// </remarks>
+        /// <example>
+        ///   {
+        ///     "authkey": "mn5tq8ZTJSmLA6FJ"
+        ///   }
+        /// </example>
         /// <param name="data"></param>
         /// <returns></returns>
         [HttpPost("/GetServices")]
@@ -140,7 +162,17 @@ namespace SkipassAPI.Controllers
         /// </summary>
         /// <remarks>
         ///  Получение списка услуг с ценами. Ключ авторизации = mn5tq8ZTJSmLA6FJ
+        ///  
+        ///  Пример запроса:
+        ///   {
+        ///     "authkey": "mn5tq8ZTJSmLA6FJ"
+        ///   }
         /// </remarks>
+        /// <example>
+        ///   {
+        ///     "authkey": "mn5tq8ZTJSmLA6FJ"
+        ///   }
+        /// </example>
         /// <param name="data"></param>
         /// <returns></returns>
         [HttpPost("/GetServicesWPrice")]
@@ -163,7 +195,17 @@ namespace SkipassAPI.Controllers
         /// </summary>
         /// <remarks>
         ///  Получение списка АБОНЕМЕНТОВ (без цен). Ключ авторизации = mn5tq8ZTJSmLA6FJ
+        ///  
+        ///  Пример запроса:
+        ///   {
+        ///     "authkey": "mn5tq8ZTJSmLA6FJ"
+        ///   }
         /// </remarks>
+        /// <example>
+        ///   {
+        ///     "authkey": "mn5tq8ZTJSmLA6FJ"
+        ///   }
+        /// </example>
         /// <param name="data"></param>
         /// <returns></returns>
         [HttpPost("/GetAbonements")]
@@ -186,7 +228,17 @@ namespace SkipassAPI.Controllers
         /// </summary>
         /// <remarks>
         ///  Получение списка АБОНЕМЕНТОВ с ценами. Ключ авторизации = mn5tq8ZTJSmLA6FJ
+        ///  
+        ///  Пример запроса:
+        ///   {
+        ///     "authkey": "mn5tq8ZTJSmLA6FJ"
+        ///   }
         /// </remarks>
+        /// <example>
+        ///   {
+        ///     "authkey": "mn5tq8ZTJSmLA6FJ"
+        ///   }
+        /// </example>
         /// <param name="data"></param>
         /// <returns></returns>
         [HttpPost("/GetAbonWPrice")]
@@ -205,11 +257,23 @@ namespace SkipassAPI.Controllers
         }
 
         /// <summary>
-        /// Получение списка услуг (абонементов)- пользователя по номеру скипасса (key)
+        /// Получение списка услуг (абонементов)- пользователя по номеру скипасса (key) -testing
         /// </summary>
         /// <remarks>
         ///  Получение списка услуг (абонементов)- пользователя по номеру скипасса (key). Ключ авторизации = mn5tq8ZTJSmLA6FJ
+        ///  
+        ///  Пример запроса:
+        ///   {
+        ///     "authkey": "mn5tq8ZTJSmLA6FJ",
+        ///     "key": "09809809"
+        ///   }
         /// </remarks>
+        /// <example>
+        ///   {
+        ///     "authkey": "mn5tq8ZTJSmLA6FJ",
+        ///     "key": "09809809"
+        ///   }
+        /// </example>
         /// <param name="data"></param>
         /// <returns></returns>
         [HttpPost("/GetUsersAbonements")]
@@ -228,11 +292,23 @@ namespace SkipassAPI.Controllers
         }
 
         /// <summary>
-        /// Получение списка услуг (ВСЕХ)- пользователя по номеру скипасса (key)
+        /// Получение списка услуг (ВСЕХ)- пользователя по номеру скипасса (key) - testing
         /// </summary>
         /// <remarks>
-        ///  Получение списка услуг (абонементов)- пользователя по номеру скипасса (key). Ключ авторизации = mn5tq8ZTJSmLA6FJ
+        ///  Получение списка услуг (ВСЕХ)- пользователя по номеру скипасса (key). Ключ авторизации = mn5tq8ZTJSmLA6FJ
+        ///  
+        ///  Пример запроса:
+        ///   {
+        ///     "authkey": "mn5tq8ZTJSmLA6FJ",
+        ///     "key": "09809809"
+        ///   }
         /// </remarks>
+        /// <example>
+        ///   {
+        ///      "authkey": "mn5tq8ZTJSmLA6FJ",
+        ///      "key": "09809809"
+        ///   }
+        /// </example>
         /// <param name="data"></param>
         /// <returns></returns>
         [HttpPost("/GetUsersServices")]
@@ -393,8 +469,28 @@ namespace SkipassAPI.Controllers
         /// Добавление услуг на номер скипасса. Ключ авторизации = mn5tq8ZTJSmLA6FJ
         /// </summary>
         /// <remarks>
-        /// Получение списка услуг. Ключ авторизации = mn5tq8ZTJSmLA6FJ
+        ///  Добавление услуг на номер скипасса. Ключ авторизации = mn5tq8ZTJSmLA6FJ
+        ///  
+        ///  Пример запроса:
+        ///   {
+        ///      "authkey": "mn5tq8ZTJSmLA6FJ",
+        ///      "categoryID": 361778,
+        ///      "amount": 2,
+        ///      "key": "09809809",
+        ///      "date_start": 1655009807,
+        ///      "date_end": 0
+        ///    }
         /// </remarks>
+        /// <example>
+        ///   {
+        ///      "authkey": "mn5tq8ZTJSmLA6FJ",
+        ///      "categoryID": 361778,
+        ///      "amount": 2,
+        ///      "key": "09809809",
+        ///      "date_start": 1655009807,
+        ///      "date_end": 0
+        ///    }
+        /// </example>
         /// <param name="data"></param>
         /// <returns></returns>
         [HttpPost("/AddServiceToUser")]
@@ -412,7 +508,7 @@ namespace SkipassAPI.Controllers
         }
 
         /// <summary>
-        /// Отмена услуг на скипассе
+        /// Отмена услуг на скипассе (ТЕСТОВАЯ ВЕРСИЯ!!!!)
         /// </summary>
         /// <remarks>
         ///  Отмена услуг на скипассе. Обязательные поля:
