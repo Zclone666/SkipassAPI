@@ -5,7 +5,17 @@ using System.Threading.Tasks;
 
 namespace SkipassAPI.Models
 {
-    public class Services:Alarm
+    public class ListServ : Alarm
+    {
+        public List<Services> services { get; set; } = new List<Services>();
+    }
+
+    public class ListServWPrice : Alarm
+    {
+        public List<ServicesWPrice> services { get; set; } = new List<ServicesWPrice>();
+    }
+
+    public class Services
     {
         public int categoryID { get; set; }
         public int stockType { get; set; }

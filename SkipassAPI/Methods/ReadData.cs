@@ -45,12 +45,12 @@ namespace SkipassAPI.Methods
             return ret;
         }
 
-        public static List<Models.Services> GetAllServices(Models.GetBalanceIn data, string SQLPath = null)
+        public static Models.ListServ GetAllServices(Models.GetBalanceIn data, string SQLPath = null)
         {
             try
             {
                 if (SQLPath is null) SQLPath = Const.Paths.LocalSQLPath;
-                List<Models.Services> ret = new List<Models.Services>();
+                Models.ListServ ret = new Models.ListServ();
                 if (Methods.CheckAuthkey.CheckAuthKey(data.authkey))
                 {
                     using (SqlConnection conn = new SqlConnection(SQLPath))
@@ -68,7 +68,7 @@ namespace SkipassAPI.Methods
                                         r.categoryID = int.TryParse(reader[0].ToString(), out int CatId) ? CatId : 0;
                                         r.stockType = int.TryParse(reader[1].ToString(), out int StockType) ? StockType : 0;
                                         r.name = reader[2].ToString();
-                                        ret.Add(r);
+                                        ret.services.Add(r);
                                     }
                                 }
                                 return ret;
@@ -76,8 +76,7 @@ namespace SkipassAPI.Methods
                             }
                             catch (Exception e)
                             {
-                                Models.Services r = new Models.Services() { errors = new Models.Error() { code = 400, message = e.Message } };
-                                ret.Add(r);
+                                Models.ListServ r = new Models.ListServ() { errors = new Models.Error() { code = 400, message = e.Message } };
                                 return ret;
                             }
                         }
@@ -85,22 +84,22 @@ namespace SkipassAPI.Methods
                 }
                 else
                 {
-                    ret.Add(new Models.Services() { errors = new Models.Error() { code = 401, message = "Unauthorized" } });
+                    ret=new Models.ListServ() { errors = new Models.Error() { code = 401, message = "Unauthorized" } };
                     return ret;
                 }
             }
             catch(Exception e)
             {
-                return new List<Models.Services>() { new Models.Services() { errors = new Models.Error() { code = 400, message = e.Message } } };
+                return new Models.ListServ() { errors = new Models.Error() { code = 400, message = e.Message } };
             }
         }
 
-        public static List<Models.Services> GetAbonements(Models.GetBalanceIn data, string SQLPath = null)
+        public static Models.ListServ GetAbonements(Models.GetBalanceIn data, string SQLPath = null)
         {
             try
             {
                 if (SQLPath is null) SQLPath = Const.Paths.LocalSQLPath;
-                List<Models.Services> ret = new List<Models.Services>();
+                Models.ListServ ret = new Models.ListServ();
                 if (Methods.CheckAuthkey.CheckAuthKey(data.authkey))
                 {
                     using (SqlConnection conn = new SqlConnection(SQLPath))
@@ -118,7 +117,7 @@ namespace SkipassAPI.Methods
                                         r.categoryID = int.TryParse(reader[0].ToString(), out int CatId) ? CatId : 0;
                                         r.stockType = int.TryParse(reader[1].ToString(), out int StockType) ? StockType : 0;
                                         r.name = reader[2].ToString();
-                                        ret.Add(r);
+                                        ret.services.Add(r);
                                     }
                                 }
                                 return ret;
@@ -126,30 +125,29 @@ namespace SkipassAPI.Methods
                             }
                             catch (Exception e)
                             {
-                                Models.Services r = new Models.Services() { errors = new Models.Error() { code = 400, message = e.Message } };
-                                ret.Add(r);
-                                return ret;
+                                Models.ListServ r = new Models.ListServ() { errors = new Models.Error() { code = 400, message = e.Message } };
+                                return r;
                             }
                         }
                     }
                 }
                 else
                 {
-                    ret.Add(new Models.Services() { errors = new Models.Error() { code = 401, message = "Unauthorized" } });
+                    ret=new Models.ListServ() { errors = new Models.Error() { code = 401, message = "Unauthorized" } };
                     return ret;
                 }
             }
             catch (Exception e)
             {
-                return new List<Models.Services>() { new Models.Services() { errors = new Models.Error() { code = 400, message = e.Message } } };
+                return new Models.ListServ() { errors = new Models.Error() { code = 400, message = e.Message } };
             }
         }
-        public static List<Models.ServicesWPrice> GetAllServicesWPrice(Models.GetBalanceIn data, string SQLPath = null)
+        public static Models.ListServWPrice GetAllServicesWPrice(Models.GetBalanceIn data, string SQLPath = null)
         {
             try
             {
                 if (SQLPath is null) SQLPath = Const.Paths.LocalSQLPath;
-                List<Models.ServicesWPrice> ret = new List<Models.ServicesWPrice>();
+                Models.ListServWPrice ret = new Models.ListServWPrice();
                 if (Methods.CheckAuthkey.CheckAuthKey(data.authkey))
                 {
                     using (SqlConnection conn = new SqlConnection(SQLPath))
@@ -169,7 +167,7 @@ namespace SkipassAPI.Methods
                                         r.name = reader[2].ToString();
                                         r.price= double.TryParse(reader[3].ToString(), out double Price) ? Price : 0;
                                         r.dayT = reader[4].ToString();
-                                        ret.Add(r);
+                                        ret.services.Add(r);
                                     }
                                 }
                                 return ret;
@@ -177,31 +175,30 @@ namespace SkipassAPI.Methods
                             }
                             catch (Exception e)
                             {
-                                Models.ServicesWPrice r = new Models.ServicesWPrice() { errors = new Models.Error() { code = 400, message = e.Message } };
-                                ret.Add(r);
-                                return ret;
+                                Models.ListServWPrice r = new Models.ListServWPrice() { errors = new Models.Error() { code = 400, message = e.Message } };
+                                return r;
                             }
                         }
                     }
                 }
                 else
                 {
-                    ret.Add(new Models.ServicesWPrice() { errors = new Models.Error() { code = 401, message = "Unauthorized" } });
+                    ret=new Models.ListServWPrice() { errors = new Models.Error() { code = 401, message = "Unauthorized" } };
                     return ret;
                 }
             }
             catch (Exception e)
             {
-                return new List<Models.ServicesWPrice>() { new Models.ServicesWPrice() { errors = new Models.Error() { code = 400, message = e.Message } } };
+                return new Models.ListServWPrice(){ errors = new Models.Error() { code = 400, message = e.Message } };
             }
         }
 
-        public static List<Models.ServicesWPrice> GetAbonWPrice(Models.GetBalanceIn data, string SQLPath = null)
+        public static Models.ListServWPrice GetAbonWPrice(Models.GetBalanceIn data, string SQLPath = null)
         {
             try
             {
                 if (SQLPath is null) SQLPath = Const.Paths.LocalSQLPath;
-                List<Models.ServicesWPrice> ret = new List<Models.ServicesWPrice>();
+                Models.ListServWPrice ret = new Models.ListServWPrice();
                 if (Methods.CheckAuthkey.CheckAuthKey(data.authkey))
                 {
                     using (SqlConnection conn = new SqlConnection(SQLPath))
@@ -221,7 +218,7 @@ namespace SkipassAPI.Methods
                                         r.name = reader[2].ToString();
                                         r.price = double.TryParse(reader[3].ToString(), out double Price) ? Price : 0;
                                         r.dayT = reader[4].ToString();
-                                        ret.Add(r);
+                                        ret.services.Add(r);
                                     }
                                 }
                                 return ret;
@@ -229,22 +226,21 @@ namespace SkipassAPI.Methods
                             }
                             catch (Exception e)
                             {
-                                Models.ServicesWPrice r = new Models.ServicesWPrice() { errors = new Models.Error() { code = 400, message = e.Message } };
-                                ret.Add(r);
-                                return ret;
+                                Models.ListServWPrice r = new Models.ListServWPrice() { errors = new Models.Error() { code = 400, message = e.Message } };
+                                return r;
                             }
                         }
                     }
                 }
                 else
                 {
-                    ret.Add(new Models.ServicesWPrice() { errors = new Models.Error() { code = 401, message = "Unauthorized" } });
+                    ret=new Models.ListServWPrice() { errors = new Models.Error() { code = 401, message = "Unauthorized" } };
                     return ret;
                 }
             }
             catch (Exception e)
             {
-                return new List<Models.ServicesWPrice>() { new Models.ServicesWPrice() { errors = new Models.Error() { code = 400, message = e.Message } } };
+                return new Models.ListServWPrice() { errors = new Models.Error() { code = 400, message = e.Message } };
             }
         }
 

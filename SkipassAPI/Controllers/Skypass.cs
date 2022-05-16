@@ -94,7 +94,8 @@ namespace SkipassAPI.Controllers
             }
         }
 
-
+        ///
+        /// 
         /// <summary>
         /// Получение списка услуг. Ключ авторизации = mn5tq8ZTJSmLA6FJ
         /// </summary>
@@ -103,6 +104,7 @@ namespace SkipassAPI.Controllers
         /// </remarks>
         /// <param name="data"></param>
         /// <returns></returns>
+        /// 
         [HttpPost("/GetServices")]
         public JsonResult GetServices(Models.GetBalanceIn data)
         {
@@ -120,6 +122,8 @@ namespace SkipassAPI.Controllers
             return res;
         }
 
+        ///
+        /// 
         /// <summary>
         /// Получение списка услуг с ценами. Ключ авторизации = mn5tq8ZTJSmLA6FJ
         /// </summary>
@@ -128,6 +132,7 @@ namespace SkipassAPI.Controllers
         /// </remarks>
         /// <param name="data"></param>
         /// <returns></returns>
+        /// 
         [HttpPost("/GetServicesWPrice")]
         public JsonResult GetServicesWPrice(Models.GetBalanceIn data)
         {
@@ -145,7 +150,8 @@ namespace SkipassAPI.Controllers
             return res;
         }
 
-
+        ///
+        /// 
         /// <summary>
         /// Получение списка АБОНЕМЕНТОВ (без цен). Ключ авторизации = mn5tq8ZTJSmLA6FJ
         /// </summary>
@@ -154,6 +160,7 @@ namespace SkipassAPI.Controllers
         /// </remarks>
         /// <param name="data"></param>
         /// <returns></returns>
+        /// 
         [HttpPost("/GetAbonements")]
         public JsonResult GetAbonements(Models.GetBalanceIn data)
         {
@@ -171,6 +178,8 @@ namespace SkipassAPI.Controllers
             return res;
         }
 
+        ///
+        /// 
         /// <summary>
         /// Получение списка АБОНЕМЕНТОВ с ценами. Ключ авторизации = mn5tq8ZTJSmLA6FJ
         /// </summary>
@@ -179,6 +188,7 @@ namespace SkipassAPI.Controllers
         /// </remarks>
         /// <param name="data"></param>
         /// <returns></returns>
+        /// 
         [HttpPost("/GetAbonWPrice")]
         public JsonResult GetAbonWPrice(Models.GetBalanceIn data)
         {
