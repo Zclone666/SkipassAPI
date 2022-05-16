@@ -77,6 +77,16 @@
             <param name="data"></param>
             <returns></returns>
         </member>
+        <member name="M:SkipassAPI.Controllers.Skypass.GetUserSrv(SkipassAPI.Models.UserServicesReq)">
+            <summary>
+            Получение списка услуг (ВСЕХ)- пользователя по номеру скипасса (key)
+            </summary>
+            <remarks>
+             Получение списка услуг (абонементов)- пользователя по номеру скипасса (key). Ключ авторизации = mn5tq8ZTJSmLA6FJ
+            </remarks>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
         <member name="M:SkipassAPI.Controllers.Skypass.GetBalance(SkipassAPI.Models.GetBalanceIn)">
             <summary>
             Получение баланса юзера (зима)
@@ -150,6 +160,14 @@
         <member name="M:SkipassAPI.Methods.ReadData.GetUserAbon(SkipassAPI.Models.UserServicesReq,System.String)">
             <summary>
             Получение списка абонементов юзера
+            </summary>
+            <param name="data"></param>
+            <param name="SQLPath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SkipassAPI.Methods.ReadData.GetUserServices(SkipassAPI.Models.UserServicesReq,System.String)">
+            <summary>
+            Получение услуг юзера (всех, кроме покупки скипасса)
             </summary>
             <param name="data"></param>
             <param name="SQLPath"></param>
