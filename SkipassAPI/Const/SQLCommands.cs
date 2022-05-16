@@ -45,9 +45,14 @@ FROM  (select Amount,code,Name,CategoryId,SuperAccountId,StockType,AccountStockI
     where StockType=1 and SuperAccountId=(select SuperAccountId from AccountStock where StockType=21 and Code=@key)
     select Amount from AccountStock where StockType = 1 and SuperAccountId=(select SuperAccountId from AccountStock where StockType=21 and Code=@key)";
         public const string AddAccountStock = @"insert into Fwp.dbo.AccountStock (AccountStockId,SuperAccountId,StockType,IsActive,CategoryId,Amount,Start,[End],IsTimePatternApplied,PassesDone) 
-    values (((select MAX(AccountStockId) from Fwp.dbo.AccountStock)+1), (select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key), (SELECT [StockType] FROM [Fwp].[dbo].[Category] where CategoryId=@catId)-1, 1, @catId, @amount, @date_start, @date_end, (case when (SELECT top 1 [TimePatternId] FROM [Fwp].[dbo].[Category] where CategoryId=361778) is null then 1 else 0 end), 0);
+    values (((select MAX(AccountStockId) from Fwp.dbo.AccountStock)+1), (select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key), (SELECT [StockType] FROM [Fwp].[dbo].[Category] where CategoryId=@catId)-1, 1, @catId, @amount, @date_start, @date_end, (case when (SELECT top 1 [TimePatternId] FROM [Fwp].[dbo].[Category] where CategoryId=@catId) is null then 1 else 0 end), 0);
     insert into Fwp.dbo.MasterTransaction (TransTime,SuperAccountFrom,UserId,ServicePointId,ServerTime,IsOffline,CheckDetailId,Machine,SecSubjectId)
     values (GETDATE(),3,'CASHDESK2@admin',3,GETDATE(),0,157862,'CASHDESK2@Bars.CashDesk',12);
+    insert into Fwp.dbo.TransactionDetail (MasterTransactionId,StockInfoIdFrom,StockInfoIdTo,Amount,SuperAccountIdFrom, SuperAccountIdTo)
+    values ((select MAX(MasterTransactionId) from Fwp.dbo.MasterTransaction),360757,(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key)+1,(SELECT TOP 1 [Amount] FROM [Fwp].[dbo].[TariffExtension]
+        inner join [Fwp].[dbo].[Tariff] on [Fwp].[dbo].[Tariff].TariffId=[Fwp].[dbo].TariffExtension.TariffId  
+        where [Type]=2 and Allow=1 and Dependence=1 and PayRightType=2 and TargetGoodId=361778)
+    ,3,(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key));
     insert into Fwp.dbo.TransactionDetail (MasterTransactionId,StockInfoIdFrom,StockInfoIdTo,Amount,SuperAccountIdFrom, SuperAccountIdTo)
     values ((select MAX(MasterTransactionId) from Fwp.dbo.MasterTransaction),(select MAX(AccountStockId) from Fwp.dbo.AccountStock),(select MAX(AccountStockId) from Fwp.dbo.AccountStock),@amount,3,(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key));
     UPDATE [Fwp].[dbo].[SuperAccount] SET [LastTransactionTime] = GETDATE() WHERE [SuperAccountId] = 3;
@@ -81,7 +86,7 @@ where StockType=4";
   where Fwp.dbo.AccountStock.SuperAccountId=(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key) and Fwp.dbo.AccountStock.StockType<>21";
 
         public const string CancelUserSrv = @"update [Fwp].[dbo].[AccountStock] set Fwp.dbo.AccountStock.SuperAccountId=3 
-where Fwp.dbo.AccountStock.SuperAccountId=(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key) and Fwp.dbo.AccountStock.CategoryId=@catId andFwp.dbo.AccountStock.Start=@date_start";
+where Fwp.dbo.AccountStock.SuperAccountId=(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key) and Fwp.dbo.AccountStock.CategoryId=@catId and Fwp.dbo.AccountStock.Start=@date_start";
 
         public const string UpdateEmail = @"update pri set Email=@email, Phone=@phone
     from PersonalInfo pri
