@@ -60,6 +60,18 @@ FROM  (select Amount,code,Name,CategoryId,SuperAccountId,StockType,AccountStockI
       ,[Name]
   FROM [Fwp].[dbo].[Category]";
 
+        public const string GetAbon = @"SELECT [CategoryId]
+      ,[StockType]
+      ,[Name]
+  FROM [Fwp].[dbo].[Category] where StockType=4";
+
+        public const string GetAllServicesWPrice = @"SELECT [CategoryId],[StockType],[Name],[Amount],[DayT] FROM [Fwp].[dbo].[Category]
+inner join (SELECT [Name] as DayT,[Amount], TargetGoodId FROM [Fwp].[dbo].[TariffExtension] inner join Fwp.dbo.DayType on Fwp.dbo.DayType.DayTypeId=Fwp.dbo.TariffExtension.DayTypeId inner join [Fwp].[dbo].[Tariff] on  [Fwp].[dbo].[Tariff].TariffId=[Fwp].[dbo].[TariffExtension].TariffId where Type=2 and Allow=1 and Dependence=1 and PayRightType=2) as tt on tt.TargetGoodId=CategoryId";
+
+        public const string GetAllAbonWPrice = @"SELECT [CategoryId],[StockType],[Name],[Amount],[DayT] FROM [Fwp].[dbo].[Category]
+inner join (SELECT [Name] as DayT,[Amount], TargetGoodId FROM [Fwp].[dbo].[TariffExtension] inner join Fwp.dbo.DayType on Fwp.dbo.DayType.DayTypeId=Fwp.dbo.TariffExtension.DayTypeId inner join [Fwp].[dbo].[Tariff] on  [Fwp].[dbo].[Tariff].TariffId=[Fwp].[dbo].[TariffExtension].TariffId where Type=2 and Allow=1 and Dependence=1 and PayRightType=2) as tt on tt.TargetGoodId=CategoryId
+where StockType=4";
+
         public const string UpdateEmail = @"update pri set Email=@email, Phone=@phone
     from PersonalInfo pri
     inner join AccountStock acs on pri.SuperAccountId=acs.SuperAccountId

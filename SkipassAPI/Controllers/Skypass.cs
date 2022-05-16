@@ -120,7 +120,82 @@ namespace SkipassAPI.Controllers
             return res;
         }
 
-        
+        /// <summary>
+        /// Получение списка услуг с ценами. Ключ авторизации = mn5tq8ZTJSmLA6FJ
+        /// </summary>
+        /// <remarks>
+        /// Получение списка услуг с ценами. Ключ авторизации = mn5tq8ZTJSmLA6FJ
+        /// </remarks>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        [HttpPost("/GetServicesWPrice")]
+        public JsonResult GetServicesWPrice(Models.GetBalanceIn data)
+        {
+            JsonResult res;
+            try
+            {
+                res = new JsonResult(Methods.ReadData.GetAllServicesWPrice(data));
+            }
+            catch (Exception e)
+            {
+                res = new JsonResult(e.Message);
+            }
+
+
+            return res;
+        }
+
+
+        /// <summary>
+        /// Получение списка АБОНЕМЕНТОВ (без цен). Ключ авторизации = mn5tq8ZTJSmLA6FJ
+        /// </summary>
+        /// <remarks>
+        /// Получение списка АБОНЕМЕНТОВ (без цен). Ключ авторизации = mn5tq8ZTJSmLA6FJ
+        /// </remarks>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        [HttpPost("/GetAbonements")]
+        public JsonResult GetAbonements(Models.GetBalanceIn data)
+        {
+            JsonResult res;
+            try
+            {
+                res = new JsonResult(Methods.ReadData.GetAbonements(data));
+            }
+            catch (Exception e)
+            {
+                res = new JsonResult(e.Message);
+            }
+
+
+            return res;
+        }
+
+        /// <summary>
+        /// Получение списка АБОНЕМЕНТОВ с ценами. Ключ авторизации = mn5tq8ZTJSmLA6FJ
+        /// </summary>
+        /// <remarks>
+        /// Получение списка АБОНЕМЕНТОВ с ценами. Ключ авторизации = mn5tq8ZTJSmLA6FJ
+        /// </remarks>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        [HttpPost("/GetAbonWPrice")]
+        public JsonResult GetAbonWPrice(Models.GetBalanceIn data)
+        {
+            JsonResult res;
+            try
+            {
+                res = new JsonResult(Methods.ReadData.GetAbonWPrice(data));
+            }
+            catch (Exception e)
+            {
+                res = new JsonResult(e.Message);
+            }
+
+
+            return res;
+        }
+
         [HttpPost("/GetBalance")]
         public JsonResult GetBalance(Models.GetBalanceIn data)
         {

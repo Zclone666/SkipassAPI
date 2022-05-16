@@ -95,6 +95,159 @@ namespace SkipassAPI.Methods
             }
         }
 
+        public static List<Models.Services> GetAbonements(Models.GetBalanceIn data, string SQLPath = null)
+        {
+            try
+            {
+                if (SQLPath is null) SQLPath = Const.Paths.LocalSQLPath;
+                List<Models.Services> ret = new List<Models.Services>();
+                if (Methods.CheckAuthkey.CheckAuthKey(data.authkey))
+                {
+                    using (SqlConnection conn = new SqlConnection(SQLPath))
+                    {
+                        conn.Open();
+                        using (SqlCommand cmd = new SqlCommand(Const.SQLCommands.GetAbon, conn))
+                        {
+                            try
+                            {
+                                using (SqlDataReader reader = cmd.ExecuteReader())
+                                {
+                                    while (reader.Read())
+                                    {
+                                        Models.Services r = new Models.Services();
+                                        r.categoryID = int.TryParse(reader[0].ToString(), out int CatId) ? CatId : 0;
+                                        r.stockType = int.TryParse(reader[1].ToString(), out int StockType) ? StockType : 0;
+                                        r.name = reader[2].ToString();
+                                        ret.Add(r);
+                                    }
+                                }
+                                return ret;
+                                // if (res != "") ret = true;
+                            }
+                            catch (Exception e)
+                            {
+                                Models.Services r = new Models.Services() { errors = new Models.Error() { code = 400, message = e.Message } };
+                                ret.Add(r);
+                                return ret;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    ret.Add(new Models.Services() { errors = new Models.Error() { code = 401, message = "Unauthorized" } });
+                    return ret;
+                }
+            }
+            catch (Exception e)
+            {
+                return new List<Models.Services>() { new Models.Services() { errors = new Models.Error() { code = 400, message = e.Message } } };
+            }
+        }
+        public static List<Models.ServicesWPrice> GetAllServicesWPrice(Models.GetBalanceIn data, string SQLPath = null)
+        {
+            try
+            {
+                if (SQLPath is null) SQLPath = Const.Paths.LocalSQLPath;
+                List<Models.ServicesWPrice> ret = new List<Models.ServicesWPrice>();
+                if (Methods.CheckAuthkey.CheckAuthKey(data.authkey))
+                {
+                    using (SqlConnection conn = new SqlConnection(SQLPath))
+                    {
+                        conn.Open();
+                        using (SqlCommand cmd = new SqlCommand(Const.SQLCommands.GetAllServicesWPrice, conn))
+                        {
+                            try
+                            {
+                                using (SqlDataReader reader = cmd.ExecuteReader())
+                                {
+                                    while (reader.Read())
+                                    {
+                                        Models.ServicesWPrice r = new Models.ServicesWPrice();
+                                        r.categoryID = int.TryParse(reader[0].ToString(), out int CatId) ? CatId : 0;
+                                        r.stockType = int.TryParse(reader[1].ToString(), out int StockType) ? StockType : 0;
+                                        r.name = reader[2].ToString();
+                                        r.price= int.TryParse(reader[3].ToString(), out int Price) ? Price : 0;
+                                        r.dayT = reader[4].ToString();
+                                        ret.Add(r);
+                                    }
+                                }
+                                return ret;
+                                // if (res != "") ret = true;
+                            }
+                            catch (Exception e)
+                            {
+                                Models.ServicesWPrice r = new Models.ServicesWPrice() { errors = new Models.Error() { code = 400, message = e.Message } };
+                                ret.Add(r);
+                                return ret;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    ret.Add(new Models.ServicesWPrice() { errors = new Models.Error() { code = 401, message = "Unauthorized" } });
+                    return ret;
+                }
+            }
+            catch (Exception e)
+            {
+                return new List<Models.ServicesWPrice>() { new Models.ServicesWPrice() { errors = new Models.Error() { code = 400, message = e.Message } } };
+            }
+        }
+
+        public static List<Models.ServicesWPrice> GetAbonWPrice(Models.GetBalanceIn data, string SQLPath = null)
+        {
+            try
+            {
+                if (SQLPath is null) SQLPath = Const.Paths.LocalSQLPath;
+                List<Models.ServicesWPrice> ret = new List<Models.ServicesWPrice>();
+                if (Methods.CheckAuthkey.CheckAuthKey(data.authkey))
+                {
+                    using (SqlConnection conn = new SqlConnection(SQLPath))
+                    {
+                        conn.Open();
+                        using (SqlCommand cmd = new SqlCommand(Const.SQLCommands.GetAllAbonWPrice, conn))
+                        {
+                            try
+                            {
+                                using (SqlDataReader reader = cmd.ExecuteReader())
+                                {
+                                    while (reader.Read())
+                                    {
+                                        Models.ServicesWPrice r = new Models.ServicesWPrice();
+                                        r.categoryID = int.TryParse(reader[0].ToString(), out int CatId) ? CatId : 0;
+                                        r.stockType = int.TryParse(reader[1].ToString(), out int StockType) ? StockType : 0;
+                                        r.name = reader[2].ToString();
+                                        r.price = int.TryParse(reader[3].ToString(), out int Price) ? Price : 0;
+                                        r.dayT = reader[4].ToString();
+                                        ret.Add(r);
+                                    }
+                                }
+                                return ret;
+                                // if (res != "") ret = true;
+                            }
+                            catch (Exception e)
+                            {
+                                Models.ServicesWPrice r = new Models.ServicesWPrice() { errors = new Models.Error() { code = 400, message = e.Message } };
+                                ret.Add(r);
+                                return ret;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    ret.Add(new Models.ServicesWPrice() { errors = new Models.Error() { code = 401, message = "Unauthorized" } });
+                    return ret;
+                }
+            }
+            catch (Exception e)
+            {
+                return new List<Models.ServicesWPrice>() { new Models.ServicesWPrice() { errors = new Models.Error() { code = 400, message = e.Message } } };
+            }
+        }
+
         public static List<Models.GetBalanceOut> CheckKey(Models.GetBalanceIn data, string SQLPath = null)
         {
             if (SQLPath is null) SQLPath = Const.Paths.LocalSQLPath;

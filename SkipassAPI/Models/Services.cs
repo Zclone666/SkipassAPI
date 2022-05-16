@@ -29,4 +29,10 @@ namespace SkipassAPI.Models
         public AddService service { get; set; }
         public bool isSuccess { get; set; }
     }
+
+    public class ServicesWPrice : Services
+    {
+        public double price { get; set; }
+        public string dayT { get; set; }
+    }
 }
