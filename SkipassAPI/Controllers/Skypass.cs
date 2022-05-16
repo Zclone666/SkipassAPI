@@ -10,12 +10,21 @@ namespace SkipassAPI.Controllers
     [Route("[controller]")]
     public class Skypass : ControllerBase
     {
+        /// <summary>
+        /// Страница апи
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public string Get()
         {
             return "Skypass API";
         }
 
+        /// <summary>
+        /// Проверка скипасса
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         [HttpPost("/CheckKey")]
         public JsonResult CheckKey(Models.GetBalanceIn data)
         {
@@ -55,6 +64,15 @@ namespace SkipassAPI.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Проверка скипасса с возвращением информации о пользователе (ФИО)
+        /// </summary>
+        /// <remarks>
+        ///  Ключ авторизации = mn5tq8ZTJSmLA6FJ
+        /// </remarks>
+        /// <param name="data"></param>
+        /// <returns></returns>
         [HttpPost("/CheckKeyGetUserInfo")]
         public JsonResult CheckKeyGetUserInfo(Models.GetBalanceIn data)
         {
@@ -94,17 +112,14 @@ namespace SkipassAPI.Controllers
             }
         }
 
-        ///
-        /// 
         /// <summary>
         /// Получение списка услуг. Ключ авторизации = mn5tq8ZTJSmLA6FJ
         /// </summary>
         /// <remarks>
-        /// Получение списка услуг. Ключ авторизации = mn5tq8ZTJSmLA6FJ
+        ///  Получение списка услуг. Ключ авторизации = mn5tq8ZTJSmLA6FJ
         /// </remarks>
         /// <param name="data"></param>
         /// <returns></returns>
-        /// 
         [HttpPost("/GetServices")]
         public JsonResult GetServices(Models.GetBalanceIn data)
         {
@@ -117,22 +132,17 @@ namespace SkipassAPI.Controllers
             {
                 res = new JsonResult(e.Message);
             }
-
-
             return res;
         }
 
-        ///
-        /// 
         /// <summary>
         /// Получение списка услуг с ценами. Ключ авторизации = mn5tq8ZTJSmLA6FJ
         /// </summary>
         /// <remarks>
-        /// Получение списка услуг с ценами. Ключ авторизации = mn5tq8ZTJSmLA6FJ
+        ///  Получение списка услуг с ценами. Ключ авторизации = mn5tq8ZTJSmLA6FJ
         /// </remarks>
         /// <param name="data"></param>
         /// <returns></returns>
-        /// 
         [HttpPost("/GetServicesWPrice")]
         public JsonResult GetServicesWPrice(Models.GetBalanceIn data)
         {
@@ -145,22 +155,17 @@ namespace SkipassAPI.Controllers
             {
                 res = new JsonResult(e.Message);
             }
-
-
             return res;
         }
 
-        ///
-        /// 
         /// <summary>
         /// Получение списка АБОНЕМЕНТОВ (без цен). Ключ авторизации = mn5tq8ZTJSmLA6FJ
         /// </summary>
         /// <remarks>
-        /// Получение списка АБОНЕМЕНТОВ (без цен). Ключ авторизации = mn5tq8ZTJSmLA6FJ
+        ///  Получение списка АБОНЕМЕНТОВ (без цен). Ключ авторизации = mn5tq8ZTJSmLA6FJ
         /// </remarks>
         /// <param name="data"></param>
         /// <returns></returns>
-        /// 
         [HttpPost("/GetAbonements")]
         public JsonResult GetAbonements(Models.GetBalanceIn data)
         {
@@ -173,22 +178,17 @@ namespace SkipassAPI.Controllers
             {
                 res = new JsonResult(e.Message);
             }
-
-
             return res;
         }
 
-        ///
-        /// 
         /// <summary>
         /// Получение списка АБОНЕМЕНТОВ с ценами. Ключ авторизации = mn5tq8ZTJSmLA6FJ
         /// </summary>
         /// <remarks>
-        /// Получение списка АБОНЕМЕНТОВ с ценами. Ключ авторизации = mn5tq8ZTJSmLA6FJ
+        ///  Получение списка АБОНЕМЕНТОВ с ценами. Ключ авторизации = mn5tq8ZTJSmLA6FJ
         /// </remarks>
         /// <param name="data"></param>
         /// <returns></returns>
-        /// 
         [HttpPost("/GetAbonWPrice")]
         public JsonResult GetAbonWPrice(Models.GetBalanceIn data)
         {
@@ -201,11 +201,60 @@ namespace SkipassAPI.Controllers
             {
                 res = new JsonResult(e.Message);
             }
-
-
             return res;
         }
 
+        /// <summary>
+        /// Получение списка услуг (абонементов)- пользователя по номеру скипасса (key)
+        /// </summary>
+        /// <remarks>
+        ///  Получение списка услуг (абонементов)- пользователя по номеру скипасса (key). Ключ авторизации = mn5tq8ZTJSmLA6FJ
+        /// </remarks>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        [HttpPost("/GetUsersAbonements")]
+        public JsonResult GetUserAbon(Models.UserServicesReq data)
+        {
+            JsonResult res;
+            try
+            {
+                res = new JsonResult(Methods.ReadData.GetUserAbon(data));
+            }
+            catch (Exception e)
+            {
+                res = new JsonResult(e.Message);
+            }
+            return res;
+        }
+
+        /// <summary>
+        /// Получение списка услуг (ВСЕХ)- пользователя по номеру скипасса (key)
+        /// </summary>
+        /// <remarks>
+        ///  Получение списка услуг (абонементов)- пользователя по номеру скипасса (key). Ключ авторизации = mn5tq8ZTJSmLA6FJ
+        /// </remarks>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        [HttpPost("/GetUsersServices")]
+        public JsonResult GetUserSrv(Models.UserServicesReq data)
+        {
+            JsonResult res;
+            try
+            {
+                res = new JsonResult(Methods.ReadData.GetUserServices(data));
+            }
+            catch (Exception e)
+            {
+                res = new JsonResult(e.Message);
+            }
+            return res;
+        }
+
+        /// <summary>
+        /// Получение баланса юзера (зима)
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         [HttpPost("/GetBalance")]
         public JsonResult GetBalance(Models.GetBalanceIn data)
         {
@@ -248,6 +297,11 @@ namespace SkipassAPI.Controllers
         }
 
 
+        /// <summary>
+        /// Добавление денег на депозит (зима)
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         [HttpPost("/AddSum")]
         public JsonResult AddSum(Models.FillBalanceIn data)
         {
@@ -357,7 +411,10 @@ namespace SkipassAPI.Controllers
             }
         }
 
-
+        /// <summary>
+        /// Понг
+        /// </summary>
+        /// <returns></returns>
         [HttpPost("/Ping")]
         public string Ping()
         {

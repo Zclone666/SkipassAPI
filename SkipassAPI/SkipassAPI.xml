@@ -4,57 +4,92 @@
         <name>SkipassAPI</name>
     </assembly>
     <members>
+        <member name="M:SkipassAPI.Controllers.Skypass.Get">
+            <summary>
+            Страница апи
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SkipassAPI.Controllers.Skypass.CheckKey(SkipassAPI.Models.GetBalanceIn)">
+            <summary>
+            Проверка скипасса
+            </summary>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SkipassAPI.Controllers.Skypass.CheckKeyGetUserInfo(SkipassAPI.Models.GetBalanceIn)">
+            <summary>
+            Проверка скипасса с возвращением информации о пользователе (ФИО)
+            </summary>
+            <remarks>
+             Ключ авторизации = mn5tq8ZTJSmLA6FJ
+            </remarks>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
         <member name="M:SkipassAPI.Controllers.Skypass.GetServices(SkipassAPI.Models.GetBalanceIn)">
-            
-             
-             <summary>
+            <summary>
+            Получение списка услуг. Ключ авторизации = mn5tq8ZTJSmLA6FJ
+            </summary>
+            <remarks>
              Получение списка услуг. Ключ авторизации = mn5tq8ZTJSmLA6FJ
-             </summary>
-             <remarks>
-             Получение списка услуг. Ключ авторизации = mn5tq8ZTJSmLA6FJ
-             </remarks>
-             <param name="data"></param>
-             <returns></returns>
-             
+            </remarks>
+            <param name="data"></param>
+            <returns></returns>
         </member>
         <member name="M:SkipassAPI.Controllers.Skypass.GetServicesWPrice(SkipassAPI.Models.GetBalanceIn)">
-            
-             
-             <summary>
+            <summary>
+            Получение списка услуг с ценами. Ключ авторизации = mn5tq8ZTJSmLA6FJ
+            </summary>
+            <remarks>
              Получение списка услуг с ценами. Ключ авторизации = mn5tq8ZTJSmLA6FJ
-             </summary>
-             <remarks>
-             Получение списка услуг с ценами. Ключ авторизации = mn5tq8ZTJSmLA6FJ
-             </remarks>
-             <param name="data"></param>
-             <returns></returns>
-             
+            </remarks>
+            <param name="data"></param>
+            <returns></returns>
         </member>
         <member name="M:SkipassAPI.Controllers.Skypass.GetAbonements(SkipassAPI.Models.GetBalanceIn)">
-            
-             
-             <summary>
+            <summary>
+            Получение списка АБОНЕМЕНТОВ (без цен). Ключ авторизации = mn5tq8ZTJSmLA6FJ
+            </summary>
+            <remarks>
              Получение списка АБОНЕМЕНТОВ (без цен). Ключ авторизации = mn5tq8ZTJSmLA6FJ
-             </summary>
-             <remarks>
-             Получение списка АБОНЕМЕНТОВ (без цен). Ключ авторизации = mn5tq8ZTJSmLA6FJ
-             </remarks>
-             <param name="data"></param>
-             <returns></returns>
-             
+            </remarks>
+            <param name="data"></param>
+            <returns></returns>
         </member>
         <member name="M:SkipassAPI.Controllers.Skypass.GetAbonWPrice(SkipassAPI.Models.GetBalanceIn)">
-            
-             
-             <summary>
+            <summary>
+            Получение списка АБОНЕМЕНТОВ с ценами. Ключ авторизации = mn5tq8ZTJSmLA6FJ
+            </summary>
+            <remarks>
              Получение списка АБОНЕМЕНТОВ с ценами. Ключ авторизации = mn5tq8ZTJSmLA6FJ
-             </summary>
-             <remarks>
-             Получение списка АБОНЕМЕНТОВ с ценами. Ключ авторизации = mn5tq8ZTJSmLA6FJ
-             </remarks>
-             <param name="data"></param>
-             <returns></returns>
-             
+            </remarks>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SkipassAPI.Controllers.Skypass.GetUserAbon(SkipassAPI.Models.UserServicesReq)">
+            <summary>
+            Получение списка услуг (абонементов)- пользователя по номеру скипасса (key)
+            </summary>
+            <remarks>
+             Получение списка услуг (абонементов)- пользователя по номеру скипасса (key). Ключ авторизации = mn5tq8ZTJSmLA6FJ
+            </remarks>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SkipassAPI.Controllers.Skypass.GetBalance(SkipassAPI.Models.GetBalanceIn)">
+            <summary>
+            Получение баланса юзера (зима)
+            </summary>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SkipassAPI.Controllers.Skypass.AddSum(SkipassAPI.Models.FillBalanceIn)">
+            <summary>
+            Добавление денег на депозит (зима)
+            </summary>
+            <param name="data"></param>
+            <returns></returns>
         </member>
         <member name="M:SkipassAPI.Controllers.Skypass.AddService(SkipassAPI.Models.AddService)">
             <summary>
@@ -64,6 +99,76 @@
             Получение списка услуг. Ключ авторизации = mn5tq8ZTJSmLA6FJ
             </remarks>
             <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SkipassAPI.Controllers.Skypass.Ping">
+            <summary>
+            Понг
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SkipassAPI.Methods.ReadData.GetBalance(SkipassAPI.Models.GetBalanceIn,System.String)">
+            <summary>
+            Получение баланса
+            </summary>
+            <param name="data"></param>
+            <param name="SQLPath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SkipassAPI.Methods.ReadData.GetAllServices(SkipassAPI.Models.GetBalanceIn,System.String)">
+            <summary>
+            Получение всех услуг в базе
+            </summary>
+            <param name="data"></param>
+            <param name="SQLPath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SkipassAPI.Methods.ReadData.GetAbonements(SkipassAPI.Models.GetBalanceIn,System.String)">
+            <summary>
+            Получение всех абонементов в базе
+            </summary>
+            <param name="data"></param>
+            <param name="SQLPath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SkipassAPI.Methods.ReadData.GetAllServicesWPrice(SkipassAPI.Models.GetBalanceIn,System.String)">
+            <summary>
+            Получение всех услуг с ценами
+            </summary>
+            <param name="data"></param>
+            <param name="SQLPath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SkipassAPI.Methods.ReadData.GetAbonWPrice(SkipassAPI.Models.GetBalanceIn,System.String)">
+            <summary>
+            Получение всех абонементов с ценами
+            </summary>
+            <param name="data"></param>
+            <param name="SQLPath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SkipassAPI.Methods.ReadData.GetUserAbon(SkipassAPI.Models.UserServicesReq,System.String)">
+            <summary>
+            Получение списка абонементов юзера
+            </summary>
+            <param name="data"></param>
+            <param name="SQLPath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SkipassAPI.Methods.ReadData.CheckKey(SkipassAPI.Models.GetBalanceIn,System.String)">
+            <summary>
+            Проверка ключа
+            </summary>
+            <param name="data"></param>
+            <param name="SQLPath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SkipassAPI.Methods.ReadData.CheckUserRetName(SkipassAPI.Models.GetBalanceIn,System.String)">
+            <summary>
+            Проверка СКИПАССА и возвращение инфы о пользователе по нему
+            </summary>
+            <param name="data"></param>
+            <param name="SQLPath"></param>
             <returns></returns>
         </member>
         <member name="P:SkipassAPI.Models.Alarm.authkey">

@@ -72,6 +72,14 @@ inner join (SELECT [Name] as DayT,[Amount], TargetGoodId FROM [Fwp].[dbo].[Tarif
 inner join (SELECT [Name] as DayT,[Amount], TargetGoodId FROM [Fwp].[dbo].[TariffExtension] inner join Fwp.dbo.DayType on Fwp.dbo.DayType.DayTypeId=Fwp.dbo.TariffExtension.DayTypeId inner join [Fwp].[dbo].[Tariff] on  [Fwp].[dbo].[Tariff].TariffId=[Fwp].[dbo].[TariffExtension].TariffId where Type=2 and Allow=1 and Dependence=1 and PayRightType=2) as tt on tt.TargetGoodId=CategoryId
 where StockType=4";
 
+        public const string GetUserAbon = @"SELECT Fwp.dbo.Category.Name,[IsActive],[Amount],[Start],[End]  FROM [Fwp].[dbo].[AccountStock]
+  inner join Fwp.dbo.Category on Fwp.dbo.Category.CategoryId=Fwp.dbo.AccountStock.CategoryId
+  where Fwp.dbo.AccountStock.StockType=3 and Fwp.dbo.AccountStock.SuperAccountId=(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key)";
+
+        public const string GetUserServices = @"SELECT Fwp.dbo.Category.Name,[IsActive],[Amount],[Start],[End]  FROM [Fwp].[dbo].[AccountStock]
+  inner join Fwp.dbo.Category on Fwp.dbo.Category.CategoryId=Fwp.dbo.AccountStock.CategoryId
+  where Fwp.dbo.AccountStock.SuperAccountId=(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key) and Fwp.dbo.AccountStock.StockType<>21";
+
         public const string UpdateEmail = @"update pri set Email=@email, Phone=@phone
     from PersonalInfo pri
     inner join AccountStock acs on pri.SuperAccountId=acs.SuperAccountId
