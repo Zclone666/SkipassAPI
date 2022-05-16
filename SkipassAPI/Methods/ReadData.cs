@@ -167,7 +167,7 @@ namespace SkipassAPI.Methods
                                         r.categoryID = int.TryParse(reader[0].ToString(), out int CatId) ? CatId : 0;
                                         r.stockType = int.TryParse(reader[1].ToString(), out int StockType) ? StockType : 0;
                                         r.name = reader[2].ToString();
-                                        r.price= int.TryParse(reader[3].ToString(), out int Price) ? Price : 0;
+                                        r.price= double.TryParse(reader[3].ToString(), out double Price) ? Price : 0;
                                         r.dayT = reader[4].ToString();
                                         ret.Add(r);
                                     }
@@ -219,7 +219,7 @@ namespace SkipassAPI.Methods
                                         r.categoryID = int.TryParse(reader[0].ToString(), out int CatId) ? CatId : 0;
                                         r.stockType = int.TryParse(reader[1].ToString(), out int StockType) ? StockType : 0;
                                         r.name = reader[2].ToString();
-                                        r.price = int.TryParse(reader[3].ToString(), out int Price) ? Price : 0;
+                                        r.price = double.TryParse(reader[3].ToString(), out double Price) ? Price : 0;
                                         r.dayT = reader[4].ToString();
                                         ret.Add(r);
                                     }
