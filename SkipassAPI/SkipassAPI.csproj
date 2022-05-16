@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>C:\Users\Администратор.SRVMAIN\source\repos\SkipassAPI\SkipassAPISkipassAPI.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DocumentationFile>SkipassAPI.xml</DocumentationFile>
   </PropertyGroup>
 
