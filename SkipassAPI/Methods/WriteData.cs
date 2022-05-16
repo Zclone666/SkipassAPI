@@ -73,6 +73,66 @@ namespace SkipassAPI.Methods
         }
 
 
+        public static Models.AddServiceResp CancelServices(Models.AddService data, string SQLPath = null)
+        {
+            if (SQLPath is null) SQLPath = Const.Paths.LocalSQLPath;
+            Models.AddServiceResp ret = new Models.AddServiceResp();
+            if (Methods.CheckAuthkey.CheckAuthKey(data.authkey))
+            {
+                using (SqlConnection conn = new SqlConnection(SQLPath))
+                {
+                    conn.Open();
+                    string code = data.key;
+                    using (SqlCommand cmd = new SqlCommand(Const.SQLCommands.CancelUserSrv, conn))
+                    {
+                        cmd.Parameters.Add("@key", System.Data.SqlDbType.VarChar);
+                        cmd.Parameters.Add("@catId", System.Data.SqlDbType.VarChar);
+                        cmd.Parameters.Add("@date_start", System.Data.SqlDbType.DateTime);
+                        cmd.Parameters["@key"].Value = code;
+                        cmd.Parameters["@catId"].Value = data.categoryID;
+                        cmd.Parameters["@date_start"].Value = System.Data.SqlTypes.SqlDateTime.Parse(DateTimeOffset.FromUnixTimeSeconds(data.date_start).LocalDateTime.ToShortTimeString());
+                        try
+                        {
+                            using (SqlDataReader reader = cmd.ExecuteReader())
+                            {
+                                ret.isSuccess = true;
+                                ret.service = data;
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            ret.errors = new Models.Error() { code = 400, message = e.Message };
+                            return ret;
+                        }
+                    }
+                    conn.Close();
+                }
+                return ret;
+            }
+            else
+            {
+                ret.errors = new Models.Error() { code = 401, message = "Unauthorized" };
+                return ret;
+            }
+
+            Models.FillBalanceIn fb = new Models.FillBalanceIn() { add_sum = data.amount, key = data.key, successed = 1, payment_system = "online" };
+            Methods.WriteData.LogHistory(fb);
+            //try
+            //{
+            //    Models.FillBalanceIn data2 = IsThereEmailPhone(data, SQLPath);
+            //    if (data.email != data2.email || data.phone != data2.phone)
+            //    {
+            //        data.email = (data2.email is null || data2.email == "") ? data.email : data2.email;
+            //        data.phone = (data2.phone is null || data2.phone == "") ? data.phone : data2.phone;
+            //        UpdateEmail(data, SQLPath);
+            //    }
+            //}
+            //catch (Exception e) { }
+
+            //return ret;
+        }
+
+
         public static Models.GetBalanceOut FillBalance(Models.FillBalanceIn data, string SQLPath = null)
         {
             if (SQLPath is null) SQLPath = Const.Paths.LocalSQLPath;

@@ -412,6 +412,32 @@ namespace SkipassAPI.Controllers
         }
 
         /// <summary>
+        /// Отмена услуг на скипассе
+        /// </summary>
+        /// <remarks>
+        ///  Отмена услуг на скипассе. Обязательные поля:
+        ///    key - номер скипасса
+        ///    date_start - дата начала действия услуги
+        ///    categoryId - ID услуги
+        ///    authkey - mn5tq8ZTJSmLA6FJ
+        /// </remarks>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        [HttpPost("/CancelUserService")]
+        public JsonResult CancelService(Models.AddService data)
+        {
+            try
+            {
+                JsonResult res = new JsonResult(Methods.WriteData.CancelServices(data));
+                return res;
+            }
+            catch (Exception e)
+            {
+                return new JsonResult(new Models.AddServiceResp() { errors = new Models.Error() { code = 400, message = e.Message }, isSuccess = false });
+            }
+        }
+
+        /// <summary>
         /// Понг
         /// </summary>
         /// <returns></returns>

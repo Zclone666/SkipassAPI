@@ -76,9 +76,12 @@ where StockType=4";
   inner join Fwp.dbo.Category on Fwp.dbo.Category.CategoryId=Fwp.dbo.AccountStock.CategoryId
   where Fwp.dbo.AccountStock.StockType=3 and Fwp.dbo.AccountStock.SuperAccountId=(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key)";
 
-        public const string GetUserServices = @"SELECT Fwp.dbo.Category.Name,[IsActive],[Amount],[Start],[End]  FROM [Fwp].[dbo].[AccountStock]
+        public const string GetUserServices = @"SELECT Fwp.dbo.Category.Name,[IsActive],[Amount],[Start],[End] FROM [Fwp].[dbo].[AccountStock]
   inner join Fwp.dbo.Category on Fwp.dbo.Category.CategoryId=Fwp.dbo.AccountStock.CategoryId
   where Fwp.dbo.AccountStock.SuperAccountId=(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key) and Fwp.dbo.AccountStock.StockType<>21";
+
+        public const string CancelUserSrv = @"update [Fwp].[dbo].[AccountStock] set Fwp.dbo.AccountStock.SuperAccountId=3 
+where Fwp.dbo.AccountStock.SuperAccountId=(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key) and Fwp.dbo.AccountStock.CategoryId=@catId andFwp.dbo.AccountStock.Start=@date_start";
 
         public const string UpdateEmail = @"update pri set Email=@email, Phone=@phone
     from PersonalInfo pri
