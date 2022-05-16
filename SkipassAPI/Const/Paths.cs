@@ -16,6 +16,11 @@ namespace SkipassAPI.Const
             if (DateTime.Today.Month < 4 && DateTime.Today.Month > 9) return Winter;
             else return Summer;
         }
+
+        public static string GetDBName()
+        {
+            return DataBaseName();
+        }
     }
 
 }

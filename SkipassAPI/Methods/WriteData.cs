@@ -29,8 +29,8 @@ namespace SkipassAPI.Methods
                         cmd.Parameters["@key"].Value = code;
                         cmd.Parameters["@amount"].Value = data.amount;
                         cmd.Parameters["@catId"].Value = data.categoryID;
-                        cmd.Parameters["@date_start"].Value = System.Data.SqlTypes.SqlDateTime.Parse(DateTimeOffset.FromUnixTimeSeconds(data.date_start).LocalDateTime.ToShortTimeString());
-                        cmd.Parameters["@date_end"].Value = System.Data.SqlTypes.SqlDateTime.Parse(DateTimeOffset.FromUnixTimeSeconds(data.date_start).LocalDateTime.ToShortTimeString());
+                        cmd.Parameters["@date_start"].Value = System.Data.SqlTypes.SqlDateTime.Parse(Global.UnixTimeToDateTime(data.date_start).ToString());
+                        cmd.Parameters["@date_end"].Value = System.Data.SqlTypes.SqlDateTime.Parse(Global.UnixTimeToDateTime(data.date_end).ToString());
                         try
                         {
                             using (SqlDataReader reader = cmd.ExecuteReader())
@@ -90,7 +90,7 @@ namespace SkipassAPI.Methods
                         cmd.Parameters.Add("@date_start", System.Data.SqlDbType.DateTime);
                         cmd.Parameters["@key"].Value = code;
                         cmd.Parameters["@catId"].Value = data.categoryID;
-                        cmd.Parameters["@date_start"].Value = System.Data.SqlTypes.SqlDateTime.Parse(DateTimeOffset.FromUnixTimeSeconds(data.date_start).LocalDateTime.ToShortTimeString());
+                        cmd.Parameters["@date_start"].Value = System.Data.SqlTypes.SqlDateTime.Parse(Global.UnixTimeToDateTime(data.date_start).ToString());
                         try
                         {
                             using (SqlDataReader reader = cmd.ExecuteReader())
