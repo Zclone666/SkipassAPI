@@ -90,7 +90,8 @@ namespace SkipassAPI.Methods
                         cmd.Parameters.Add("@date_start", System.Data.SqlDbType.DateTime);
                         cmd.Parameters["@key"].Value = code;
                         cmd.Parameters["@catId"].Value = data.categoryID;
-                        cmd.Parameters["@date_start"].Value = System.Data.SqlTypes.SqlDateTime.Parse(Global.UnixTimeToDateTime(data.date_start).ToString());
+                        string dt = Global.UnixTimeToDateTime(data.date_start).ToString();
+                        cmd.Parameters["@date_start"].Value = dt;
                         try
                         {
                             using (SqlDataReader reader = cmd.ExecuteReader())

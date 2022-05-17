@@ -508,7 +508,7 @@ namespace SkipassAPI.Controllers
         }
 
         /// <summary>
-        /// Отмена услуг на скипассе (ТЕСТОВАЯ ВЕРСИЯ!!!!)
+        /// Отмена услуг на скипассе - testing
         /// </summary>
         /// <remarks>
         ///  Отмена услуг на скипассе. Обязательные поля:
@@ -516,6 +516,15 @@ namespace SkipassAPI.Controllers
         ///    date_start - дата начала действия услуги
         ///    categoryId - ID услуги
         ///    authkey - mn5tq8ZTJSmLA6FJ
+        ///    
+        ///   Пример запроса:
+        ///    {
+        ///       "authkey": "mn5tq8ZTJSmLA6FJ",
+        ///       "categoryID": 361778,
+        ///       "amount": 1,
+        ///       "key": "09809809",
+        ///       "date_start": 1652748960
+        ///    }
         /// </remarks>
         /// <param name="data"></param>
         /// <returns></returns>
