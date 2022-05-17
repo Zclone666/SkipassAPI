@@ -85,8 +85,48 @@ where StockType=4";
   inner join Fwp.dbo.Category on Fwp.dbo.Category.CategoryId=Fwp.dbo.AccountStock.CategoryId
   where Fwp.dbo.AccountStock.SuperAccountId=(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key) and Fwp.dbo.AccountStock.StockType<>21";
 
-        public const string CancelUserSrv = @"update [Fwp].[dbo].[AccountStock] set Fwp.dbo.AccountStock.SuperAccountId=3 
-where Fwp.dbo.AccountStock.SuperAccountId=(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key) and Fwp.dbo.AccountStock.CategoryId=@catId and Fwp.dbo.AccountStock.Start=@date_start";
+        public const string CancelUserSrv = @"update [Fwp].[dbo].[AccountStock] set Fwp.dbo.AccountStock.IsActive=0
+where Fwp.dbo.AccountStock.SuperAccountId=(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key) and Fwp.dbo.AccountStock.CategoryId=@catId and Fwp.dbo.AccountStock.Start=@date_start;
+INSERT INTO [MasterTransaction]
+ (
+	[SuperAccountFrom],
+	[SuperAccountTo],
+	[TransTime],
+	[UserId],
+	[Machine],
+	[ExternalId],
+	[SecSubjectId],
+	[CheckDetailId],
+	[IsOffline],
+	[ExtendedData],
+	[GeographyId],
+	[ServicePointId]
+) VALUES (
+	(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key),
+	3,
+	GETDATE(),
+	'FREESTYLE@Администратор',
+	'SRVMAIN@Bars.Administrator',
+	NULL,
+	1,
+	NULL,
+	0,
+	NULL,
+	NULL,
+	4
+);
+UPDATE
+	[abi]
+SET
+	[BookingStatus] = 3
+FROM
+	fWP.DBO.[ActivityBookingInfo] [abi]
+		INNER JOIN Fwp.dbo.[AccountStock] [a] ON [abi].[ActivityBookingInfoId] = [a].[ActivityBookingInfoId]
+WHERE
+	[a].[TargetAccountStockId] = (select AccountStockId from Fwp.dbo.AccountStock where Fwp.dbo.AccountStock.SuperAccountId=(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key) and Fwp.dbo.AccountStock.CategoryId=@catId and Fwp.dbo.AccountStock.Start=@date_start) AND [abi].[BookingStatus] = 1;
+    UPDATE [Fwp].[dbo].[SuperAccount] SET [LastTransactionTime] = GETDATE() WHERE [SuperAccountId] = 3;
+    UPDATE [Fwp].[dbo].[SuperAccount] SET [LastTransactionTime] = GETDATE() WHERE [SuperAccountId] = (select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key);
+";
 
         public const string UpdateEmail = @"update pri set Email=@email, Phone=@phone
     from PersonalInfo pri

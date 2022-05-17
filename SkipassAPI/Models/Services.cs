@@ -25,7 +25,7 @@ namespace SkipassAPI.Models
     public class AddService:Alarm
     {
         public int categoryID { get; set; }
-        public decimal amount { get; set; }
+        public decimal amount { get; set; } = 1;
         /// <summary>
         /// ID скипасса или браслета
         /// </summary>
