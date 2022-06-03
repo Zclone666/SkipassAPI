@@ -8,7 +8,9 @@ namespace SkipassAPI.Models
     public class User:Alarm
     {
         public string firstName { get; set; }
-        public string middlename { get; set; }
-        public string lastname { get; set; }
+        public string middleName { get; set; }
+        public string lastName { get; set; }
+
+        public bool founded { get; set; }
     }
 }

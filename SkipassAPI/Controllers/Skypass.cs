@@ -21,6 +21,24 @@ namespace SkipassAPI.Controllers
         }
 
         /// <summary>
+        /// Контроллер перекэширования списка услуг и абонементов
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("/RenewS")]
+        public IActionResult RenewS()
+        {
+            try
+            {
+                Cache.Init.GenerateCacheOnInit();
+                return Content("ReCache sheduled");
+            }
+            catch(Exception e)
+            {
+                return Content(e.Message);
+            }
+        }
+
+        /// <summary>
         /// Проверка скипасса
         /// </summary>
         /// <param name="data"></param>
@@ -29,11 +47,11 @@ namespace SkipassAPI.Controllers
         public JsonResult CheckKey(Models.GetBalanceIn data)
         {
             bool tst;
-            List<Models.GetBalanceOut> ret = new List<Models.GetBalanceOut>();
+            Models.GetBalanceOut ret = new Models.GetBalanceOut();
             try
             {
                 ret = Methods.ReadData.CheckKey(data);
-                JsonResult res = new JsonResult((ret.Count>0)?new Models.KeyFound() { Founded = true }: new Models.KeyFound() { Founded = false });
+                JsonResult res = new JsonResult((ret.id > 0) ? new Models.KeyFound() { founded = true } : new Models.KeyFound() { founded = false });
                 return res;
             }
             catch (Exception e)
@@ -45,19 +63,19 @@ namespace SkipassAPI.Controllers
                     if (tst)
                     {
                         ret = Methods.ReadData.CheckKey(data);
-                        JsonResult res = new JsonResult((ret.Count > 0) ? new Models.KeyFound() { Founded = true } : new Models.KeyFound() { Founded = false });
+                        JsonResult res = new JsonResult((ret.id > 0) ? new Models.KeyFound() { founded = true } : new Models.KeyFound() { founded = false });
                         return res;
                     }
                     else
                     {
                         ret = Methods.ReadData.CheckKey(data, Const.Paths.SQLPath);
-                        JsonResult res = new JsonResult((ret.Count > 0) ? new Models.KeyFound() { Founded = true } : new Models.KeyFound() { Founded = false });
+                        JsonResult res = new JsonResult((ret.id > 0) ? new Models.KeyFound() { founded = true } : new Models.KeyFound() { founded = false });
                         return res;
                     }
                 }
                 catch (Exception e2)
                 {
-                    ret.Add(new Models.GetBalanceOut() { errors = new Models.Error() { code=500, message = e2.Message } });
+                    ret=new Models.GetBalanceOut() { errors = new Models.Error() { code = 500, message = e2.Message } };
                     JsonResult res = new JsonResult(ret);
                     return res;
                 }
@@ -89,11 +107,11 @@ namespace SkipassAPI.Controllers
         public JsonResult CheckKeyGetUserInfo(Models.GetBalanceIn data)
         {
             bool tst;
-            List<Models.User> ret = new List<Models.User>();
+            Models.User ret = new Models.User();
             try
             {
                 ret = Methods.ReadData.CheckUserRetName(data);
-                JsonResult res = new JsonResult(ret);
+                JsonResult res = new JsonResult((ret.errors.code == 0) ? ret : new Models.User() { founded = false, errors=new Models.Error() { code=ret.errors.code, message=ret.errors.message } });
                 return res;
             }
             catch (Exception e)
@@ -105,19 +123,19 @@ namespace SkipassAPI.Controllers
                     if (tst)
                     {
                         ret = Methods.ReadData.CheckUserRetName(data);
-                        JsonResult res = new JsonResult((ret.Count > 0) ? new Models.KeyFound() { Founded = true } : new Models.KeyFound() { Founded = false });
+                        JsonResult res = new JsonResult((ret.errors.code == 0) ? new Models.KeyFound() { founded = true } : new Models.KeyFound() { founded = false });
                         return res;
                     }
                     else
                     {
                         ret = Methods.ReadData.CheckUserRetName(data, Const.Paths.SQLPath);
-                        JsonResult res = new JsonResult((ret.Count > 0) ? new Models.KeyFound() { Founded = true } : new Models.KeyFound() { Founded = false });
+                        JsonResult res = new JsonResult((ret.errors.code == 0) ? new Models.KeyFound() { founded = true } : new Models.KeyFound() { founded = false });
                         return res;
                     }
                 }
                 catch (Exception e2)
                 {
-                    ret.Add(new Models.User() { errors = new Models.Error() { code = 400, message = e2.Message } });
+                    ret=new Models.User() { errors = new Models.Error() { code = 400, message = e2.Message } };
                     JsonResult res = new JsonResult(ret);
                     return res;
                 }

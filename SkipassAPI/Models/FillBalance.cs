@@ -23,7 +23,7 @@ namespace SkipassAPI.Models
 
     public class KeyFound : Alarm
     {
-        public bool Founded { get; set; } = false;
+        public bool founded { get; set; } = false;
     }
 
 }

@@ -65,34 +65,8 @@ namespace SkipassAPI.Methods
                 Models.ListServ ret = new Models.ListServ();
                 if (Methods.CheckAuthkey.CheckAuthKey(data.authkey))
                 {
-                    using (SqlConnection conn = new SqlConnection(SQLPath))
-                    {
-                        conn.Open();
-                        using (SqlCommand cmd = new SqlCommand(Const.SQLCommands.GetAllServices, conn))
-                        {
-                            try
-                            {
-                                using (SqlDataReader reader = cmd.ExecuteReader())
-                                {
-                                    while (reader.Read())
-                                    {
-                                        Models.Services r = new Models.Services();
-                                        r.categoryID = int.TryParse(reader[0].ToString(), out int CatId) ? CatId : 0;
-                                        r.stockType = int.TryParse(reader[1].ToString(), out int StockType) ? StockType : 0;
-                                        r.name = reader[2].ToString();
-                                        ret.services.Add(r);
-                                    }
-                                }
-                                return ret;
-                                // if (res != "") ret = true;
-                            }
-                            catch (Exception e)
-                            {
-                                Models.ListServ r = new Models.ListServ() { errors = new Models.Error() { code = 400, message = e.Message } };
-                                return ret;
-                            }
-                        }
-                    }
+                    ret.services = Cache.Static.ServiceCache.Services;
+                    return ret;
                 }
                 else
                 {
@@ -120,34 +94,34 @@ namespace SkipassAPI.Methods
                 Models.ListServ ret = new Models.ListServ();
                 if (Methods.CheckAuthkey.CheckAuthKey(data.authkey))
                 {
-                    using (SqlConnection conn = new SqlConnection(SQLPath))
-                    {
-                        conn.Open();
-                        using (SqlCommand cmd = new SqlCommand(Const.SQLCommands.GetAbon, conn))
-                        {
-                            try
-                            {
-                                using (SqlDataReader reader = cmd.ExecuteReader())
-                                {
-                                    while (reader.Read())
-                                    {
-                                        Models.Services r = new Models.Services();
-                                        r.categoryID = int.TryParse(reader[0].ToString(), out int CatId) ? CatId : 0;
-                                        r.stockType = int.TryParse(reader[1].ToString(), out int StockType) ? StockType : 0;
-                                        r.name = reader[2].ToString();
-                                        ret.services.Add(r);
-                                    }
-                                }
-                                return ret;
-                                // if (res != "") ret = true;
-                            }
-                            catch (Exception e)
-                            {
-                                Models.ListServ r = new Models.ListServ() { errors = new Models.Error() { code = 400, message = e.Message } };
-                                return r;
-                            }
-                        }
-                    }
+                    //using (SqlConnection conn = new SqlConnection(SQLPath))
+                    //{
+                    //    conn.Open();
+                    //    using (SqlCommand cmd = new SqlCommand(Const.SQLCommands.GetAbon, conn))
+                    //    {
+                    //        try
+                    //        {
+                    //            using (SqlDataReader reader = cmd.ExecuteReader())
+                    //            {
+                    //                while (reader.Read())
+                    //                {
+                    //                    Models.Services r = new Models.Services();
+                    //                    r.categoryID = int.TryParse(reader[0].ToString(), out int CatId) ? CatId : 0;
+                    //                    r.stockType = int.TryParse(reader[1].ToString(), out int StockType) ? StockType : 0;
+                    //                    r.name = reader[2].ToString();
+                    //                    ret.services.Add(r);
+                    //                }
+                    //            }
+                    //            return ret;
+                    //            // if (res != "") ret = true;
+                    //        }
+                    //        catch (Exception e)
+                    //        {
+                    //            Models.ListServ r = new Models.ListServ() { errors = new Models.Error() { code = 400, message = e.Message } };
+                    //            return r;
+                    //        }
+                    ret.services = Cache.Static.ServiceCache.Abons;
+                    return ret;
                 }
                 else
                 {
@@ -176,36 +150,8 @@ namespace SkipassAPI.Methods
                 Models.ListServWPrice ret = new Models.ListServWPrice();
                 if (Methods.CheckAuthkey.CheckAuthKey(data.authkey))
                 {
-                    using (SqlConnection conn = new SqlConnection(SQLPath))
-                    {
-                        conn.Open();
-                        using (SqlCommand cmd = new SqlCommand(Const.SQLCommands.GetAllServicesWPrice, conn))
-                        {
-                            try
-                            {
-                                using (SqlDataReader reader = cmd.ExecuteReader())
-                                {
-                                    while (reader.Read())
-                                    {
-                                        Models.ServicesWPrice r = new Models.ServicesWPrice();
-                                        r.categoryID = int.TryParse(reader[0].ToString(), out int CatId) ? CatId : 0;
-                                        r.stockType = int.TryParse(reader[1].ToString(), out int StockType) ? StockType : 0;
-                                        r.name = reader[2].ToString();
-                                        r.price= double.TryParse(reader[3].ToString(), out double Price) ? Price : 0;
-                                        r.dayT = reader[4].ToString();
-                                        ret.services.Add(r);
-                                    }
-                                }
-                                return ret;
-                                // if (res != "") ret = true;
-                            }
-                            catch (Exception e)
-                            {
-                                Models.ListServWPrice r = new Models.ListServWPrice() { errors = new Models.Error() { code = 400, message = e.Message } };
-                                return r;
-                            }
-                        }
-                    }
+                    ret.services = Cache.Static.ServiceCache.ServicesWPrice;
+                    return ret;
                 }
                 else
                 {
@@ -234,36 +180,8 @@ namespace SkipassAPI.Methods
                 Models.ListServWPrice ret = new Models.ListServWPrice();
                 if (Methods.CheckAuthkey.CheckAuthKey(data.authkey))
                 {
-                    using (SqlConnection conn = new SqlConnection(SQLPath))
-                    {
-                        conn.Open();
-                        using (SqlCommand cmd = new SqlCommand(Const.SQLCommands.GetAllAbonWPrice, conn))
-                        {
-                            try
-                            {
-                                using (SqlDataReader reader = cmd.ExecuteReader())
-                                {
-                                    while (reader.Read())
-                                    {
-                                        Models.ServicesWPrice r = new Models.ServicesWPrice();
-                                        r.categoryID = int.TryParse(reader[0].ToString(), out int CatId) ? CatId : 0;
-                                        r.stockType = int.TryParse(reader[1].ToString(), out int StockType) ? StockType : 0;
-                                        r.name = reader[2].ToString();
-                                        r.price = double.TryParse(reader[3].ToString(), out double Price) ? Price : 0;
-                                        r.dayT = reader[4].ToString();
-                                        ret.services.Add(r);
-                                    }
-                                }
-                                return ret;
-                                // if (res != "") ret = true;
-                            }
-                            catch (Exception e)
-                            {
-                                Models.ListServWPrice r = new Models.ListServWPrice() { errors = new Models.Error() { code = 400, message = e.Message } };
-                                return r;
-                            }
-                        }
-                    }
+                    ret.services = Cache.Static.ServiceCache.AbonsWPrice;
+                    return ret;
                 }
                 else
                 {
@@ -404,41 +322,49 @@ namespace SkipassAPI.Methods
         /// <param name="data"></param>
         /// <param name="SQLPath"></param>
         /// <returns></returns>
-        public static List<Models.GetBalanceOut> CheckKey(Models.GetBalanceIn data, string SQLPath = null)
+        public static Models.GetBalanceOut CheckKey(Models.GetBalanceIn data, string SQLPath = null)
         {
             if (SQLPath is null) SQLPath = Const.Paths.LocalSQLPath;
-            List<Models.GetBalanceOut> ret = new List<Models.GetBalanceOut>();
-            using (SqlConnection conn = new SqlConnection(SQLPath))
+            Models.GetBalanceOut ret = new Models.GetBalanceOut();
+            if (Methods.CheckAuthkey.CheckAuthKey(data.authkey))
             {
-                conn.Open();
-                string code = data.key;
-                using (SqlCommand cmd = new SqlCommand(Const.SQLCommands.GetKeyPass, conn))
+                using (SqlConnection conn = new SqlConnection(SQLPath))
                 {
-                    cmd.Parameters.Add("@key", System.Data.SqlDbType.VarChar);
-                    cmd.Parameters["@key"].Value = code;
-                    try
+                    conn.Open();
+                    string code = data.key;
+                    using (SqlCommand cmd = new SqlCommand(Const.SQLCommands.GetKeyPass, conn))
                     {
-                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        cmd.Parameters.Add("@key", System.Data.SqlDbType.VarChar);
+                        cmd.Parameters["@key"].Value = code;
+                        try
                         {
-                            while (reader.Read())
+                            using (SqlDataReader reader = cmd.ExecuteReader())
                             {
-                                Models.GetBalanceOut r = new Models.GetBalanceOut();
-                                r.key = reader[0].ToString();
-                                ret.Add(r);
+                                while (reader.Read())
+                                {
+                                    Models.GetBalanceOut r = new Models.GetBalanceOut();
+                                    r.key = reader[0].ToString();
+                                    ret=r;
+                                }
                             }
+                            // if (res != "") ret = true;
                         }
-                        // if (res != "") ret = true;
+                        catch (Exception e)
+                        {
+                            Models.GetBalanceOut r = new Models.GetBalanceOut() { errors = new Models.Error() { code = 400, message = e.Message } };
+                            ret=r;
+                            return ret;
+                        }
                     }
-                    catch (Exception e) 
-                    {
-                        Models.GetBalanceOut r = new Models.GetBalanceOut() { errors = new Models.Error() { code = 400, message = e.Message } };
-                        ret.Add(r);
-                        return ret; 
-                    }
+                    conn.Close();
                 }
-                conn.Close();
+                return ret;
             }
-            return ret;
+            else
+            {
+                ret = new Models.GetBalanceOut() { errors = new Models.Error() { code = 401, message = "Unauthorized" } };
+                return ret;
+            }
         }
 
         /// <summary>
@@ -447,45 +373,58 @@ namespace SkipassAPI.Methods
         /// <param name="data"></param>
         /// <param name="SQLPath"></param>
         /// <returns></returns>
-        public static List<Models.User> CheckUserRetName(Models.GetBalanceIn data, string SQLPath = null)
+        public static Models.User CheckUserRetName(Models.GetBalanceIn data, string SQLPath = null)
         {
             if (SQLPath is null) SQLPath = Const.Paths.LocalSQLPath;
-            List<Models.User> ret = new List<Models.User>();
-            using (SqlConnection conn = new SqlConnection(SQLPath))
+            Models.User ret = new Models.User();
+            if (Methods.CheckAuthkey.CheckAuthKey(data.authkey))
             {
-                conn.Open();
-                string code = data.key;
-                using (SqlCommand cmd = new SqlCommand(Const.SQLCommands.GetKeyPassAndName, conn))
+                using (SqlConnection conn = new SqlConnection(SQLPath))
                 {
-                    cmd.Parameters.Add("@key", System.Data.SqlDbType.VarChar);
-                    cmd.Parameters["@key"].Value = code;
-                    try
+                    conn.Open();
+                    string code = data.key;
+                    using (SqlCommand cmd = new SqlCommand(Const.SQLCommands.GetKeyPassAndName, conn))
                     {
-                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        cmd.Parameters.Add("@key", System.Data.SqlDbType.VarChar);
+                        cmd.Parameters["@key"].Value = code;
+                        try
                         {
-                            while (reader.Read())
+                            using (SqlDataReader reader = cmd.ExecuteReader())
                             {
-                                Models.User r = new Models.User();
-                                r.lastname = reader[1].ToString();
-                                r.firstName = reader[2].ToString();
-                                r.middlename = reader[3].ToString();
-                                ret.Add(r);
+                                while (reader.Read())
+                                {
+                                    Models.User r = new Models.User();
+                                    r.lastName = reader[1].ToString();
+                                    r.firstName = reader[2].ToString();
+                                    r.middleName = reader[3].ToString();
+                                    ret=r;
+                                    ret.founded = true;
+                                }
                             }
+                            // if (res != "") ret = true;
                         }
-                        // if (res != "") ret = true;
+                        catch (Exception e)
+                        {
+                            Models.User r = new Models.User() { errors = new Models.Error() { code = 400, message = e.Message } };
+                            ret=r;
+                            ret.founded = false;
+                            return ret;
+                        }
                     }
-                    catch (Exception e)
-                    {
-                        Models.User r = new Models.User() { errors = new Models.Error() { code = 400, message = e.Message } };
-                        ret.Add(r);
-                        return ret;
-                    }
+                    conn.Close();
                 }
-                conn.Close();
+
+
+                return ret;
             }
-
-
-            return ret;
+            else
+            {
+                ret = new Models.User()
+                {
+                    errors = new Models.Error() { code = 401, message = "Unauthorized" }
+                };
+                return ret;
+            }
         }
 
     }

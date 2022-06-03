@@ -13,6 +13,7 @@ namespace SkipassAPI
     {
         public static void Main(string[] args)
         {
+            Cache.Init.GenerateCacheOnInit();
             CreateHostBuilder(args).Build().Run();
         }
 

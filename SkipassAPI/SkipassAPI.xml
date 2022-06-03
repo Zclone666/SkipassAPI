@@ -4,9 +4,85 @@
         <name>SkipassAPI</name>
     </assembly>
     <members>
+        <member name="T:SkipassAPI.Cache.Init">
+            <summary>
+            Basic initialisations for caches
+            </summary>
+        </member>
+        <member name="F:SkipassAPI.Cache.Init.FirstLaunch">
+            <summary>
+            Flag that indicates whatever is it a first API start or not
+            </summary>
+        </member>
+        <member name="M:SkipassAPI.Cache.Init.GenerateCacheOnInit">
+            <summary>
+            Main method for cache init
+            </summary>
+        </member>
+        <member name="T:SkipassAPI.Cache.Renew">
+            <summary>
+            Renew for cache
+            </summary>
+        </member>
+        <member name="M:SkipassAPI.Cache.Renew.All">
+            <summary>
+            Renew All Cached data
+            </summary>
+        </member>
+        <member name="M:SkipassAPI.Cache.Renew.RenewServices">
+            <summary>
+            Async Service Cache renew
+            </summary>
+        </member>
+        <member name="M:SkipassAPI.Cache.Renew.RenewServicesWPrice">
+            <summary>
+            Async Services With Price Cache renew
+            </summary>
+        </member>
+        <member name="M:SkipassAPI.Cache.Renew.RenewAbons">
+            <summary>
+            Async Abonements Cache renew
+            </summary>
+        </member>
+        <member name="M:SkipassAPI.Cache.Renew.RenewAbonsWPrice">
+            <summary>
+            Async Abonements With Price Cache renew
+            </summary>
+        </member>
+        <member name="T:SkipassAPI.Cache.Static.ServiceCache">
+            <summary>
+            Static object serving as a cache for services
+            </summary>
+        </member>
+        <member name="P:SkipassAPI.Cache.Static.ServiceCache.ServicesWPrice">
+            <summary>
+            Static List of Services with Price
+            </summary>
+        </member>
+        <member name="P:SkipassAPI.Cache.Static.ServiceCache.Services">
+            <summary>
+            Static List of Services WITHOUT Price
+            </summary>
+        </member>
+        <member name="P:SkipassAPI.Cache.Static.ServiceCache.AbonsWPrice">
+            <summary>
+            Static List of only Abonements with Price
+            </summary>
+        </member>
+        <member name="P:SkipassAPI.Cache.Static.ServiceCache.Abons">
+            <summary>
+            Static List of Abonements WITHOUT Price
+            </summary>
+        </member>
         <member name="M:SkipassAPI.Controllers.Skypass.Get">
             <summary>
             Страница апи
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SkipassAPI.Controllers.Skypass.RenewS">
+            <summary>
+            Контроллер перекэширования списка услуг и абонементов
             </summary>
             <returns></returns>
         </member>
