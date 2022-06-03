@@ -25,7 +25,8 @@ namespace SkipassAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("/RenewS")]
-        public IActionResult RenewS()
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<IActionResult> RenewS()
         {
             try
             {
@@ -44,7 +45,7 @@ namespace SkipassAPI.Controllers
         /// <param name="data"></param>
         /// <returns></returns>
         [HttpPost("/CheckKey")]
-        public JsonResult CheckKey(Models.GetBalanceIn data)
+        public async Task<JsonResult> CheckKey(Models.GetBalanceIn data)
         {
             bool tst;
             Models.GetBalanceOut ret = new Models.GetBalanceOut();
@@ -104,7 +105,7 @@ namespace SkipassAPI.Controllers
         /// <param name="data"></param>
         /// <returns></returns>
         [HttpPost("/CheckKeyGetUserInfo")]
-        public JsonResult CheckKeyGetUserInfo(Models.GetBalanceIn data)
+        public async Task<JsonResult> CheckKeyGetUserInfo(Models.GetBalanceIn data)
         {
             bool tst;
             Models.User ret = new Models.User();
@@ -161,7 +162,7 @@ namespace SkipassAPI.Controllers
         /// <param name="data"></param>
         /// <returns></returns>
         [HttpPost("/GetServices")]
-        public JsonResult GetServices(Models.GetBalanceIn data)
+        public async Task<JsonResult> GetServices(Models.GetBalanceIn data)
         {
             JsonResult res;
             try
@@ -194,7 +195,7 @@ namespace SkipassAPI.Controllers
         /// <param name="data"></param>
         /// <returns></returns>
         [HttpPost("/GetServicesWPrice")]
-        public JsonResult GetServicesWPrice(Models.GetBalanceIn data)
+        public async Task<JsonResult> GetServicesWPrice(Models.GetBalanceIn data)
         {
             JsonResult res;
             try
@@ -227,7 +228,7 @@ namespace SkipassAPI.Controllers
         /// <param name="data"></param>
         /// <returns></returns>
         [HttpPost("/GetAbonements")]
-        public JsonResult GetAbonements(Models.GetBalanceIn data)
+        public async Task<JsonResult> GetAbonements(Models.GetBalanceIn data)
         {
             JsonResult res;
             try
@@ -260,7 +261,7 @@ namespace SkipassAPI.Controllers
         /// <param name="data"></param>
         /// <returns></returns>
         [HttpPost("/GetAbonWPrice")]
-        public JsonResult GetAbonWPrice(Models.GetBalanceIn data)
+        public async Task<JsonResult> GetAbonWPrice(Models.GetBalanceIn data)
         {
             JsonResult res;
             try
@@ -295,7 +296,7 @@ namespace SkipassAPI.Controllers
         /// <param name="data"></param>
         /// <returns></returns>
         [HttpPost("/GetUsersAbonements")]
-        public JsonResult GetUserAbon(Models.UserServicesReq data)
+        public async Task<JsonResult> GetUserAbon(Models.UserServicesReq data)
         {
             JsonResult res;
             try
@@ -330,7 +331,7 @@ namespace SkipassAPI.Controllers
         /// <param name="data"></param>
         /// <returns></returns>
         [HttpPost("/GetUsersServices")]
-        public JsonResult GetUserSrv(Models.UserServicesReq data)
+        public async Task<JsonResult> GetUserSrv(Models.UserServicesReq data)
         {
             JsonResult res;
             try
@@ -350,7 +351,7 @@ namespace SkipassAPI.Controllers
         /// <param name="data"></param>
         /// <returns></returns>
         [HttpPost("/GetBalance")]
-        public JsonResult GetBalance(Models.GetBalanceIn data)
+        public async Task<JsonResult> GetBalance(Models.GetBalanceIn data)
         {
             bool tst;
             Models.GetBalanceOut ret = new Models.GetBalanceOut();
@@ -397,7 +398,7 @@ namespace SkipassAPI.Controllers
         /// <param name="data"></param>
         /// <returns></returns>
         [HttpPost("/AddSum")]
-        public JsonResult AddSum(Models.FillBalanceIn data)
+        public async Task<JsonResult> AddSum(Models.FillBalanceIn data)
         {
             try
             {
@@ -512,7 +513,7 @@ namespace SkipassAPI.Controllers
         /// <param name="data"></param>
         /// <returns></returns>
         [HttpPost("/AddServiceToUser")]
-        public JsonResult AddService(Models.AddService data)
+        public async Task<JsonResult> AddService(Models.AddService data)
         {
             try
             {
@@ -547,7 +548,7 @@ namespace SkipassAPI.Controllers
         /// <param name="data"></param>
         /// <returns></returns>
         [HttpPost("/CancelUserService")]
-        public JsonResult CancelService(Models.AddService data)
+        public async Task<JsonResult> CancelService(Models.AddService data)
         {
             try
             {

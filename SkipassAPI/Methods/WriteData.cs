@@ -33,11 +33,38 @@ namespace SkipassAPI.Methods
                         cmd.Parameters["@date_end"].Value = Global.UnixTimeToDateTime(data.date_end).ToString();
                         try
                         {
-                            using (SqlDataReader reader = cmd.ExecuteReader())
+                            #region MicrosoftSQL transaction creating
+                            using (SqlTransaction trans = conn.BeginTransaction(System.Data.IsolationLevel.Serializable, "Writing..."))
                             {
+                                cmd.Connection = conn;
+                                cmd.Transaction = trans;
+                                #endregion
+                                cmd.ExecuteNonQuery();
+                                try
+                                {
+                                    trans.Commit();
                                     ret.isSuccess = true;
                                     ret.service = data;
+                                }
+                                #region SQLReading Exception
+                                catch (Exception SQLReadEx)
+                                {
+                                    ret.errors.message = SQLReadEx.Message;
+                                    ret.errors.code = 500;
+                                    try
+                                    {
+                                        trans.Rollback();
+                                    }
+                                    #region Transaction RollBack Exception
+                                    catch (Exception RollBEx)
+                                    {
+                                        ret.errors.message += $"\n{RollBEx.Message}";
+                                    }
+                                    #endregion
+                                }
+                                #endregion
                             }
+                            
                         }
                         catch (Exception e)
                         {
@@ -94,10 +121,34 @@ namespace SkipassAPI.Methods
                         cmd.Parameters["@date_start"].Value = dt;
                         try
                         {
-                            using (SqlDataReader reader = cmd.ExecuteReader())
+                            #region MicrosoftSQL transaction creating
+                            using (SqlTransaction trans = conn.BeginTransaction(System.Data.IsolationLevel.Serializable, "Writing..."))
                             {
-                                ret.isSuccess = true;
-                                ret.service = data;
+                                cmd.Connection = conn;
+                                cmd.Transaction = trans;
+                            #endregion
+                                cmd.ExecuteNonQuery();
+                                try
+                                {
+                                    trans.Commit();
+                                }
+                                #region SQLReading Exception
+                                catch (Exception SQLReadEx)
+                                {
+                                    ret.errors.message = SQLReadEx.Message;
+                                    ret.errors.code = 500;
+                                    try
+                                    {
+                                        trans.Rollback();
+                                    }
+                                    #region Transaction RollBack Exception
+                                    catch (Exception RollBEx)
+                                    {
+                                        ret.errors.message += $"\n{RollBEx.Message}";
+                                    }
+                                    #endregion
+                                }
+                                #endregion
                             }
                         }
                         catch (Exception e)
@@ -286,7 +337,35 @@ namespace SkipassAPI.Methods
                     cmd.Parameters["@comment"].Value = (data.comment is null)?"":data.comment;
                     try
                     {
-                        cmd.ExecuteNonQuery();
+                        #region MicrosoftSQL transaction creating
+                        using (SqlTransaction trans = conn.BeginTransaction(System.Data.IsolationLevel.Serializable, "Writing..."))
+                        {
+                            cmd.Connection = conn;
+                            cmd.Transaction = trans;
+                            #endregion
+                            cmd.ExecuteNonQuery();
+                            try
+                            {
+                                trans.Commit();
+                            }
+                            #region SQLReading Exception
+                            catch (Exception SQLReadEx)
+                            {
+                                ret.errors.message = SQLReadEx.Message;
+                                ret.errors.code = 500;
+                                try
+                                {
+                                    trans.Rollback();
+                                }
+                                #region Transaction RollBack Exception
+                                catch (Exception RollBEx)
+                                {
+                                    ret.errors.message += $"\n{RollBEx.Message}";
+                                }
+                                #endregion
+                            }
+                            #endregion
+                        }
                         //using (SqlDataReader reader = cmd.ExecuteReader())
                         //{
                         //    while (reader.Read())
