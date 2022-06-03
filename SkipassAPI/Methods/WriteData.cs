@@ -131,6 +131,7 @@ namespace SkipassAPI.Methods
                                 try
                                 {
                                     trans.Commit();
+                                    ret.isSuccess = true;
                                 }
                                 #region SQLReading Exception
                                 catch (Exception SQLReadEx)
