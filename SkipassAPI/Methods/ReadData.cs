@@ -142,26 +142,37 @@ namespace SkipassAPI.Methods
         /// <param name="data"></param>
         /// <param name="SQLPath"></param>
         /// <returns></returns>
-        public static Models.ListServWPrice GetAllServicesWPrice(Models.GetBalanceIn data, string SQLPath = null)
+        public static Models.ListServWPriceResp GetAllServicesWPrice(Models.GetBalanceIn data, string SQLPath = null)
         {
             try
             {
                 if (SQLPath is null) SQLPath = Const.Paths.LocalSQLPath;
-                Models.ListServWPrice ret = new Models.ListServWPrice();
+                Models.ListServWPriceResp ret = new Models.ListServWPriceResp();
                 if (Methods.CheckAuthkey.CheckAuthKey(data.authkey))
                 {
-                    ret.services = Cache.Static.ServiceCache.ServicesWPrice;
+                    var tmpsrv = new List<Models.BaseServResp>();
+                    
+                    foreach(var i in Cache.Static.ServiceCache.ServicesWPrice.Select(x=>x.categoryID).Distinct())
+                    {
+                        var tmpprices = new List<Models.PriceResp>();
+                        foreach(var p in Cache.Static.ServiceCache.ServicesWPrice.Where(x => x.categoryID == i))
+                        {
+                            tmpprices.Add(new Models.PriceResp() { dayT = p.dayT, dayTypeId = p.dayTypeId, price = p.price });
+                        }
+                        tmpsrv.Add(new Models.BaseServResp() { categoryID = i, name = Cache.Static.ServiceCache.ServicesWPrice.Where(x => x.categoryID == i).Select(x => x.name).FirstOrDefault(), stockType = Cache.Static.ServiceCache.ServicesWPrice.Where(x => x.categoryID == i).Select(x => x.stockType).FirstOrDefault(), price=tmpprices });
+                    }
+                    ret.services = tmpsrv;
                     return ret;
                 }
                 else
                 {
-                    ret=new Models.ListServWPrice() { errors = new Models.Error() { code = 401, message = "Unauthorized" } };
+                    ret=new Models.ListServWPriceResp() { errors = new Models.Error() { code = 401, message = "Unauthorized" } };
                     return ret;
                 }
             }
             catch (Exception e)
             {
-                return new Models.ListServWPrice(){ errors = new Models.Error() { code = 400, message = e.Message } };
+                return new Models.ListServWPriceResp(){ errors = new Models.Error() { code = 400, message = e.Message } };
             }
         }
 
@@ -172,26 +183,37 @@ namespace SkipassAPI.Methods
         /// <param name="data"></param>
         /// <param name="SQLPath"></param>
         /// <returns></returns>
-        public static Models.ListServWPrice GetAbonWPrice(Models.GetBalanceIn data, string SQLPath = null)
+        public static Models.ListServWPriceResp GetAbonWPrice(Models.GetBalanceIn data, string SQLPath = null)
         {
             try
             {
                 if (SQLPath is null) SQLPath = Const.Paths.LocalSQLPath;
-                Models.ListServWPrice ret = new Models.ListServWPrice();
+                Models.ListServWPriceResp ret = new Models.ListServWPriceResp();
                 if (Methods.CheckAuthkey.CheckAuthKey(data.authkey))
                 {
-                    ret.services = Cache.Static.ServiceCache.AbonsWPrice;
+                    var tmpsrv = new List<Models.BaseServResp>();
+
+                    foreach (var i in Cache.Static.ServiceCache.ServicesWPrice.Select(x => x.categoryID).Distinct())
+                    {
+                        var tmpprices = new List<Models.PriceResp>();
+                        foreach (var p in Cache.Static.ServiceCache.ServicesWPrice.Where(x => x.categoryID == i))
+                        {
+                            tmpprices.Add(new Models.PriceResp() { dayT = p.dayT, dayTypeId = p.dayTypeId, price = p.price });
+                        }
+                        tmpsrv.Add(new Models.BaseServResp() { categoryID = i, name = Cache.Static.ServiceCache.ServicesWPrice.Where(x => x.categoryID == i).Select(x => x.name).FirstOrDefault(), stockType = Cache.Static.ServiceCache.ServicesWPrice.Where(x => x.categoryID == i).Select(x => x.stockType).FirstOrDefault(), price = tmpprices });
+                    }
+                    ret.services = tmpsrv;
                     return ret;
                 }
                 else
                 {
-                    ret=new Models.ListServWPrice() { errors = new Models.Error() { code = 401, message = "Unauthorized" } };
+                    ret=new Models.ListServWPriceResp() { errors = new Models.Error() { code = 401, message = "Unauthorized" } };
                     return ret;
                 }
             }
             catch (Exception e)
             {
-                return new Models.ListServWPrice() { errors = new Models.Error() { code = 400, message = e.Message } };
+                return new Models.ListServWPriceResp() { errors = new Models.Error() { code = 400, message = e.Message } };
             }
         }
 

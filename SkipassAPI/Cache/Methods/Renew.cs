@@ -123,12 +123,6 @@ namespace SkipassAPI.Cache
                     {
                         try
                         {
-                            #region MicrosoftSQL transaction creating
-                            SqlTransaction trans;
-                            trans = conn.BeginTransaction(System.Data.IsolationLevel.Serializable, "Reading From dbo.Category");
-                            cmd.Connection = conn;
-                            cmd.Transaction = trans;
-                            #endregion
                             using (SqlDataReader reader = cmd.ExecuteReader())
                             {
                                 try
@@ -143,6 +137,7 @@ namespace SkipassAPI.Cache
                                         r.name = reader[2].ToString();
                                         r.price = double.TryParse(reader[3].ToString(), out double Price) ? Price : 0;
                                         r.dayT = reader[4].ToString();
+                                        r.dayTypeId= int.TryParse(reader[5].ToString(), out int DayTypeId) ? DayTypeId : 0;
                                         ret.services.Add(r);
                                     }
                                     #endregion
@@ -152,16 +147,6 @@ namespace SkipassAPI.Cache
                                 {
                                     ret.errors.message = SQLReadEx.Message;
                                     ret.errors.code = 500;
-                                    try
-                                    {
-                                        trans.Rollback();
-                                    }
-                                    #region Transaction RollBack Exception
-                                    catch (Exception RollBEx)
-                                    {
-                                        ret.errors.message += $"\n{RollBEx.Message}";
-                                    }
-                                    #endregion
                                 }
                                 #endregion
                             }
@@ -282,12 +267,6 @@ namespace SkipassAPI.Cache
                     {
                         try
                         {
-                            #region MicrosoftSQL transaction creating
-                            SqlTransaction trans;
-                            trans = conn.BeginTransaction(System.Data.IsolationLevel.Serializable, "Reading From dbo.Category");
-                            cmd.Connection = conn;
-                            cmd.Transaction = trans;
-                            #endregion
                             using (SqlDataReader reader = cmd.ExecuteReader())
                             {
                                 try
@@ -302,6 +281,7 @@ namespace SkipassAPI.Cache
                                         r.name = reader[2].ToString();
                                         r.price = double.TryParse(reader[3].ToString(), out double Price) ? Price : 0;
                                         r.dayT = reader[4].ToString();
+                                        r.dayTypeId = int.TryParse(reader[5].ToString(), out int DayTypeId) ? DayTypeId : 0;
                                         ret.services.Add(r);
                                     }
                                     #endregion
@@ -311,20 +291,9 @@ namespace SkipassAPI.Cache
                                 {
                                     ret.errors.message = SQLReadEx.Message;
                                     ret.errors.code = 500;
-                                    try
-                                    {
-                                        trans.Rollback();
-                                    }
-                                    #region Transaction RollBack Exception
-                                    catch (Exception RollBEx)
-                                    {
-                                        ret.errors.message += $"\n{RollBEx.Message}";
-                                    }
-                                    #endregion
                                 }
                                 #endregion
                             }
-                     //       trans.Dispose();
                             return ret;
                         }
                         #region Arguments Exception

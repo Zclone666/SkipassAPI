@@ -44,5 +44,28 @@ namespace SkipassAPI.Models
     {
         public double price { get; set; }
         public string dayT { get; set; }
+        public int dayTypeId { get; set; }
+    }
+
+    public class ListServWPriceResp
+    {
+        public Error errors { get; set; } = new Error();
+        public List<BaseServResp> services { get; set; } = new List<BaseServResp>();
+    }
+
+
+    public class BaseServResp
+    {
+        public int categoryID { get; set; }
+        public int stockType { get; set; }
+        public string name { get; set; }
+        public List<PriceResp> price { get; set; } = new List<PriceResp>();
+    }
+
+    public class PriceResp
+    {
+        public double price { get; set; }
+        public string dayT { get; set; }
+        public int dayTypeId { get; set; }
     }
 }
