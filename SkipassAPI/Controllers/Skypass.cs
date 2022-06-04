@@ -114,7 +114,8 @@ namespace SkipassAPI.Controllers
             try
             {
                 ret = Methods.ReadData.CheckUserRetName(data);
-                if (!ret.founded && String.IsNullOrEmpty(ret.firstName) && String.IsNullOrEmpty(ret.lastName) && String.IsNullOrEmpty(ret.middleName)) ret.errors = new Models.Error() { code = 422, message = "Key not found!" };
+                if (ret.errors.code == 401) return new JsonResult(ret);
+                if (!ret.founded && String.IsNullOrEmpty(ret.userInfo.firstName) && String.IsNullOrEmpty(ret.userInfo.lastName) && String.IsNullOrEmpty(ret.userInfo.middleName)) ret.errors = new Models.Error() { code = 422, message = "Key not found!" };
                 JsonResult res = new JsonResult((ret.errors.code == 0) ? ret : new Models.User() { founded = false, errors=new Models.Error() { code=ret.errors.code, message=ret.errors.message } });
                 return res;
             }
@@ -304,7 +305,7 @@ namespace SkipassAPI.Controllers
             #region Checks
             if (String.IsNullOrEmpty(data.key) || String.IsNullOrWhiteSpace(data.key)) return new JsonResult(new Models.UserServicesResp() { errors = new Models.Error() { code = 400, message = "Key couldn't be empty" } });
             Models.User chck = Methods.ReadData.CheckUserRetName(new Models.GetBalanceIn() { authkey = data.authkey, key = data.key });
-            if (!chck.founded && String.IsNullOrEmpty(chck.firstName) && String.IsNullOrEmpty(chck.lastName) && String.IsNullOrEmpty(chck.middleName))
+            if (!chck.founded && String.IsNullOrEmpty(chck.userInfo.firstName) && String.IsNullOrEmpty(chck.userInfo.lastName) && String.IsNullOrEmpty(chck.userInfo.middleName))
             {
                 return new JsonResult(new Models.AddServiceResp() { errors = new Models.Error() { code = 422, message = "Key not found!" } });
             }
@@ -347,7 +348,7 @@ namespace SkipassAPI.Controllers
             #region Checks
             if (String.IsNullOrEmpty(data.key) || String.IsNullOrWhiteSpace(data.key)) return new JsonResult(new Models.UserServicesResp() { errors = new Models.Error() { code = 400, message = "Key couldn't be empty" } });
             Models.User chck = Methods.ReadData.CheckUserRetName(new Models.GetBalanceIn() { authkey = data.authkey, key = data.key });
-            if (!chck.founded && String.IsNullOrEmpty(chck.firstName) && String.IsNullOrEmpty(chck.lastName) && String.IsNullOrEmpty(chck.middleName))
+            if (!chck.founded && String.IsNullOrEmpty(chck.userInfo.firstName) && String.IsNullOrEmpty(chck.userInfo.lastName) && String.IsNullOrEmpty(chck.userInfo.middleName))
             {
                 return new JsonResult(new Models.AddServiceResp() { errors = new Models.Error() { code = 422, message = "Key not found!" } });
             }
@@ -378,7 +379,7 @@ namespace SkipassAPI.Controllers
             bool tst;
             Models.GetBalanceOut ret = new Models.GetBalanceOut();
             Models.User chck = Methods.ReadData.CheckUserRetName(new Models.GetBalanceIn() { authkey = data.authkey, key = data.key });
-            if (!chck.founded && String.IsNullOrEmpty(chck.firstName) && String.IsNullOrEmpty(chck.lastName) && String.IsNullOrEmpty(chck.middleName))
+            if (!chck.founded && String.IsNullOrEmpty(chck.userInfo.firstName) && String.IsNullOrEmpty(chck.userInfo.lastName) && String.IsNullOrEmpty(chck.userInfo.middleName))
             {
                 ret.errors = new Models.Error() { code = 422, message = "Key not found!" };
                 return new JsonResult(ret);
@@ -439,7 +440,7 @@ namespace SkipassAPI.Controllers
                     bool tst;
                     Models.GetBalanceOut ret = new Models.GetBalanceOut();
                     Models.User chck = Methods.ReadData.CheckUserRetName(new Models.GetBalanceIn() { authkey = data.authkey, key = data.key });
-                    if (!chck.founded && String.IsNullOrEmpty(chck.firstName) && String.IsNullOrEmpty(chck.lastName) && String.IsNullOrEmpty(chck.middleName))
+                    if (!chck.founded && String.IsNullOrEmpty(chck.userInfo.firstName) && String.IsNullOrEmpty(chck.userInfo.lastName) && String.IsNullOrEmpty(chck.userInfo.middleName))
                     {
                         ret.errors = new Models.Error() { code = 422, message = "Key not found!" };
                         return new JsonResult(ret);
@@ -557,9 +558,9 @@ namespace SkipassAPI.Controllers
             try
             {
                 #region Checks
-                if (String.IsNullOrEmpty(data.key) || String.IsNullOrWhiteSpace(data.key) || data.categoryID==0) return new JsonResult(new Models.AddServiceResp() { errors = new Models.Error() { code = 400, message = "Not enough parameters" } });
+                if (String.IsNullOrEmpty(data.key) || String.IsNullOrWhiteSpace(data.key) || data.categoryID==0 || data.date_start==0 || data.date_end==0) return new JsonResult(new Models.AddServiceResp() { errors = new Models.Error() { code = 400, message = "Not enough parameters" } });
                 Models.User chck = Methods.ReadData.CheckUserRetName(new Models.GetBalanceIn() { authkey = data.authkey, key = data.key });
-                if (!chck.founded && String.IsNullOrEmpty(chck.firstName) && String.IsNullOrEmpty(chck.lastName) && String.IsNullOrEmpty(chck.middleName))
+                if (!chck.founded && String.IsNullOrEmpty(chck.userInfo.firstName) && String.IsNullOrEmpty(chck.userInfo.lastName) && String.IsNullOrEmpty(chck.userInfo.middleName))
                 {
                     return new JsonResult(new Models.AddServiceResp() { errors = new Models.Error() { code = 422, message = "Key not found!" } });
                 }
@@ -600,9 +601,9 @@ namespace SkipassAPI.Controllers
             try
             {
                 #region Checks
-                if (String.IsNullOrEmpty(data.key) || String.IsNullOrWhiteSpace(data.key) || data.categoryID==0 || data.date_start==0) return new JsonResult(new Models.GetBalanceOut() { errors = new Models.Error() { code = 400, message = "Not enough parameters" } });
+                if ((String.IsNullOrEmpty(data.key) || String.IsNullOrWhiteSpace(data.key) || data.categoryID==0 || data.date_start==0) && data.accountStockId==0) return new JsonResult(new Models.GetBalanceOut() { errors = new Models.Error() { code = 400, message = "Not enough parameters" } });
                 Models.User chck = Methods.ReadData.CheckUserRetName(new Models.GetBalanceIn() { authkey = data.authkey, key = data.key });
-                if (!chck.founded && String.IsNullOrEmpty(chck.firstName) && String.IsNullOrEmpty(chck.lastName) && String.IsNullOrEmpty(chck.middleName))
+                if (data.accountStockId==0 && (!chck.founded && String.IsNullOrEmpty(chck.userInfo.firstName) && String.IsNullOrEmpty(chck.userInfo.lastName) && String.IsNullOrEmpty(chck.userInfo.middleName)))
                 {
                     return new JsonResult(new Models.AddServiceResp() { errors = new Models.Error() { code = 422, message = "Key not found!" } });
                 }

@@ -150,6 +150,7 @@ namespace SkipassAPI.Methods
                 Models.ListServWPriceResp ret = new Models.ListServWPriceResp();
                 if (Methods.CheckAuthkey.CheckAuthKey(data.authkey))
                 {
+                    return Cache.Static.NewServResp.ListServWPriceResp;
                     var tmpsrv = new List<Models.BaseServResp>();
                     
                     foreach(var i in Cache.Static.ServiceCache.ServicesWPrice.Select(x=>x.categoryID).Distinct())
@@ -191,6 +192,7 @@ namespace SkipassAPI.Methods
                 Models.ListServWPriceResp ret = new Models.ListServWPriceResp();
                 if (Methods.CheckAuthkey.CheckAuthKey(data.authkey))
                 {
+                    return Cache.Static.NewServResp.ListAbonWPriceResp;
                     var tmpsrv = new List<Models.BaseServResp>();
 
                     foreach (var i in Cache.Static.ServiceCache.ServicesWPrice.Select(x => x.categoryID).Distinct())
@@ -416,9 +418,11 @@ namespace SkipassAPI.Methods
                                 while (reader.Read())
                                 {
                                     Models.User r = new Models.User();
-                                    r.lastName = reader[1].ToString();
-                                    r.firstName = reader[2].ToString();
-                                    r.middleName = reader[3].ToString();
+                                    r.userInfo.lastName = reader[1].ToString();
+                                    r.userInfo.firstName = reader[2].ToString();
+                                    r.userInfo.middleName = reader[3].ToString();
+                                    r.userInfo.email = reader[4].ToString();
+                                    r.userInfo.phone = reader[5].ToString();
                                     ret=r;
                                     ret.founded = true;
                                 }

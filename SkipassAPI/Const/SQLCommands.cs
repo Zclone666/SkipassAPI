@@ -38,7 +38,7 @@ FROM  (select Amount,code,Name,CategoryId,SuperAccountId,StockType,AccountStockI
 	f1.StockType = 21 and SuperAccount.Type = 0 and f1.Code=@key";
 
         public const string GetKeyPass = @"SELECT Code FROM [AccountStock] WHERE code like @key";
-        public const string GetKeyPassAndName = @"SELECT a.Code, i.LastName, i.FirstName, i.SecondName FROM Fwp.dbo.AccountStock as a inner join Fwp.dbo.PersonalInfo as i on i.SuperAccountId=a.SuperAccountId WHERE a.Code like @key";
+        public const string GetKeyPassAndName = @"SELECT a.Code, i.LastName, i.FirstName, i.SecondName, i.Email, i.Phone FROM Fwp.dbo.AccountStock as a inner join Fwp.dbo.PersonalInfo as i on i.SuperAccountId=a.SuperAccountId WHERE a.Code like @key";
 
         public const string UpdateBalance = @"update [AccountStock]
     set Amount=@add_sum+(select Amount from AccountStock where StockType=1 and SuperAccountId=(select SuperAccountId from AccountStock where StockType=21 and Code=@key))
@@ -58,7 +58,10 @@ FROM  (select Amount,code,Name,CategoryId,SuperAccountId,StockType,AccountStockI
     UPDATE [Fwp].[dbo].[SuperAccount] SET [LastTransactionTime] = GETDATE() WHERE [SuperAccountId] = 3;
     UPDATE [Fwp].[dbo].[SuperAccount] SET [LastTransactionTime] = GETDATE() WHERE [SuperAccountId] = (select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key);
     INSERT INTO [Fwp].[dbo].[GlobalId] ([StockType]) VALUES (0);
-    INSERT INTO [Fwp].[dbo].[GlobalId] ([StockType]) VALUES (0);";
+    INSERT INTO [Fwp].[dbo].[GlobalId] ([StockType]) VALUES (0);
+    SELECT [AccountStockId] FROM Fwp.dbo.AccountStock WHERE SuperAccountId=(select SuperAccountId from AccountStock where StockType=21 and Code=@key) AND CategoryId=@catid AND AMOUNT=@amount AND Start=@date_start AND [End]=@date_end";
+
+        public const string GetAddedAccountStockId = "SELECT [AccountStockId] FROM Fwp.dbo.AccountStock WHERE SuperAccountId=(select SuperAccountId from AccountStock where StockType=21 and Code=@key) AND CategoryId=@catid AND AMOUNT=@amount AND Start=@date_start AND End=@date_end";
 
         public const string GetAllServices = @"SELECT [CategoryId]
       ,[StockType]
@@ -128,7 +131,51 @@ WHERE
     UPDATE [Fwp].[dbo].[SuperAccount] SET [LastTransactionTime] = GETDATE() WHERE [SuperAccountId] = (select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key);
 ";
 
-        public const string UpdateEmail = @"update pri set Email=@email, Phone=@phone
+
+		public const string CanUSrvAccStockId = @"update [Fwp].[dbo].[AccountStock] set Fwp.dbo.AccountStock.IsActive=0
+where Fwp.dbo.AccountStock.[AccountStockId]=@accStockId;
+INSERT INTO [MasterTransaction]
+ (
+	[SuperAccountFrom],
+	[SuperAccountTo],
+	[TransTime],
+	[UserId],
+	[Machine],
+	[ExternalId],
+	[SecSubjectId],
+	[CheckDetailId],
+	[IsOffline],
+	[ExtendedData],
+	[GeographyId],
+	[ServicePointId]
+) VALUES (
+	(select SuperAccountId from Fwp.dbo.AccountStock where [AccountStockId]=@accStockId),
+	3,
+	GETDATE(),
+	'FREESTYLE@Администратор',
+	'SRVMAIN@Bars.Administrator',
+	NULL,
+	1,
+	NULL,
+	0,
+	NULL,
+	NULL,
+	4
+);
+UPDATE
+	[abi]
+SET
+	[BookingStatus] = 3
+FROM
+	fWP.DBO.[ActivityBookingInfo] [abi]
+		INNER JOIN Fwp.dbo.[AccountStock] [a] ON [abi].[ActivityBookingInfoId] = [a].[ActivityBookingInfoId]
+WHERE
+	[a].[TargetAccountStockId] = @accStockId AND [abi].[BookingStatus] = 1;
+    UPDATE [Fwp].[dbo].[SuperAccount] SET [LastTransactionTime] = GETDATE() WHERE [SuperAccountId] = 3;
+    UPDATE [Fwp].[dbo].[SuperAccount] SET [LastTransactionTime] = GETDATE() WHERE [SuperAccountId] = (select SuperAccountId from Fwp.dbo.AccountStock where [AccountStockId]=@accStockId);
+";
+
+		public const string UpdateEmail = @"update pri set Email=@email, Phone=@phone
     from PersonalInfo pri
     inner join AccountStock acs on pri.SuperAccountId=acs.SuperAccountId
     where code=@key

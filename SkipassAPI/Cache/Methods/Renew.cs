@@ -18,6 +18,18 @@ namespace SkipassAPI.Cache
             Cache.Static.ServiceCache.ServicesWPrice = (_RenewServicesWPrice().Result).services;
             Cache.Static.ServiceCache.Abons = (_RenewAbons().Result).services;
             Cache.Static.ServiceCache.AbonsWPrice = (_RenewAbonsWPrice().Result).services;
+            if (Cache.Init.FirstLaunch)
+            {
+                if (Cache.Static.ServiceCache.ServicesWPrice.Count == 0)
+                {
+                    do
+                    {
+
+                    } while (Cache.Static.ServiceCache.ServicesWPrice.Count == 0);
+                }
+            }
+                Cache.Static.NewServResp.ListServWPriceResp = Cache.Methods.Convert.OldToNew(Cache.Static.ServiceCache.ServicesWPrice);
+                Cache.Static.NewServResp.ListAbonWPriceResp = Cache.Methods.Convert.OldToNew(Cache.Static.ServiceCache.AbonsWPrice);
         }
 
         /// <summary>

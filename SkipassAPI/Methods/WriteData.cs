@@ -39,11 +39,13 @@ namespace SkipassAPI.Methods
                                 cmd.Connection = conn;
                                 cmd.Transaction = trans;
                                 #endregion
-                                cmd.ExecuteNonQuery();
+                                //cmd.ExecuteNonQuery();
+                                ret.service.accountStockId = (int)cmd.ExecuteScalar();
                                 try
                                 {
                                     trans.Commit();
                                     ret.isSuccess = true;
+                                    data.accountStockId = ret.service.accountStockId;
                                     ret.service = data;
                                 }
                                 #region SQLReading Exception
@@ -110,6 +112,101 @@ namespace SkipassAPI.Methods
                 {
                     conn.Open();
                     string code = data.key;
+                    string CommOfChoise = (data.accountStockId != 0) ? Const.SQLCommands.CanUSrvAccStockId : Const.SQLCommands.CancelUserSrv;
+                    using (SqlCommand cmd = new SqlCommand(CommOfChoise, conn))
+                    {
+                        if (data.accountStockId == 0)
+                        {
+                            cmd.Parameters.Add("@key", System.Data.SqlDbType.VarChar);
+                            cmd.Parameters.Add("@catId", System.Data.SqlDbType.VarChar);
+                            cmd.Parameters.Add("@date_start", System.Data.SqlDbType.DateTime);
+                            cmd.Parameters["@key"].Value = code;
+                            cmd.Parameters["@catId"].Value = data.categoryID;
+                            string dt = Global.UnixTimeToDateTime(data.date_start).ToString();
+                            cmd.Parameters["@date_start"].Value = dt;
+                        }
+                        else
+                        {
+                            cmd.Parameters.Add("@accStockId", System.Data.SqlDbType.VarChar);
+                            cmd.Parameters["@accStockId"].Value = data.accountStockId;
+                        }
+                        try
+                        {
+                            #region MicrosoftSQL transaction creating
+                            using (SqlTransaction trans = conn.BeginTransaction(System.Data.IsolationLevel.Serializable, "Writing..."))
+                            {
+                                cmd.Connection = conn;
+                                cmd.Transaction = trans;
+                            #endregion
+                                cmd.ExecuteNonQuery();
+                                try
+                                {
+                                    trans.Commit();
+                                    ret.isSuccess = true;
+                                }
+                                #region SQLReading Exception
+                                catch (Exception SQLReadEx)
+                                {
+                                    ret.errors.message = SQLReadEx.Message;
+                                    ret.errors.code = 500;
+                                    try
+                                    {
+                                        trans.Rollback();
+                                    }
+                                    #region Transaction RollBack Exception
+                                    catch (Exception RollBEx)
+                                    {
+                                        ret.errors.message += $"\n{RollBEx.Message}";
+                                    }
+                                    #endregion
+                                }
+                                #endregion
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            ret.errors = new Models.Error() { code = 400, message = e.Message };
+                            return ret;
+                        }
+                    }
+                    conn.Close();
+                }
+                return ret;
+            }
+            else
+            {
+                ret.errors = new Models.Error() { code = 401, message = "Unauthorized" };
+                return ret;
+            }
+
+            Models.FillBalanceIn fb = new Models.FillBalanceIn() { add_sum = data.amount, key = data.key, successed = 1, payment_system = "online" };
+            Methods.WriteData.LogHistory(fb);
+            //try
+            //{
+            //    Models.FillBalanceIn data2 = IsThereEmailPhone(data, SQLPath);
+            //    if (data.email != data2.email || data.phone != data2.phone)
+            //    {
+            //        data.email = (data2.email is null || data2.email == "") ? data.email : data2.email;
+            //        data.phone = (data2.phone is null || data2.phone == "") ? data.phone : data2.phone;
+            //        UpdateEmail(data, SQLPath);
+            //    }
+            //}
+            //catch (Exception e) { }
+
+            //return ret;
+        }
+
+
+        public static Models.AddServiceResp CancelSrvByAccStId(Models.AddService data, string SQLPath = null)
+        {
+            if (SQLPath is null) SQLPath = Const.Paths.LocalSQLPath;
+            Models.AddServiceResp ret = new Models.AddServiceResp();
+            if (Methods.CheckAuthkey.CheckAuthKey(data.authkey))
+            {
+                using (SqlConnection conn = new SqlConnection(SQLPath))
+                {
+                    conn.Open();
+                    string code = data.key;
                     using (SqlCommand cmd = new SqlCommand(Const.SQLCommands.CancelUserSrv, conn))
                     {
                         cmd.Parameters.Add("@key", System.Data.SqlDbType.VarChar);
@@ -126,7 +223,7 @@ namespace SkipassAPI.Methods
                             {
                                 cmd.Connection = conn;
                                 cmd.Transaction = trans;
-                            #endregion
+                                #endregion
                                 cmd.ExecuteNonQuery();
                                 try
                                 {

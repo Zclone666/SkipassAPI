@@ -24,6 +24,7 @@ namespace SkipassAPI.Models
 
     public class AddService:Alarm
     {
+        public int accountStockId { get; set; }
         public int categoryID { get; set; }
         public decimal amount { get; set; } = 1;
         /// <summary>
@@ -36,7 +37,7 @@ namespace SkipassAPI.Models
     
     public class AddServiceResp : Alarm
     {
-        public AddService service { get; set; }
+        public AddService service { get; set; } = new AddService();
         public bool isSuccess { get; set; }
     }
 
