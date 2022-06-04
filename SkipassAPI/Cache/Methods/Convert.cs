@@ -14,14 +14,14 @@ namespace SkipassAPI.Cache.Methods
             {
                 var tmpsrv = new List<Models.BaseServResp>();
 
-                foreach (var i in Cache.Static.ServiceCache.ServicesWPrice.Select(x => x.categoryID).Distinct())
+                foreach (var i in old.Select(x => x.categoryID).Distinct())
                 {
                     var tmpprices = new List<Models.PriceResp>();
-                    foreach (var p in Cache.Static.ServiceCache.ServicesWPrice.Where(x => x.categoryID == i))
+                    foreach (var p in old.Where(x => x.categoryID == i))
                     {
                         tmpprices.Add(new Models.PriceResp() { dayT = p.dayT, dayTypeId = p.dayTypeId, price = p.price });
                     }
-                    tmpsrv.Add(new Models.BaseServResp() { categoryID = i, name = Cache.Static.ServiceCache.ServicesWPrice.Where(x => x.categoryID == i).Select(x => x.name).FirstOrDefault(), stockType = Cache.Static.ServiceCache.ServicesWPrice.Where(x => x.categoryID == i).Select(x => x.stockType).FirstOrDefault(), price = tmpprices });
+                    tmpsrv.Add(new Models.BaseServResp() { categoryID = i, name = old.Where(x => x.categoryID == i).Select(x => x.name).FirstOrDefault(), stockType = old.Where(x => x.categoryID == i).Select(x => x.stockType).FirstOrDefault(), price = tmpprices });
                 }
                 ret.services = tmpsrv;
             }catch(Exception e)

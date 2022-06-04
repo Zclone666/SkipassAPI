@@ -9,7 +9,7 @@ namespace SkipassAPI.Methods
     public static class WriteData
     {
 
-        public static Models.AddServiceResp AddServices(Models.AddService data, string SQLPath = null)
+        public static Models.AddServiceResp AddServices(Models.AddServiceReq data, string SQLPath = null)
         {
             if (SQLPath is null) SQLPath = Const.Paths.LocalSQLPath;
             Models.AddServiceResp ret = new Models.AddServiceResp();
@@ -102,7 +102,7 @@ namespace SkipassAPI.Methods
         }
 
 
-        public static Models.AddServiceResp CancelServices(Models.AddService data, string SQLPath = null)
+        public static Models.AddServiceResp CancelServices(Models.AddServiceReq data, string SQLPath = null)
         {
             if (SQLPath is null) SQLPath = Const.Paths.LocalSQLPath;
             Models.AddServiceResp ret = new Models.AddServiceResp();
@@ -197,7 +197,7 @@ namespace SkipassAPI.Methods
         }
 
 
-        public static Models.AddServiceResp CancelSrvByAccStId(Models.AddService data, string SQLPath = null)
+        public static Models.AddServiceResp CancelSrvByAccStId(Models.AddServiceReq data, string SQLPath = null)
         {
             if (SQLPath is null) SQLPath = Const.Paths.LocalSQLPath;
             Models.AddServiceResp ret = new Models.AddServiceResp();

@@ -292,7 +292,7 @@ namespace SkipassAPI.Cache
                                         r.stockType = int.TryParse(reader[1].ToString(), out int StockType) ? StockType : 0;
                                         r.name = reader[2].ToString();
                                         r.price = double.TryParse(reader[3].ToString(), out double Price) ? Price : 0;
-                                        r.dayT = reader[4].ToString();
+                                        r.dayT = (String.IsNullOrEmpty(reader[4].ToString()))?"":reader[4].ToString();
                                         r.dayTypeId = int.TryParse(reader[5].ToString(), out int DayTypeId) ? DayTypeId : 0;
                                         ret.services.Add(r);
                                     }

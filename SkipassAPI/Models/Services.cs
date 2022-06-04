@@ -22,7 +22,20 @@ namespace SkipassAPI.Models
         public string name { get; set; }
     }
 
-    public class AddService:Alarm
+    public class AddService
+    {
+        public int accountStockId { get; set; }
+        public int categoryID { get; set; }
+        public decimal amount { get; set; } = 1;
+        /// <summary>
+        /// ID скипасса или браслета
+        /// </summary>
+        public string key { get; set; }
+        public long date_start { get; set; } = DateTime.Now.Ticks;
+        public long date_end { get; set; } = DateTime.MaxValue.Ticks;
+    }
+
+    public class AddServiceReq:Alarm
     {
         public int accountStockId { get; set; }
         public int categoryID { get; set; }
@@ -37,7 +50,7 @@ namespace SkipassAPI.Models
     
     public class AddServiceResp : Alarm
     {
-        public AddService service { get; set; } = new AddService();
+        public AddServiceReq service { get; set; } = new AddServiceReq();
         public bool isSuccess { get; set; }
     }
 

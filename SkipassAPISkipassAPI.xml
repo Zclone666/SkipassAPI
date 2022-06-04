@@ -253,7 +253,7 @@
             <param name="data"></param>
             <returns></returns>
         </member>
-        <member name="M:SkipassAPI.Controllers.Skypass.AddService(SkipassAPI.Models.AddService)">
+        <member name="M:SkipassAPI.Controllers.Skypass.AddService(SkipassAPI.Models.AddServiceReq)">
             <summary>
             Добавление услуг на номер скипасса. Ключ авторизации = mn5tq8ZTJSmLA6FJ
             </summary>
@@ -283,7 +283,7 @@
             <param name="data"></param>
             <returns></returns>
         </member>
-        <member name="M:SkipassAPI.Controllers.Skypass.CancelService(SkipassAPI.Models.AddService)">
+        <member name="M:SkipassAPI.Controllers.Skypass.CancelService(SkipassAPI.Models.AddServiceReq)">
             <summary>
             Отмена услуг на скипассе - testing
             </summary>
@@ -405,6 +405,11 @@
             </summary>
         </member>
         <member name="P:SkipassAPI.Models.AddService.key">
+            <summary>
+            ID скипасса или браслета
+            </summary>
+        </member>
+        <member name="P:SkipassAPI.Models.AddServiceReq.key">
             <summary>
             ID скипасса или браслета
             </summary>

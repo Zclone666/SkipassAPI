@@ -47,13 +47,15 @@ namespace SkipassAPI.Controllers
         [HttpPost("/CheckKey")]
         public async Task<JsonResult> CheckKey(Models.GetBalanceIn data)
         {
-            if (String.IsNullOrEmpty(data.key) || String.IsNullOrWhiteSpace(data.key)) return new JsonResult(new Models.KeyFound() { founded = false, errors = new Models.Error() { code = 400, message = "Key couldn't be empty" } });
+            if (String.IsNullOrEmpty(data.key) || String.IsNullOrWhiteSpace(data.key)) return new JsonResult(new Models.User() { founded = false, errors = new Models.Error() { code = 400, message = "Key couldn't be empty" } });
             bool tst;
-            Models.GetBalanceOut ret = new Models.GetBalanceOut();
+            Models.User ret = new Models.User();
             try
             {
-                ret = Methods.ReadData.CheckKey(data);
-                JsonResult res = new JsonResult((ret.id > 0) ? new Models.KeyFound() { founded = true } : new Models.KeyFound() { founded = false });
+                ret = Methods.ReadData.CheckUserRetName(data);
+                if (ret.errors.code == 401) return new JsonResult(ret);
+                if (!ret.founded && String.IsNullOrEmpty(ret.userInfo.firstName) && String.IsNullOrEmpty(ret.userInfo.lastName) && String.IsNullOrEmpty(ret.userInfo.middleName)) ret.errors = new Models.Error() { code = 422, message = "Key not found!" };
+                JsonResult res = new JsonResult((ret.errors.code == 0) ? ret : new Models.User() { founded = false, errors = new Models.Error() { code = ret.errors.code, message = ret.errors.message } }, new System.Text.Json.JsonSerializerOptions() { IgnoreNullValues=true});
                 return res;
             }
             catch (Exception e)
@@ -64,24 +66,59 @@ namespace SkipassAPI.Controllers
 
                     if (tst)
                     {
-                        ret = Methods.ReadData.CheckKey(data);
-                        JsonResult res = new JsonResult((ret.id > 0) ? new Models.KeyFound() { founded = true } : new Models.KeyFound() { founded = false });
+                        ret = Methods.ReadData.CheckUserRetName(data);
+                        JsonResult res = new JsonResult((ret.errors.code == 0) ? new Models.KeyFound() { founded = true } : new Models.KeyFound() { founded = false });
                         return res;
                     }
                     else
                     {
-                        ret = Methods.ReadData.CheckKey(data, Const.Paths.SQLPath);
-                        JsonResult res = new JsonResult((ret.id > 0) ? new Models.KeyFound() { founded = true } : new Models.KeyFound() { founded = false });
+                        ret = Methods.ReadData.CheckUserRetName(data, Const.Paths.SQLPath);
+                        JsonResult res = new JsonResult((ret.errors.code == 0) ? new Models.KeyFound() { founded = true } : new Models.KeyFound() { founded = false });
                         return res;
                     }
                 }
                 catch (Exception e2)
                 {
-                    ret=new Models.GetBalanceOut() { errors = new Models.Error() { code = 500, message = e2.Message } };
+                    ret = new Models.User() { errors = new Models.Error() { code = 400, message = e2.Message } };
                     JsonResult res = new JsonResult(ret);
                     return res;
                 }
             }
+            //if (String.IsNullOrEmpty(data.key) || String.IsNullOrWhiteSpace(data.key)) return new JsonResult(new Models.KeyFound() { founded = false, errors = new Models.Error() { code = 400, message = "Key couldn't be empty" } });
+            //bool tst;
+            //Models.GetBalanceOut ret = new Models.GetBalanceOut();
+            //try
+            //{
+            //    ret = Methods.ReadData.CheckKey(data);
+            //    JsonResult res = new JsonResult((ret.id > 0) ? new Models.KeyFound() { founded = true } : new Models.KeyFound() { founded = false });
+            //    return res;
+            //}
+            //catch (Exception e)
+            //{
+            //    try
+            //    {
+            //        tst = Methods.Connect.Test();
+
+            //        if (tst)
+            //        {
+            //            ret = Methods.ReadData.CheckKey(data);
+            //            JsonResult res = new JsonResult((ret.id > 0) ? new Models.KeyFound() { founded = true } : new Models.KeyFound() { founded = false });
+            //            return res;
+            //        }
+            //        else
+            //        {
+            //            ret = Methods.ReadData.CheckKey(data, Const.Paths.SQLPath);
+            //            JsonResult res = new JsonResult((ret.id > 0) ? new Models.KeyFound() { founded = true } : new Models.KeyFound() { founded = false });
+            //            return res;
+            //        }
+            //    }
+            //    catch (Exception e2)
+            //    {
+            //        ret=new Models.GetBalanceOut() { errors = new Models.Error() { code = 500, message = e2.Message } };
+            //        JsonResult res = new JsonResult(ret);
+            //        return res;
+            //    }
+            //}
         }
 
 
@@ -116,7 +153,7 @@ namespace SkipassAPI.Controllers
                 ret = Methods.ReadData.CheckUserRetName(data);
                 if (ret.errors.code == 401) return new JsonResult(ret);
                 if (!ret.founded && String.IsNullOrEmpty(ret.userInfo.firstName) && String.IsNullOrEmpty(ret.userInfo.lastName) && String.IsNullOrEmpty(ret.userInfo.middleName)) ret.errors = new Models.Error() { code = 422, message = "Key not found!" };
-                JsonResult res = new JsonResult((ret.errors.code == 0) ? ret : new Models.User() { founded = false, errors=new Models.Error() { code=ret.errors.code, message=ret.errors.message } });
+                JsonResult res = new JsonResult((ret.errors.code == 0) ? ret : new Models.User() { founded = false, errors=new Models.Error() { code=ret.errors.code, message=ret.errors.message } }, new System.Text.Json.JsonSerializerOptions() { IgnoreNullValues = true });
                 return res;
             }
             catch (Exception e)
@@ -553,7 +590,7 @@ namespace SkipassAPI.Controllers
         /// <param name="data"></param>
         /// <returns></returns>
         [HttpPost("/AddServiceToUser")]
-        public async Task<JsonResult> AddService(Models.AddService data)
+        public async Task<JsonResult> AddService(Models.AddServiceReq data)
         {
             try
             {
@@ -596,7 +633,7 @@ namespace SkipassAPI.Controllers
         /// <param name="data"></param>
         /// <returns></returns>
         [HttpPost("/CancelUserService")]
-        public async Task<JsonResult> CancelService(Models.AddService data)
+        public async Task<JsonResult> CancelService(Models.AddServiceReq data)
         {
             try
             {
