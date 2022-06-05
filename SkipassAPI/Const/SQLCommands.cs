@@ -59,7 +59,7 @@ FROM  (select Amount,code,Name,CategoryId,SuperAccountId,StockType,AccountStockI
     UPDATE [Fwp].[dbo].[SuperAccount] SET [LastTransactionTime] = GETDATE() WHERE [SuperAccountId] = (select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key);
     INSERT INTO [Fwp].[dbo].[GlobalId] ([StockType]) VALUES (0);
     INSERT INTO [Fwp].[dbo].[GlobalId] ([StockType]) VALUES (0);
-    SELECT [AccountStockId] FROM Fwp.dbo.AccountStock WHERE SuperAccountId=(select SuperAccountId from AccountStock where StockType=21 and Code=@key) AND CategoryId=@catid AND AMOUNT=@amount AND Start=@date_start AND [End]=@date_end";
+    SELECT MAX([AccountStockId]) FROM Fwp.dbo.AccountStock WHERE SuperAccountId=(select SuperAccountId from AccountStock where StockType=21 and Code=@key) AND CategoryId=@catid AND AMOUNT=@amount AND Start=@date_start AND [End]=@date_end";
 
         public const string GetAddedAccountStockId = "SELECT [AccountStockId] FROM Fwp.dbo.AccountStock WHERE SuperAccountId=(select SuperAccountId from AccountStock where StockType=21 and Code=@key) AND CategoryId=@catid AND AMOUNT=@amount AND Start=@date_start AND End=@date_end";
 
