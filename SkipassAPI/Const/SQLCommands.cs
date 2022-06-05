@@ -63,7 +63,9 @@ FROM  (select Amount,code,Name,CategoryId,SuperAccountId,StockType,AccountStockI
 
         public const string GetAddedAccountStockId = "SELECT [AccountStockId] FROM Fwp.dbo.AccountStock WHERE SuperAccountId=(select SuperAccountId from AccountStock where StockType=21 and Code=@key) AND CategoryId=@catid AND AMOUNT=@amount AND Start=@date_start AND End=@date_end";
 
-        public const string GetAllServices = @"SELECT [CategoryId]
+		public const string GetAccountStockId = "SELECT [AccountStockId] FROM Fwp.dbo.AccountStock WHERE AccountStockId=@accStockId AND IsActive=1";
+
+		public const string GetAllServices = @"SELECT [CategoryId]
       ,[StockType]
       ,[Name]
   FROM [Fwp].[dbo].[Category]";

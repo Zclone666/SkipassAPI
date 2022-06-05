@@ -453,5 +453,34 @@ namespace SkipassAPI.Methods
             }
         }
 
+
+        public static bool CheckAccountStockId(Models.AddServiceReq data)
+        {
+            using (SqlConnection conn = new SqlConnection(Const.Paths.LocalSQLPath))
+            {
+                conn.Open();
+                int AccountStockId = data.accountStockId;
+                if (AccountStockId == 0) return false;
+                using (SqlCommand cmd = new SqlCommand(Const.SQLCommands.GetKeyPassAndName, conn))
+                {
+                    cmd.Parameters.Add("@accStockId", System.Data.SqlDbType.VarChar);
+                    cmd.Parameters["@accStockId"].Value = AccountStockId;
+                    try
+                    {
+
+                        AccountStockId = (int)cmd.ExecuteScalar();
+                        if (AccountStockId == data.accountStockId) return true;
+                        else return false;
+                        // if (res != "") ret = true;
+                    }
+                    catch (Exception e)
+                    {
+                        return false;
+                    }
+                }
+                conn.Close();
+            }
+        }
+
     }
 }

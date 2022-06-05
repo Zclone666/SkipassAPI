@@ -54,6 +54,11 @@ namespace SkipassAPI.Models
         public bool isSuccess { get; set; }
     }
 
+    public class CancelServiceResp : Alarm
+    {
+        public bool isSuccess { get; set; }
+    }
+
     public class ServicesWPrice : Services
     {
         public double price { get; set; }

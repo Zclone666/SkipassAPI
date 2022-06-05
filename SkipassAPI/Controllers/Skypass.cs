@@ -645,7 +645,7 @@ namespace SkipassAPI.Controllers
                     return new JsonResult(new Models.AddServiceResp() { errors = new Models.Error() { code = 422, message = "Key not found!" } });
                 }
                 #endregion
-                JsonResult res = new JsonResult(Methods.WriteData.CancelServices(data));
+                JsonResult res = new JsonResult(Methods.WriteData.CancelServices(data), new System.Text.Json.JsonSerializerOptions() { IgnoreNullValues = true }); ;
                 return res;
             }
             catch (Exception e)
