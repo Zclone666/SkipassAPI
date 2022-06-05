@@ -82,7 +82,7 @@ inner join (SELECT [Name] as DayT,[Amount], TargetGoodId, DayType.DayTypeId FROM
 		//inner join (SELECT [Name] as DayT,[Amount], TargetGoodId, DayType.DayTypeId FROM [Fwp].[dbo].[TariffExtension] inner join Fwp.dbo.DayType on Fwp.dbo.DayType.DayTypeId=Fwp.dbo.TariffExtension.DayTypeId inner join [Fwp].[dbo].[Tariff] on  [Fwp].[dbo].[Tariff].TariffId=[Fwp].[dbo].[TariffExtension].TariffId where Type=2 and Allow=1 and Dependence=1 and PayRightType=2) as tt on tt.TargetGoodId=CategoryId
 		//where StockType=4";
 		public const string GetAllAbonWPrice = @"SELECT [CategoryId],[StockType],[Name],[Amount],[DayT],DayTypeId,TimePatternId FROM [Fwp].[dbo].[Category]
-inner join (SELECT [Name] as DayT,[Amount], TargetGoodId, DayType.DayTypeId FROM [Fwp].[dbo].[TariffExtension] left join Fwp.dbo.DayType on Fwp.dbo.DayType.DayTypeId=Fwp.dbo.TariffExtension.DayTypeId inner join [Fwp].[dbo].[Tariff] on  [Fwp].[dbo].[Tariff].TariffId=[Fwp].[dbo].[TariffExtension].TariffId) as tt on tt.TargetGoodId=CategoryId
+inner join (SELECT [Name] as DayT,[Amount], TargetGoodId, DayType.DayTypeId FROM [Fwp].[dbo].[TariffExtension] left join Fwp.dbo.DayType on Fwp.dbo.DayType.DayTypeId=Fwp.dbo.TariffExtension.DayTypeId inner join [Fwp].[dbo].[Tariff] on  [Fwp].[dbo].[Tariff].TariffId=[Fwp].[dbo].[TariffExtension].TariffId where Type=2 and Allow=1) as tt on tt.TargetGoodId=CategoryId
 where StockType=4";
 
 		public const string GetUserAbon = @"SELECT Fwp.dbo.Category.Name,[IsActive],[Amount],[Start],[End]  FROM [Fwp].[dbo].[AccountStock]
