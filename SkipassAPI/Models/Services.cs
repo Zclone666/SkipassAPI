@@ -50,7 +50,7 @@ namespace SkipassAPI.Models
     
     public class AddServiceResp : Alarm
     {
-        public AddServiceReq service { get; set; } = new AddServiceReq();
+        public AddService service { get; set; } = new AddService();
         public bool isSuccess { get; set; }
     }
 

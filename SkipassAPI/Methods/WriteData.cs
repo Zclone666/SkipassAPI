@@ -46,7 +46,7 @@ namespace SkipassAPI.Methods
                                     trans.Commit();
                                     ret.isSuccess = true;
                                     data.accountStockId = ret.service.accountStockId;
-                                    ret.service = data;
+                                    ret.service = Newtonsoft.Json.JsonConvert.DeserializeObject<Models.AddService>(Newtonsoft.Json.JsonConvert.SerializeObject(data));
                                 }
                                 #region SQLReading Exception
                                 catch (Exception SQLReadEx)
