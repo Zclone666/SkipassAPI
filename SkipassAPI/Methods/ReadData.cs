@@ -461,7 +461,7 @@ namespace SkipassAPI.Methods
                 conn.Open();
                 int AccountStockId = data.accountStockId;
                 if (AccountStockId == 0) return false;
-                using (SqlCommand cmd = new SqlCommand(Const.SQLCommands.GetKeyPassAndName, conn))
+                using (SqlCommand cmd = new SqlCommand(Const.SQLCommands.GetAccountStockId, conn))
                 {
                     cmd.Parameters.Add("@accStockId", System.Data.SqlDbType.VarChar);
                     cmd.Parameters["@accStockId"].Value = AccountStockId;
