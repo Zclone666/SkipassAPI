@@ -51,10 +51,10 @@ FROM  (select Amount,code,Name,CategoryId,SuperAccountId,StockType,AccountStockI
     insert into Fwp.dbo.TransactionDetail (MasterTransactionId,StockInfoIdFrom,StockInfoIdTo,Amount,SuperAccountIdFrom, SuperAccountIdTo)
     values ((select MAX(MasterTransactionId) from Fwp.dbo.MasterTransaction),360757,(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key)+1,(SELECT TOP 1 [Amount] FROM [Fwp].[dbo].[TariffExtension]
         inner join [Fwp].[dbo].[Tariff] on [Fwp].[dbo].[Tariff].TariffId=[Fwp].[dbo].TariffExtension.TariffId  
-        where [Type]=2 and Allow=1 and Dependence=1 and PayRightType=2 and TargetGoodId=361778)
+        where [Type]=2 and Allow=1 and Dependence=1 and PayRightType=2 and TargetGoodId=@catId)
     ,3,(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key));
     insert into Fwp.dbo.TransactionDetail (MasterTransactionId,StockInfoIdFrom,StockInfoIdTo,Amount,SuperAccountIdFrom, SuperAccountIdTo)
-    values ((select MAX(MasterTransactionId) from Fwp.dbo.MasterTransaction),(select MAX(AccountStockId) from Fwp.dbo.AccountStock),(select MAX(AccountStockId) from Fwp.dbo.AccountStock),@amount,3,(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key));
+    values ((select MAX(MasterTransactionId) from Fwp.dbo.MasterTransaction),(select MAX(AccountStockId) from Fwp.dbo.AccountStock),(select MAX(AccountStockId) from Fwp.dbo.AccountStock),@amount,(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key),3);
     UPDATE [Fwp].[dbo].[SuperAccount] SET [LastTransactionTime] = GETDATE() WHERE [SuperAccountId] = 3;
     UPDATE [Fwp].[dbo].[SuperAccount] SET [LastTransactionTime] = GETDATE() WHERE [SuperAccountId] = (select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key);
     INSERT INTO [Fwp].[dbo].[GlobalId] ([StockType]) VALUES (0);
