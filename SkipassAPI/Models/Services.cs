@@ -54,8 +54,9 @@ namespace SkipassAPI.Models
         public bool isSuccess { get; set; }
     }
 
-    public class CancelServiceResp : Alarm
+    public class CancelServiceResp
     {
+        public Error errors { get; set; } = new Error();
         public bool isSuccess { get; set; }
     }
 

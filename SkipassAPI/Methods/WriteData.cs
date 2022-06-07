@@ -108,7 +108,7 @@ namespace SkipassAPI.Methods
             Models.CancelServiceResp ret = new Models.CancelServiceResp();
             if (data.accountStockId!=0 || Methods.CheckAuthkey.CheckAuthKey(data.authkey))
             {
-                if (!Methods.ReadData.CheckAccountStockId(data)) return new Models.CancelServiceResp() { isSuccess = false, errors = new Models.Error() { code = 404, message = "No such AccountStockId or it's cancelled!" }, authkey=null };
+                if (!Methods.ReadData.CheckAccountStockId(data)) return new Models.CancelServiceResp() { isSuccess = false, errors = new Models.Error() { code = 404, message = "No such AccountStockId or it's cancelled!" } };
                 using (SqlConnection conn = new SqlConnection(SQLPath))
                 {
                     conn.Open();
