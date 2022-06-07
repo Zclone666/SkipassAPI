@@ -52,23 +52,23 @@ FROM  (select Amount,code,Name,CategoryId,SuperAccountId,StockType,AccountStockI
     values (GETDATE(),3,(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key),'CASHDESK2@admin',3,GETDATE(),0,157862,'CASHDESK2@Bars.CashDesk',12);
 
     insert into Fwp.dbo.TransactionDetail (MasterTransactionId,StockInfoIdTo,Amount, SuperAccountIdTo)
-    values ((select MAX(MasterTransactionId) from Fwp.dbo.MasterTransaction),360757,(SELECT TOP 1 [Amount] FROM [Fwp].[dbo].[TariffExtension]
+    values ((select MAX(MasterTransactionId) from Fwp.dbo.MasterTransaction),360757,ifnull((SELECT TOP 1 [Amount] FROM [Fwp].[dbo].[TariffExtension]
         inner join [Fwp].[dbo].[Tariff] on [Fwp].[dbo].[Tariff].TariffId=[Fwp].[dbo].TariffExtension.TariffId  
-        where [Type]=2 and Allow=1 and Dependence=1 and PayRightType=2 and TargetGoodId=@catId)
+        where [Type]=2 and Allow=1 and Dependence=1 and PayRightType=2 and TargetGoodId=@catId),@amount)
     ,3);
     insert into Fwp.dbo.TransactionDetail (MasterTransactionId,StockInfoIdFrom,StockInfoIdTo,Amount,SuperAccountIdFrom, SuperAccountIdTo)
-    values ((select MAX(MasterTransactionId) from Fwp.dbo.MasterTransaction),360757,(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key)+1,(SELECT TOP 1 [Amount] FROM [Fwp].[dbo].[TariffExtension]
+    values ((select MAX(MasterTransactionId) from Fwp.dbo.MasterTransaction),360757,(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key)+1,ifnull((SELECT TOP 1 [Amount] FROM [Fwp].[dbo].[TariffExtension]
         inner join [Fwp].[dbo].[Tariff] on [Fwp].[dbo].[Tariff].TariffId=[Fwp].[dbo].TariffExtension.TariffId  
-        where [Type]=2 and Allow=1 and Dependence=1 and PayRightType=2 and TargetGoodId=@catId)
+        where [Type]=2 and Allow=1 and Dependence=1 and PayRightType=2 and TargetGoodId=@catId),@amount)
     ,3,(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key));
 
 	insert into Fwp.dbo.MasterTransaction (TransTime,SuperAccountFrom,SuperAccountTo,UserId,ServicePointId,ServerTime,IsOffline,CheckDetailId,Machine,SecSubjectId)
     values (GETDATE(),3,(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key),'CASHDESK2@admin',3,GETDATE(),0,157862,'CASHDESK2@Bars.CashDesk',12);
 
     insert into Fwp.dbo.TransactionDetail (MasterTransactionId,StockInfoIdFrom,StockInfoIdTo,Amount,SuperAccountIdFrom, SuperAccountIdTo)
-    values ((select MAX(MasterTransactionId) from Fwp.dbo.MasterTransaction),(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key)+1,360757,(SELECT TOP 1 [Amount] FROM [Fwp].[dbo].[TariffExtension]
+    values ((select MAX(MasterTransactionId) from Fwp.dbo.MasterTransaction),(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key)+1,360757,ifnull((SELECT TOP 1 [Amount] FROM [Fwp].[dbo].[TariffExtension]
         inner join [Fwp].[dbo].[Tariff] on [Fwp].[dbo].[Tariff].TariffId=[Fwp].[dbo].TariffExtension.TariffId  
-        where [Type]=2 and Allow=1 and Dependence=1 and PayRightType=2 and TargetGoodId=@catId),(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key),3);
+        where [Type]=2 and Allow=1 and Dependence=1 and PayRightType=2 and TargetGoodId=@catId),@amount),(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key),3);
 	insert into Fwp.dbo.TransactionDetail (MasterTransactionId,StockInfoIdFrom,StockInfoIdTo,Amount,SuperAccountIdFrom, SuperAccountIdTo)
     values ((select MAX(MasterTransactionId) from Fwp.dbo.MasterTransaction),(select MAX(AccountStockId) from Fwp.dbo.AccountStock),(select MAX(AccountStockId) from Fwp.dbo.AccountStock),@amount,3,(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key));
 
