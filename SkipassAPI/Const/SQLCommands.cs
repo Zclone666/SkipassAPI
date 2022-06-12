@@ -49,7 +49,7 @@ FROM  (select Amount,code,Name,CategoryId,SuperAccountId,StockType,AccountStockI
    
 
     insert into Fwp.dbo.MasterTransaction (TransTime,SuperAccountFrom,SuperAccountTo,UserId,ServicePointId,ServerTime,IsOffline,CheckDetailId,Machine,SecSubjectId)
-    values (GETDATE(),3,(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key),'CASHDESK2@admin',3,GETDATE(),0,157862,'CASHDESK2@Bars.CashDesk',12);
+    values (GETDATE(),3,(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key),'CASHDESK2@admin',7,GETDATE(),0,157862,'CASHDESK2@Bars.CashDesk',12);
 
     insert into Fwp.dbo.TransactionDetail (MasterTransactionId,StockInfoIdTo,Amount, SuperAccountIdTo)
     values ((select MAX(MasterTransactionId) from Fwp.dbo.MasterTransaction)
@@ -84,7 +84,7 @@ FROM  (select Amount,code,Name,CategoryId,SuperAccountId,StockType,AccountStockI
 		,(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key));
 
 	insert into Fwp.dbo.MasterTransaction (TransTime,SuperAccountFrom,SuperAccountTo,UserId,ServicePointId,ServerTime,IsOffline,CheckDetailId,Machine,SecSubjectId)
-    values (GETDATE(),3,(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key),'CASHDESK2@admin',3,GETDATE(),0,157862,'CASHDESK2@Bars.CashDesk',12);
+    values (GETDATE(),3,(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key),'CASHDESK2@admin',7,GETDATE(),0,157862,'CASHDESK2@Bars.CashDesk',12);
 
     insert into Fwp.dbo.TransactionDetail (MasterTransactionId
 		,StockInfoIdFrom
@@ -187,7 +187,7 @@ INSERT INTO [MasterTransaction]
 	0,
 	NULL,
 	NULL,
-	4
+	7
 );
 UPDATE
 	[abi]
@@ -231,7 +231,7 @@ INSERT INTO [MasterTransaction]
 	0,
 	NULL,
 	NULL,
-	4
+	7
 );
 UPDATE
 	[abi]
