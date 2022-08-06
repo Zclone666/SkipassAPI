@@ -15,6 +15,21 @@ namespace SkipassAPI.Models
         public string key { get; set; }
     }
 
+    /// <summary>
+    /// Класс запроса для получения кода скипасса по email или номеру телефона
+    /// </summary>
+    public class GetCodeBReq : Alarm
+    {
+        /// <summary>
+        /// Номер телефона в формате +79.......
+        /// </summary>
+        public string phone { get; set; }
+        /// <summary>
+        /// Email пользователя
+        /// </summary>
+        public string email { get; set; }
+    }
+
     public class GetBalanceOut:Alarm
     {
         public int id { get; set; }

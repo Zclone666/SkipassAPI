@@ -19,5 +19,13 @@ namespace SkipassAPI.Models
         public string lastName { get; set; }
         public string email { get; set; }
         public string phone { get; set; }
+        public string key { get; set; }
+        public string isActive { get; set; }
+    }
+
+    public class UserInfoList:Alarm
+    {
+        public List<UserInfo> userInfo { get; set; } = new List<UserInfo>();
+        public bool founded { get; set; }
     }
 }

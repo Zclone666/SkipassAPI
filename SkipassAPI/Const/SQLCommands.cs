@@ -38,7 +38,7 @@ FROM  (select Amount,code,Name,CategoryId,SuperAccountId,StockType,AccountStockI
 	f1.StockType = 21 and SuperAccount.Type = 0 and f1.Code=@key";
 
         public const string GetKeyPass = @"SELECT Code FROM [AccountStock] WHERE code like @key";
-        public const string GetKeyPassAndName = @"SELECT a.Code, i.LastName, i.FirstName, i.SecondName, i.Email, i.Phone FROM Fwp.dbo.AccountStock as a inner join Fwp.dbo.PersonalInfo as i on i.SuperAccountId=a.SuperAccountId WHERE a.Code like @key";
+        public const string GetKeyPassAndName = @"SELECT a.Code, i.LastName, i.FirstName, i.SecondName, i.Email, i.Phone, a.IsActive FROM Fwp.dbo.AccountStock as a inner join Fwp.dbo.PersonalInfo as i on i.SuperAccountId=a.SuperAccountId WHERE a.Code like @key";
 
         public const string UpdateBalance = @"update [AccountStock]
     set Amount=@add_sum+(select Amount from AccountStock where StockType=1 and SuperAccountId=(select SuperAccountId from AccountStock where StockType=21 and Code=@key))
@@ -260,7 +260,18 @@ WHERE
     inner join AccountStock acs on pri.SuperAccountId=acs.SuperAccountId
     where code=@key";
 
-        public const string SaveHistory = @"insert into internet_payments
+		public const string GetCodeByEmail = @"select acs.Code, pri.LastName, pri.FirstName, pri.SecondName, pri.Email, pri.Phone, acs.IsActive from AccountStock acs
+												inner join PersonalInfo pri on pri.SuperAccountId=acs.SuperAccountId
+												where acs.StockType=21 and Email like @email";
+
+		public const string GetCodeByPhone = @"select acs.Code, pri.LastName, pri.FirstName, pri.SecondName, pri.Email, pri.Phone, acs.IsActive from AccountStock acs
+												inner join PersonalInfo pri on pri.SuperAccountId=acs.SuperAccountId
+												where acs.StockType=21 and Phone like @phone";
+		public const string GetCodeByBoth = @"select acs.Code, pri.LastName, pri.FirstName, pri.SecondName, pri.Email, pri.Phone, acs.IsActive from AccountStock acs
+												inner join PersonalInfo pri on pri.SuperAccountId=acs.SuperAccountId
+												where acs.StockType=21 and Phone like @phone and Email like @email";
+
+		public const string SaveHistory = @"insert into internet_payments
 values(@key,@add_sum,@successed,@email,@phone,@payment_id,@payment_system,@payment_source, @comment)";
     }
 }

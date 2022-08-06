@@ -418,11 +418,13 @@ namespace SkipassAPI.Methods
                                 while (reader.Read())
                                 {
                                     Models.User r = new Models.User();
+                                    r.userInfo.key = reader[0].ToString();
                                     r.userInfo.lastName = reader[1].ToString();
                                     r.userInfo.firstName = reader[2].ToString();
                                     r.userInfo.middleName = reader[3].ToString();
                                     r.userInfo.email = reader[4].ToString();
                                     r.userInfo.phone = reader[5].ToString();
+                                    r.userInfo.isActive = reader[6].ToString();
                                     ret=r;
                                     ret.founded = true;
                                 }
@@ -453,6 +455,87 @@ namespace SkipassAPI.Methods
             }
         }
 
+        public static Models.UserInfoList GetCodeByPhoneOrEmail(Models.GetCodeBReq data, string SQLPath = null)
+        {
+            if (SQLPath is null) SQLPath = Const.Paths.LocalSQLPath;
+            Models.UserInfoList ret = new Models.UserInfoList();
+            if (Methods.CheckAuthkey.CheckAuthKey(data.authkey))
+            {
+                using (SqlConnection conn = new SqlConnection(SQLPath))
+                {
+                    conn.Open();
+                    string Email= String.IsNullOrEmpty(data.email)?"":data.email;
+                    string Phone = String.IsNullOrEmpty(data.phone) ? "" : data.phone;
+                    string CmdtToUse = String.IsNullOrEmpty(data.email) ? Const.SQLCommands.GetCodeByPhone :(String.IsNullOrEmpty(data.phone)? Const.SQLCommands.GetCodeByEmail: Const.SQLCommands.GetCodeByBoth);
+                    using (SqlCommand cmd = new SqlCommand(CmdtToUse, conn))
+                    {
+                        if (String.IsNullOrEmpty(data.email) && !String.IsNullOrEmpty(data.phone))
+                        {
+                            cmd.Parameters.Add("@phone", System.Data.SqlDbType.VarChar);
+                            cmd.Parameters["@phone"].Value = Phone;
+                        }else if (String.IsNullOrEmpty(data.email) && String.IsNullOrEmpty(data.phone))
+                        {
+                            ret = new Models.UserInfoList()
+                            {
+                                errors = new Models.Error() { code = 400, message = "Specify email or phone!" }
+                            };
+                            return ret;
+                        }
+                        else if(!String.IsNullOrEmpty(data.email) && String.IsNullOrEmpty(data.phone))
+                        {
+                            cmd.Parameters.Add("@email", System.Data.SqlDbType.VarChar);
+                            cmd.Parameters["@email"].Value = Email;
+                        }
+                        else if (!String.IsNullOrEmpty(data.email) && !String.IsNullOrEmpty(data.phone))
+                        {
+                            cmd.Parameters.Add("@phone", System.Data.SqlDbType.VarChar);
+                            cmd.Parameters["@phone"].Value = Phone;
+                            cmd.Parameters.Add("@email", System.Data.SqlDbType.VarChar);
+                            cmd.Parameters["@email"].Value = Email;
+                        }
+                        try
+                        {
+                            using (SqlDataReader reader = cmd.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    Models.UserInfo r = new Models.UserInfo();
+                                    r.key = reader[0].ToString();
+                                    r.lastName = reader[1].ToString();
+                                    r.firstName = reader[2].ToString();
+                                    r.middleName = reader[3].ToString();
+                                    r.email = reader[4].ToString();
+                                    r.phone = reader[5].ToString();
+                                    r.isActive = reader[6].ToString();
+                                    ret.userInfo.Add(r);
+                                    ret.founded = true;
+                                }
+                            }
+                            // if (res != "") ret = true;
+                        }
+                        catch (Exception e)
+                        {
+                            Models.UserInfoList r = new Models.UserInfoList() { errors = new Models.Error() { code = 400, message = e.Message } };
+                            ret = r;
+                            ret.founded = false;
+                            return ret;
+                        }
+                    }
+                    conn.Close();
+                }
+
+
+                return ret;
+            }
+            else
+            {
+                ret = new Models.UserInfoList()
+                {
+                    errors = new Models.Error() { code = 401, message = "Unauthorized" }
+                };
+                return ret;
+            }
+        }
 
         public static bool CheckAccountStockId(Models.AddServiceReq data)
         {

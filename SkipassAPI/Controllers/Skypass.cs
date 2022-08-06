@@ -185,6 +185,76 @@ namespace SkipassAPI.Controllers
         }
 
         /// <summary>
+        /// Получение кода скипасса по телефону или email с возвращением информации о пользователе (ФИО)
+        /// Формат телефона: +79991234567
+        /// </summary>
+        /// <remarks>
+        ///  Ключ авторизации = mn5tq8ZTJSmLA6FJ
+        ///  
+        ///  Пример запроса:
+        ///   {
+        ///     "authkey": "mn5tq8ZTJSmLA6FJ",
+        ///     "phone": "+79169444545"
+        ///   }
+        ///   
+        ///  Пример запроса:
+        ///   {
+        ///     "authkey": "mn5tq8ZTJSmLA6FJ",
+        ///     "email": "1@ya.ru"
+        ///   }
+        ///   
+        /// </remarks>
+        /// <example>
+        ///   {
+        ///     "authkey": "mn5tq8ZTJSmLA6FJ",
+        ///     "phone": "+79169444545"
+        ///   }
+        /// </example>
+        /// <example>
+        ///   {
+        ///     "authkey": "mn5tq8ZTJSmLA6FJ",
+        ///     "email": "1@ya.ru"
+        ///   }
+        /// </example>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        [HttpPost("/GetCodeUserInfo")]
+        public async Task<JsonResult> GetCodeUserInfo(Models.GetCodeBReq data)
+        {
+         //   if (String.IsNullOrEmpty(data.key) || String.IsNullOrWhiteSpace(data.key)) return new JsonResult(new Models.User() { founded = false, errors = new Models.Error() { code = 400, message = "Key couldn't be empty" } });
+            bool tst;
+            Models.UserInfoList ret = new Models.UserInfoList();
+            try
+            {
+                ret = Methods.ReadData.GetCodeByPhoneOrEmail(data);
+                if (ret.errors.code == 401) return new JsonResult(ret);
+                if (ret.userInfo.Count == 0)
+                {
+                    string TmpEmail = data.email;
+                    data.email = String.Empty;
+                    ret = Methods.ReadData.GetCodeByPhoneOrEmail(data);
+                    data.email = TmpEmail;
+                }
+                if (ret.userInfo.Count == 0)
+                {
+                    string TmpPhone = data.phone;
+                    data.phone = String.Empty;
+                    ret = Methods.ReadData.GetCodeByPhoneOrEmail(data);
+                    data.phone = TmpPhone;
+                }
+                //       if (!ret.founded && String.IsNullOrEmpty(ret.userInfo.firstName) && String.IsNullOrEmpty(ret.userInfo.lastName) && String.IsNullOrEmpty(ret.userInfo.middleName)) ret.errors = new Models.Error() { code = 422, message = "Key not found!" };
+                JsonResult res = new JsonResult((ret.errors.code == 0) ? ret : new Models.UserInfoList() { founded = false, errors = new Models.Error() { code = ret.errors.code, message = ret.errors.message } }, new System.Text.Json.JsonSerializerOptions() { IgnoreNullValues = true });
+                return res;
+            }
+            catch (Exception e)
+            {
+                    ret = new Models.UserInfoList() { errors = new Models.Error() { code = 400, message = e.Message } };
+                    JsonResult res = new JsonResult(ret);
+                    return res;
+            }
+        }
+
+        /// <summary>
         /// Получение списка услуг. Ключ авторизации = mn5tq8ZTJSmLA6FJ
         /// </summary>
         /// <remarks>
