@@ -228,20 +228,20 @@ namespace SkipassAPI.Controllers
             {
                 ret = Methods.ReadData.GetCodeByPhoneOrEmail(data);
                 if (ret.errors.code == 401) return new JsonResult(ret);
-                if (ret.userInfo.Count == 0)
-                {
-                    string TmpEmail = data.email;
-                    data.email = String.Empty;
-                    ret = Methods.ReadData.GetCodeByPhoneOrEmail(data);
-                    data.email = TmpEmail;
-                }
-                if (ret.userInfo.Count == 0)
-                {
-                    string TmpPhone = data.phone;
-                    data.phone = String.Empty;
-                    ret = Methods.ReadData.GetCodeByPhoneOrEmail(data);
-                    data.phone = TmpPhone;
-                }
+                //if (ret.userInfo.Count == 0)
+                //{
+                //    string TmpEmail = data.email;
+                //    data.email = String.Empty;
+                //    ret = Methods.ReadData.GetCodeByPhoneOrEmail(data);
+                //    data.email = TmpEmail;
+                //}
+                //if (ret.userInfo.Count == 0)
+                //{
+                //    string TmpPhone = data.phone;
+                //    data.phone = String.Empty;
+                //    ret = Methods.ReadData.GetCodeByPhoneOrEmail(data);
+                //    data.phone = TmpPhone;
+                //}
                 //       if (!ret.founded && String.IsNullOrEmpty(ret.userInfo.firstName) && String.IsNullOrEmpty(ret.userInfo.lastName) && String.IsNullOrEmpty(ret.userInfo.middleName)) ret.errors = new Models.Error() { code = 422, message = "Key not found!" };
                 JsonResult res = new JsonResult((ret.errors.code == 0) ? ret : new Models.UserInfoList() { founded = false, errors = new Models.Error() { code = ret.errors.code, message = ret.errors.message } }, new System.Text.Json.JsonSerializerOptions() { IgnoreNullValues = true });
                 return res;

@@ -115,7 +115,42 @@
             <param name="data"></param>
             <returns></returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:SkipassAPI.Controllers.Skypass.GetCodeUserInfo(SkipassAPI.Models.GetCodeBReq)" -->
+        <member name="M:SkipassAPI.Controllers.Skypass.GetCodeUserInfo(SkipassAPI.Models.GetCodeBReq)">
+            <summary>
+            Получение кода скипасса по телефону или email с возвращением информации о пользователе (ФИО)
+            Формат телефона: +79991234567
+            </summary>
+            <remarks>
+             Ключ авторизации = mn5tq8ZTJSmLA6FJ
+             
+             Пример запроса:
+              {
+                "authkey": "mn5tq8ZTJSmLA6FJ",
+                "phone": "+79169444545"
+              }
+              
+             Пример запроса:
+              {
+                "authkey": "mn5tq8ZTJSmLA6FJ",
+                "email": "1@ya.ru"
+              }
+              
+            </remarks>
+            <example>
+              {
+                "authkey": "mn5tq8ZTJSmLA6FJ",
+                "phone": "+79169444545"
+              }
+            </example>
+            <example>
+              {
+                "authkey": "mn5tq8ZTJSmLA6FJ",
+                "email": "1@ya.ru"
+              }
+            </example>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
         <member name="M:SkipassAPI.Controllers.Skypass.GetServices(SkipassAPI.Models.GetBalanceIn)">
             <summary>
             Получение списка услуг. Ключ авторизации = mn5tq8ZTJSmLA6FJ
