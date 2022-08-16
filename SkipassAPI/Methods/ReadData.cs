@@ -424,7 +424,7 @@ namespace SkipassAPI.Methods
                                     r.userInfo.middleName = reader[3].ToString();
                                     r.userInfo.email = reader[4].ToString();
                                     r.userInfo.phone = reader[5].ToString();
-                                    r.userInfo.isActive = reader[6].ToString();
+                                    r.userInfo.isActive = Boolean.TryParse(reader[6].ToString(), out bool IsAct)?IsAct:false;
                                     ret=r;
                                     ret.founded = true;
                                 }
@@ -506,7 +506,7 @@ namespace SkipassAPI.Methods
                                     r.middleName = reader[3].ToString();
                                     r.email = reader[4].ToString();
                                     r.phone = reader[5].ToString();
-                                    r.isActive = reader[6].ToString();
+                                    r.isActive = Boolean.TryParse(reader[6].ToString(), out bool IsAct)?IsAct:false;
                                     ret.userInfo.Add(r);
                                     ret.founded = true;
                                 }
