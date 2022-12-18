@@ -42,6 +42,62 @@ namespace SkipassAPI.Controllers
         /// <summary>
         /// Проверка скипасса
         /// </summary>
+        /// <remarks>
+        /// Пример запроса:
+        /// 
+        /// {"authkey": "mn5tq8ZTJSmLA6FJ","key": "B3A9D829"}
+        /// 
+        /// </remarks>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        [HttpPost("/CheckSkipass")]
+        public async Task<JsonResult> CheckSkipass(Models.GetBalanceIn data)
+        {
+            if (String.IsNullOrEmpty(data.key) || String.IsNullOrWhiteSpace(data.key)) return new JsonResult(new Models.User() { founded = false, errors = new Models.Error() { code = 400, message = "Key couldn't be empty" } });
+            bool tst;
+            Models.User ret = new Models.User();
+            try
+            {
+                var tm = Methods.ReadData.CheckKey(data);
+                ret.errors = tm.errors;
+                ret.userInfo.isActive=ret.founded = (!String.IsNullOrEmpty(tm.key)) ? true : false;
+                ret.userInfo.key = tm.key;
+                JsonResult res = new JsonResult((ret.errors.code == 0) ? ret : new Models.User() { founded = false, errors = new Models.Error() { code = ret.errors.code, message = ret.errors.message } }, new System.Text.Json.JsonSerializerOptions() { IgnoreNullValues = true });
+                return res;
+            }
+            catch (Exception e)
+            {
+                try
+                {
+                    tst = Methods.Connect.Test();
+
+                    if (tst)
+                    {
+                        var tm = Methods.ReadData.CheckKey(data);
+                        ret.errors = tm.errors;
+                        JsonResult res = new JsonResult((ret.errors.code == 0) ? new Models.KeyFound() { founded = true } : new Models.KeyFound() { founded = false });
+                        return res;
+                    }
+                    else
+                    {
+                        var tm = Methods.ReadData.CheckKey(data);
+                        ret.errors = tm.errors;
+                        JsonResult res = new JsonResult((ret.errors.code == 0) ? new Models.KeyFound() { founded = true } : new Models.KeyFound() { founded = false });
+                        return res;
+                    }
+                }
+                catch (Exception e2)
+                {
+                    ret = new Models.User() { errors = new Models.Error() { code = 400, message = e2.Message } };
+                    JsonResult res = new JsonResult(ret);
+                    return res;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Проверка браслета
+        /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
         [HttpPost("/CheckKey")]
@@ -52,9 +108,19 @@ namespace SkipassAPI.Controllers
             Models.User ret = new Models.User();
             try
             {
-                ret = Methods.ReadData.CheckUserRetName(data);
-                if (ret.errors.code == 401) return new JsonResult(ret);
-                if (!ret.founded && String.IsNullOrEmpty(ret.userInfo.firstName) && String.IsNullOrEmpty(ret.userInfo.lastName) && String.IsNullOrEmpty(ret.userInfo.middleName)) ret.errors = new Models.Error() { code = 422, message = "Key not found!" };
+                if (Const.Paths.GetDBName() == "Ski2Db_2015 - 2016")
+                {
+                    var tm = Methods.ReadData.CheckKey(data);
+                    ret.errors = tm.errors;
+                    ret.founded = (!String.IsNullOrEmpty(tm.key)) ? true : false;
+                    ret.userInfo.key = tm.key;
+                }
+                else
+                {
+                    ret = Methods.ReadData.CheckUserRetName(data);
+                    if (ret.errors.code == 401) return new JsonResult(ret);
+                    if (!ret.founded && String.IsNullOrEmpty(ret.userInfo.firstName) && String.IsNullOrEmpty(ret.userInfo.lastName) && String.IsNullOrEmpty(ret.userInfo.middleName)) ret.errors = new Models.Error() { code = 422, message = "Key not found!" };
+                }
                 JsonResult res = new JsonResult((ret.errors.code == 0) ? ret : new Models.User() { founded = false, errors = new Models.Error() { code = ret.errors.code, message = ret.errors.message } }, new System.Text.Json.JsonSerializerOptions() { IgnoreNullValues=true});
                 return res;
             }
@@ -473,19 +539,32 @@ namespace SkipassAPI.Controllers
             return res;
         }
 
-        /// <summary>
-        /// Получение баланса юзера (зима)
-        /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        [HttpPost("/GetBalance")]
+    /// <summary>
+    /// Получение баланса юзера (зима)
+    /// </summary>
+    /// <remarks>
+    /// Пример запрооса: 
+    /// 
+    /// {  
+    /// 
+    ///    "authkey": "mn5tq8ZTJSmLA6FJ",  
+    ///    "key": "B3A9D829"
+    ///    
+    /// }
+    /// </remarks>
+    /// <param name="data"></param>
+    /// <returns></returns>
+    [HttpPost("/GetBalance")]
         public async Task<JsonResult> GetBalance(Models.GetBalanceIn data)
         {
             #region Checks
             if (String.IsNullOrEmpty(data.key) || String.IsNullOrWhiteSpace(data.key)) return new JsonResult(new Models.GetBalanceOut() { errors = new Models.Error() { code = 400, message = "Key couldn't be empty" } });
             bool tst;
-            Models.GetBalanceOut ret = new Models.GetBalanceOut();
-            Models.User chck = Methods.ReadData.CheckUserRetName(new Models.GetBalanceIn() { authkey = data.authkey, key = data.key });
+            Models.GetBalanceOut ret = Methods.ReadData.CheckKey(data);
+            Models.User chck = new Models.User();
+            chck.errors = ret.errors;
+            chck.founded = (!String.IsNullOrEmpty(ret.key)) ? true : false;
+            chck.userInfo.key = ret.key;
             if (!chck.founded && String.IsNullOrEmpty(chck.userInfo.firstName) && String.IsNullOrEmpty(chck.userInfo.lastName) && String.IsNullOrEmpty(chck.userInfo.middleName))
             {
                 ret.errors = new Models.Error() { code = 422, message = "Key not found!" };
@@ -532,9 +611,15 @@ namespace SkipassAPI.Controllers
         /// <summary>
         /// Добавление денег на депозит (зима)
         /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        [HttpPost("/AddSum")]
+        /// <remarks>
+        /// Для добавления денег на баланс необходимо передать authkey, key (номер скипасса), add_sum и флаг успешности банковской операции - successed (1 для успеха)
+        /// Пример запроса:
+        /// 
+        /// {  "authkey": "mn5tq8ZTJSmLA6FJ",  "key": "B3A9D829",  "add_sum": 500, "successed": 1}
+    /// </remarks>
+    /// <param name="data"></param>
+    /// <returns></returns>
+    [HttpPost("/AddSum")]
         public async Task<JsonResult> AddSum(Models.FillBalanceIn data)
         {
             try
@@ -545,8 +630,11 @@ namespace SkipassAPI.Controllers
                 if (data.successed==1)
                 {
                     bool tst;
-                    Models.GetBalanceOut ret = new Models.GetBalanceOut();
-                    Models.User chck = Methods.ReadData.CheckUserRetName(new Models.GetBalanceIn() { authkey = data.authkey, key = data.key });
+                    Models.GetBalanceOut ret = Methods.ReadData.CheckKey(new Models.GetBalanceIn() { key=data.key, authkey=data.authkey});
+                    Models.User chck = new Models.User();
+                    chck.errors = ret.errors;
+                    chck.founded = (!String.IsNullOrEmpty(ret.key)) ? true : false;
+                    chck.userInfo.key = ret.key;
                     if (!chck.founded && String.IsNullOrEmpty(chck.userInfo.firstName) && String.IsNullOrEmpty(chck.userInfo.lastName) && String.IsNullOrEmpty(chck.userInfo.middleName))
                     {
                         ret.errors = new Models.Error() { code = 422, message = "Key not found!" };

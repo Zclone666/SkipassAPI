@@ -86,9 +86,16 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:SkipassAPI.Controllers.Skypass.CheckKey(SkipassAPI.Models.GetBalanceIn)">
+        <member name="M:SkipassAPI.Controllers.Skypass.CheckSkipass(SkipassAPI.Models.GetBalanceIn)">
             <summary>
             Проверка скипасса
+            </summary>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SkipassAPI.Controllers.Skypass.CheckKey(SkipassAPI.Models.GetBalanceIn)">
+            <summary>
+            Проверка браслета
             </summary>
             <param name="data"></param>
             <returns></returns>
@@ -286,6 +293,12 @@
             <summary>
             Добавление денег на депозит (зима)
             </summary>
+            <remarks>
+            Для добавления денег на баланс необходимо передать authkey, key (номер скипасса), add_sum и флаг успешности банковской операции - successed (1 для успеха)
+            Пример запроса:
+            
+            {  "authkey": "mn5tq8ZTJSmLA6FJ",  "key": "B3A9D829",  "add_sum": 500, "successed": 1}
+            </remarks>
             <param name="data"></param>
             <returns></returns>
         </member>

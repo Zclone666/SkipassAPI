@@ -317,18 +317,20 @@ namespace SkipassAPI.Methods
                 }
                 conn.Close();
             }
-
-            try
+            if (!String.IsNullOrEmpty(data.email) && !String.IsNullOrEmpty(data.phone))
             {
-                Models.FillBalanceIn data2 = IsThereEmailPhone(data, SQLPath);
-                if(data.email!=data2.email || data.phone != data2.phone)
+                try
                 {
-                    data.email = (data2.email is null || data2.email == "") ? data.email : data2.email;
-                    data.phone = (data2.phone is null || data2.phone=="") ? data.phone : data2.phone;
-                    UpdateEmail(data, SQLPath);
+                    Models.FillBalanceIn data2 = IsThereEmailPhone(data, SQLPath);
+                    if (data.email != data2.email || data.phone != data2.phone)
+                    {
+                        data.email = (data2.email is null || data2.email == "") ? data.email : data2.email;
+                        data.phone = (data2.phone is null || data2.phone == "") ? data.phone : data2.phone;
+                        UpdateEmail(data, SQLPath);
+                    }
                 }
-            }catch(Exception e) { }
-
+                catch (Exception e) { }
+            }
             return ret;
         }
 
