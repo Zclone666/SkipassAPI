@@ -18,7 +18,7 @@ namespace SkipassAPI.Models
         public string payment_system { get; set; }
         public string payment_source { get; set; }
         public string comment { get; set; }
-        public int successed { get; set; }
+        public int successed { get; set; } = 1;
     }
 
     public class KeyFound : Alarm

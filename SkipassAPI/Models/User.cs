@@ -21,6 +21,7 @@ namespace SkipassAPI.Models
         public string phone { get; set; }
         public string key { get; set; }
         public bool isActive { get; set; }
+        public decimal balance { get; set; }
     }
 
     public class UserInfoList:Alarm

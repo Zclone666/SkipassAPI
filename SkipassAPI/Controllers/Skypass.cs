@@ -55,6 +55,7 @@ namespace SkipassAPI.Controllers
         {
             if (String.IsNullOrEmpty(data.key) || String.IsNullOrWhiteSpace(data.key)) return new JsonResult(new Models.User() { founded = false, errors = new Models.Error() { code = 400, message = "Key couldn't be empty" } });
             bool tst;
+            var bal = Methods.ReadData.GetBalance(data);
             Models.User ret = new Models.User();
             try
             {
@@ -62,6 +63,7 @@ namespace SkipassAPI.Controllers
                 ret.errors = tm.errors;
                 ret.userInfo.isActive=ret.founded = (!String.IsNullOrEmpty(tm.key)) ? true : false;
                 ret.userInfo.key = tm.key;
+                ret.userInfo.balance = bal.balance;
                 JsonResult res = new JsonResult((ret.errors.code == 0) ? ret : new Models.User() { founded = false, errors = new Models.Error() { code = ret.errors.code, message = ret.errors.message } }, new System.Text.Json.JsonSerializerOptions() { IgnoreNullValues = true });
                 return res;
             }
@@ -627,10 +629,46 @@ namespace SkipassAPI.Controllers
                 #region Checks
                 if (String.IsNullOrEmpty(data.key) || String.IsNullOrWhiteSpace(data.key)) return new JsonResult(new Models.GetBalanceOut() { errors = new Models.Error() { code = 400, message = "Key couldn't be empty" } });             
                 
-                if (data.successed==1)
+                if (data.successed==0)
                 {
                     bool tst;
-                    Models.GetBalanceOut ret = Methods.ReadData.CheckKey(new Models.GetBalanceIn() { key=data.key, authkey=data.authkey});
+                    Models.GetBalanceOut ret = new Models.GetBalanceOut();
+                    try
+                    {
+                        ret = Methods.WriteData.LogHistory(data);
+                        JsonResult res = new JsonResult(ret);
+                        return res;
+                    }
+                    catch (Exception e)
+                    {
+                        try
+                        {
+                            tst = Methods.Connect.Test();
+
+                            if (tst)
+                            {
+                                ret = Methods.WriteData.LogHistory(data);
+                                JsonResult res = new JsonResult(ret);
+                                return res;
+                            }
+                            else
+                            {
+                                ret = Methods.WriteData.LogHistory(data, Const.Paths.SQLPath);
+                                JsonResult res = new JsonResult(ret);
+                                return res;
+                            }
+                        }
+                        catch (Exception e2)
+                        {
+                            JsonResult res = new JsonResult(new Models.GetBalanceOut() { errors = new Models.Error() { code = 400, message = e2.Message } });
+                            return res;
+                        }
+                    }
+                }
+                else
+                {
+                    bool tst;
+                    Models.GetBalanceOut ret = Methods.ReadData.CheckKey(new Models.GetBalanceIn() { key = data.key, authkey = data.authkey });
                     Models.User chck = new Models.User();
                     chck.errors = ret.errors;
                     chck.founded = (!String.IsNullOrEmpty(ret.key)) ? true : false;
@@ -665,42 +703,6 @@ namespace SkipassAPI.Controllers
                             {
                                 ret = Methods.WriteData.FillBalance(data, Const.Paths.SQLPath);
                                 Methods.WriteData.LogHistory(data, Const.Paths.SQLPath);
-                                JsonResult res = new JsonResult(ret);
-                                return res;
-                            }
-                        }
-                        catch (Exception e2)
-                        {
-                            JsonResult res = new JsonResult(new Models.GetBalanceOut() { errors = new Models.Error() { code = 400, message = e2.Message } });
-                            return res;
-                        }
-                    }
-                }
-                else
-                {
-                    bool tst;
-                    Models.GetBalanceOut ret = new Models.GetBalanceOut();
-                    try
-                    {
-                        ret = Methods.WriteData.LogHistory(data);
-                        JsonResult res = new JsonResult(ret);
-                        return res;
-                    }
-                    catch (Exception e)
-                    {
-                        try
-                        {
-                            tst = Methods.Connect.Test();
-
-                            if (tst)
-                            {
-                                ret = Methods.WriteData.LogHistory(data);
-                                JsonResult res = new JsonResult(ret);
-                                return res;
-                            }
-                            else
-                            {
-                                ret = Methods.WriteData.LogHistory(data, Const.Paths.SQLPath);
                                 JsonResult res = new JsonResult(ret);
                                 return res;
                             }
