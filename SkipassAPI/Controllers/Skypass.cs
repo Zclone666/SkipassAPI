@@ -478,8 +478,19 @@ namespace SkipassAPI.Controllers
         public async Task<JsonResult> GetUserAbon(Models.UserServicesReq data)
         {
             #region Checks
-            if (String.IsNullOrEmpty(data.key) || String.IsNullOrWhiteSpace(data.key)) return new JsonResult(new Models.UserServicesResp() { errors = new Models.Error() { code = 400, message = "Key couldn't be empty" } });
-            Models.User chck = Methods.ReadData.CheckUserRetName(new Models.GetBalanceIn() { authkey = data.authkey, key = data.key });
+            Models.User chck = new Models.User();
+            if (Const.Paths.GetDBName() != "Ski2Db_2015-2016")
+            {
+                if (String.IsNullOrEmpty(data.key) || String.IsNullOrWhiteSpace(data.key)) return new JsonResult(new Models.UserServicesResp() { errors = new Models.Error() { code = 400, message = "Key couldn't be empty" } });
+                chck = Methods.ReadData.CheckUserRetName(new Models.GetBalanceIn() { authkey = data.authkey, key = data.key });
+            }
+            else
+            {
+                Models.GetBalanceOut ret = Methods.ReadData.CheckKey(new Models.GetBalanceIn() { key = data.key, authkey = data.authkey });
+                chck.errors = ret.errors;
+                chck.founded = (!String.IsNullOrEmpty(ret.key)) ? true : false;
+                chck.userInfo.key = ret.key;
+            }
             if (!chck.founded && String.IsNullOrEmpty(chck.userInfo.firstName) && String.IsNullOrEmpty(chck.userInfo.lastName) && String.IsNullOrEmpty(chck.userInfo.middleName))
             {
                 return new JsonResult(new Models.AddServiceResp() { errors = new Models.Error() { code = 422, message = "Key not found!" } });
@@ -521,8 +532,19 @@ namespace SkipassAPI.Controllers
         public async Task<JsonResult> GetUserSrv(Models.UserServicesReq data)
         {
             #region Checks
-            if (String.IsNullOrEmpty(data.key) || String.IsNullOrWhiteSpace(data.key)) return new JsonResult(new Models.UserServicesResp() { errors = new Models.Error() { code = 400, message = "Key couldn't be empty" } });
-            Models.User chck = Methods.ReadData.CheckUserRetName(new Models.GetBalanceIn() { authkey = data.authkey, key = data.key });
+            Models.User chck = new Models.User();
+            if (Const.Paths.GetDBName() != "Ski2Db_2015-2016")
+            {
+                if (String.IsNullOrEmpty(data.key) || String.IsNullOrWhiteSpace(data.key)) return new JsonResult(new Models.UserServicesResp() { errors = new Models.Error() { code = 400, message = "Key couldn't be empty" } });
+                chck = Methods.ReadData.CheckUserRetName(new Models.GetBalanceIn() { authkey = data.authkey, key = data.key });
+            }
+            else
+            {
+                Models.GetBalanceOut ret = Methods.ReadData.CheckKey(new Models.GetBalanceIn() { key = data.key, authkey = data.authkey });
+                chck.errors = ret.errors;
+                chck.founded = (!String.IsNullOrEmpty(ret.key)) ? true : false;
+                chck.userInfo.key = ret.key;
+            }
             if (!chck.founded && String.IsNullOrEmpty(chck.userInfo.firstName) && String.IsNullOrEmpty(chck.userInfo.lastName) && String.IsNullOrEmpty(chck.userInfo.middleName))
             {
                 return new JsonResult(new Models.AddServiceResp() { errors = new Models.Error() { code = 422, message = "Key not found!" } });

@@ -205,13 +205,13 @@ where Amount is not null and Amount>0";
 inner join (SELECT [Name] as DayT,[Amount], TargetGoodId, DayType.DayTypeId FROM [Fwp].[dbo].[TariffExtension] left join Fwp.dbo.DayType on Fwp.dbo.DayType.DayTypeId=Fwp.dbo.TariffExtension.DayTypeId inner join [Fwp].[dbo].[Tariff] on  [Fwp].[dbo].[Tariff].TariffId=[Fwp].[dbo].[TariffExtension].TariffId where Type=2 and Allow=1) as tt on tt.TargetGoodId=CategoryId
 where StockType=4";
 
-		public const string GetUserAbon = @"SELECT Fwp.dbo.Category.Name,[IsActive],[Amount],[Start],[End]  FROM [Fwp].[dbo].[AccountStock]
-  inner join Fwp.dbo.Category on Fwp.dbo.Category.CategoryId=Fwp.dbo.AccountStock.CategoryId
-  where Fwp.dbo.AccountStock.StockType=3 and Fwp.dbo.AccountStock.SuperAccountId=(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key)";
+		public const string GetUserAbon = @"SELECT [Category].Name,[IsActive],[Amount],[Start],[End]  FROM [AccountStock]
+  inner join [Category] on [Category].CategoryId=[AccountStock].CategoryId
+  where [AccountStock].StockType=3 and [AccountStock].SuperAccountId=(select SuperAccountId from [AccountStock] where StockType=21 and Code=@key)";
 
-        public const string GetUserServices = @"SELECT Fwp.dbo.Category.Name,[IsActive],[Amount],[Start],[End] FROM [Fwp].[dbo].[AccountStock]
-  inner join Fwp.dbo.Category on Fwp.dbo.Category.CategoryId=Fwp.dbo.AccountStock.CategoryId
-  where Fwp.dbo.AccountStock.SuperAccountId=(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key) and Fwp.dbo.AccountStock.StockType<>21";
+        public const string GetUserServices = @"SELECT [Category].Name,[IsActive],[Amount],[Start],[End] FROM [AccountStock]
+  inner join [Category] on [Category].CategoryId=[AccountStock].CategoryId
+  where [AccountStock].SuperAccountId=(select SuperAccountId from [AccountStock] where StockType=21 and Code=@key) and [AccountStock].StockType<>21";
 
         public const string CancelUserSrv = @"update [Fwp].[dbo].[AccountStock] set Fwp.dbo.AccountStock.IsActive=0
 where Fwp.dbo.AccountStock.SuperAccountId=(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key) and Fwp.dbo.AccountStock.CategoryId=@catId and Fwp.dbo.AccountStock.Start=@date_start;
