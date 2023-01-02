@@ -44,11 +44,12 @@ FROM  (select Amount,code,Name,CategoryId,SuperAccountId,StockType,AccountStockI
     set Amount=@add_sum+(select Amount from AccountStock where StockType=1 and SuperAccountId=(select SuperAccountId from AccountStock where StockType=21 and Code=@key))
     where StockType=1 and SuperAccountId=(select SuperAccountId from AccountStock where StockType=21 and Code=@key)
 insert into [Ski2Db_2015-2016].dbo.MasterTransaction (TransTime,SuperAccountFrom,SuperAccountTo,UserId,ServicePointId,ServerTime,IsOffline,CheckDetailId,Machine,SecSubjectId)
-    values (GETDATE(),3,(select SuperAccountId from [Ski2Db_2015-2016].dbo.AccountStock where StockType=21 and Code=@key),'CASHDESK2@admin',7,GETDATE(),0,157862,'CASHDESK2@Bars.CashDesk',12);
+    values (GETDATE(),3,(select SuperAccountId from [Ski2Db_2015-2016].dbo.AccountStock where StockType=21 and Code=@key),'CASHDESK2@admin',7,GETDATE(),0,NULL,'CASHDESK2@Bars.CashDesk',1);
 
-    insert into [Ski2Db_2015-2016].dbo.TransactionDetail (MasterTransactionId,StockInfoIdTo,Amount, SuperAccountIdTo)
+    insert into [Ski2Db_2015-2016].dbo.TransactionDetail (MasterTransactionId, StockInfoIdFrom, StockInfoIdTo,Amount, SuperAccountIdTo)
     values ((select MAX(MasterTransactionId) from [Ski2Db_2015-2016].dbo.MasterTransaction)
-		,360757
+		,NULL
+		,455
 		,@add_sum
 		,3);
     insert into [Ski2Db_2015-2016].dbo.TransactionDetail (MasterTransactionId
@@ -58,7 +59,7 @@ insert into [Ski2Db_2015-2016].dbo.MasterTransaction (TransTime,SuperAccountFrom
 		,SuperAccountIdFrom
 		, SuperAccountIdTo)
     values ((select MAX(MasterTransactionId) from [Ski2Db_2015-2016].dbo.MasterTransaction)
-		,360757
+		,455
 		,(select SuperAccountId from [Ski2Db_2015-2016].dbo.AccountStock where StockType=21 and Code=@key)+1
 		,@add_sum
 		,3
@@ -75,7 +76,7 @@ insert into [Ski2Db_2015-2016].dbo.MasterTransaction (TransTime,SuperAccountFrom
 		,SuperAccountIdTo)
     values ((select MAX(MasterTransactionId) from [Ski2Db_2015-2016].dbo.MasterTransaction)
 		,(select SuperAccountId from [Ski2Db_2015-2016].dbo.AccountStock where StockType=21 and Code=@key)+1
-		,360757
+		,455
 		,@add_sum
 		,(select SuperAccountId from [Ski2Db_2015-2016].dbo.AccountStock where StockType=21 and Code=@key)
 		,3);
