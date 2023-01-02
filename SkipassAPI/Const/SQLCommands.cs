@@ -66,7 +66,7 @@ insert into [Ski2Db_2015-2016].dbo.MasterTransaction (TransTime,SuperAccountFrom
 		,(select SuperAccountId from [Ski2Db_2015-2016].dbo.AccountStock where StockType=21 and Code=@key));
 
 	insert into [Ski2Db_2015-2016].dbo.MasterTransaction (TransTime,SuperAccountFrom,SuperAccountTo,UserId,ServicePointId,ServerTime,IsOffline,CheckDetailId,Machine,SecSubjectId)
-    values (GETDATE(),3,(select SuperAccountId from [Ski2Db_2015-2016].dbo.AccountStock where StockType=21 and Code=@key),'CASHDESK2@admin',7,GETDATE(),0,157862,'CASHDESK2@Bars.CashDesk',12);
+    values (GETDATE(),3,(select SuperAccountId from [Ski2Db_2015-2016].dbo.AccountStock where StockType=21 and Code=@key),'CASHDESK2@admin',7,GETDATE(),0,NULL,'CASHDESK2@Bars.CashDesk',1);
 
     insert into [Ski2Db_2015-2016].dbo.TransactionDetail (MasterTransactionId
 		,StockInfoIdFrom
@@ -95,8 +95,8 @@ insert into [Ski2Db_2015-2016].dbo.MasterTransaction (TransTime,SuperAccountFrom
 
 	UPDATE [Ski2Db_2015-2016].[dbo].[SuperAccount] SET [LastTransactionTime] = GETDATE() WHERE [SuperAccountId] = 3;
     UPDATE [Ski2Db_2015-2016].[dbo].[SuperAccount] SET [LastTransactionTime] = GETDATE() WHERE [SuperAccountId] = (select SuperAccountId from [Ski2Db_2015-2016].dbo.AccountStock where StockType=21 and Code=@key);
-    INSERT INTO [Ski2Db_2015-2016].[dbo].[GlobalId] ([StockType]) VALUES (1);
-    INSERT INTO [Ski2Db_2015-2016].[dbo].[GlobalId] ([StockType]) VALUES (1);
+    INSERT INTO [Ski2Db_2015-2016].[dbo].[GlobalId] ([StockType]) VALUES (0);
+    INSERT INTO [Ski2Db_2015-2016].[dbo].[GlobalId] ([StockType]) VALUES (0);
    select Amount from AccountStock where StockType = 1 and SuperAccountId=(select SuperAccountId from AccountStock where StockType=21 and Code=@key)";
         public const string AddAccountStock = @"insert into Fwp.dbo.AccountStock (AccountStockId,SuperAccountId,StockType,IsActive,CategoryId,Amount,Start,[End],IsTimePatternApplied,PassesDone) 
     values (((select MAX(AccountStockId) from Fwp.dbo.AccountStock)+1), (select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key), (SELECT [StockType] FROM [Fwp].[dbo].[Category] where CategoryId=@catId)-1, 1, @catId, @amount, @date_start, @date_end, (case when (SELECT top 1 [TimePatternId] FROM [Fwp].[dbo].[Category] where CategoryId=@catId) is null then 1 else 0 end), 0);
