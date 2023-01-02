@@ -90,6 +90,12 @@
             <summary>
             Проверка скипасса
             </summary>
+            <remarks>
+            Пример запроса:
+            
+            {"authkey": "mn5tq8ZTJSmLA6FJ","key": "B3A9D829"}
+            
+            </remarks>
             <param name="data"></param>
             <returns></returns>
         </member>
@@ -286,6 +292,16 @@
             <summary>
             Получение баланса юзера (зима)
             </summary>
+            <remarks>
+            Пример запрооса: 
+            
+            {  
+            
+               "authkey": "mn5tq8ZTJSmLA6FJ",  
+               "key": "B3A9D829"
+               
+            }
+            </remarks>
             <param name="data"></param>
             <returns></returns>
         </member>

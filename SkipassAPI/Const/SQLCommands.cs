@@ -98,85 +98,85 @@ insert into [Ski2Db_2015-2016].dbo.MasterTransaction (TransTime,SuperAccountFrom
     INSERT INTO [Ski2Db_2015-2016].[dbo].[GlobalId] ([StockType]) VALUES (0);
     INSERT INTO [Ski2Db_2015-2016].[dbo].[GlobalId] ([StockType]) VALUES (0);
    select Amount from AccountStock where StockType = 1 and SuperAccountId=(select SuperAccountId from AccountStock where StockType=21 and Code=@key)";
-        public const string AddAccountStock = @"insert into Fwp.dbo.AccountStock (AccountStockId,SuperAccountId,StockType,IsActive,CategoryId,Amount,Start,[End],IsTimePatternApplied,PassesDone) 
-    values (((select MAX(AccountStockId) from Fwp.dbo.AccountStock)+1), (select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key), (SELECT [StockType] FROM [Fwp].[dbo].[Category] where CategoryId=@catId)-1, 1, @catId, @amount, @date_start, @date_end, (case when (SELECT top 1 [TimePatternId] FROM [Fwp].[dbo].[Category] where CategoryId=@catId) is null then 1 else 0 end), 0);
+        public const string AddAccountStock = @"insert into [AccountStock] (AccountStockId,SuperAccountId,StockType,IsActive,CategoryId,Amount,Start,[End],IsTimePatternApplied,PassesDone) 
+    values (((select MAX(AccountStockId) from [AccountStock])+1), (select SuperAccountId from [AccountStock] where StockType=21 and Code=@key), (SELECT [StockType] FROM [Category] where CategoryId=@catId)-1, 1, @catId, @amount, @date_start, @date_end, (case when (SELECT top 1 [TimePatternId] FROM [Category] where CategoryId=@catId) is null then 1 else 0 end), 0);
    
 
-    insert into Fwp.dbo.MasterTransaction (TransTime,SuperAccountFrom,SuperAccountTo,UserId,ServicePointId,ServerTime,IsOffline,CheckDetailId,Machine,SecSubjectId)
-    values (GETDATE(),3,(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key),'CASHDESK2@admin',7,GETDATE(),0,157862,'CASHDESK2@Bars.CashDesk',12);
+    insert into [MasterTransaction] (TransTime,SuperAccountFrom,SuperAccountTo,UserId,ServicePointId,ServerTime,IsOffline,CheckDetailId,Machine,SecSubjectId)
+    values (GETDATE(),3,(select SuperAccountId from [AccountStock] where StockType=21 and Code=@key),'CASHDESK2@admin',7,GETDATE(),0,157862,'CASHDESK2@Bars.CashDesk',12);
 
-    insert into Fwp.dbo.TransactionDetail (MasterTransactionId,StockInfoIdTo,Amount, SuperAccountIdTo)
-    values ((select MAX(MasterTransactionId) from Fwp.dbo.MasterTransaction)
+    insert into [TransactionDetail] (MasterTransactionId,StockInfoIdTo,Amount, SuperAccountIdTo)
+    values ((select MAX(MasterTransactionId) from [MasterTransaction])
 		,360757
 		,isnull(
 			(
 				select
-				case when exists(SELECT TOP 1 [Amount] FROM [Fwp].[dbo].[TariffExtension] left join Fwp.dbo.DayType on Fwp.dbo.DayType.DayTypeId=Fwp.dbo.TariffExtension.DayTypeId right join [Fwp].[dbo].[Tariff] on  [Fwp].[dbo].[Tariff].TariffId=[Fwp].[dbo].[TariffExtension].TariffId where Allow=1 and DayType.DayTypeId=(select case when DATEPART( dw, CAST(@date_start AS DATETIME) ) = 6 or DATEPART( dw, CAST(@date_start AS DATETIME) ) = 7 then 85 ELSE 84 end) and TargetGoodId=@catId)
-				then (SELECT TOP 1 [Amount] FROM [Fwp].[dbo].[TariffExtension] left join Fwp.dbo.DayType on Fwp.dbo.DayType.DayTypeId=Fwp.dbo.TariffExtension.DayTypeId right join [Fwp].[dbo].[Tariff] on  [Fwp].[dbo].[Tariff].TariffId=[Fwp].[dbo].[TariffExtension].TariffId where Allow=1 and DayType.DayTypeId=(select case when DATEPART( dw,CAST(@date_start AS DATETIME) ) = 6 or DATEPART( dw, CAST(@date_start AS DATETIME) ) = 7 then 85 ELSE 84 end) and TargetGoodId=@catId)
-				else (SELECT TOP 1 [Amount] FROM [Fwp].[dbo].[TariffExtension] left join Fwp.dbo.DayType on Fwp.dbo.DayType.DayTypeId=Fwp.dbo.TariffExtension.DayTypeId right join [Fwp].[dbo].[Tariff] on  [Fwp].[dbo].[Tariff].TariffId=[Fwp].[dbo].[TariffExtension].TariffId where Allow=1 and TargetGoodId=@catId)
+				case when exists(SELECT TOP 1 [Amount] FROM [TariffExtension] left join [DayType] on [DayType].DayTypeId=[TariffExtension].DayTypeId right join [Tariff] on  [Tariff].TariffId=[TariffExtension].TariffId where Allow=1 and DayType.DayTypeId=(select case when DATEPART( dw, CAST(@date_start AS DATETIME) ) = 6 or DATEPART( dw, CAST(@date_start AS DATETIME) ) = 7 then 85 ELSE 84 end) and TargetGoodId=@catId)
+				then (SELECT TOP 1 [Amount] FROM [TariffExtension] left join [DayType] on [DayType].DayTypeId=[TariffExtension].DayTypeId right join [Tariff] on  [Tariff].TariffId=[TariffExtension].TariffId where Allow=1 and DayType.DayTypeId=(select case when DATEPART( dw,CAST(@date_start AS DATETIME) ) = 6 or DATEPART( dw, CAST(@date_start AS DATETIME) ) = 7 then 85 ELSE 84 end) and TargetGoodId=@catId)
+				else (SELECT TOP 1 [Amount] FROM [TariffExtension] left join [DayType] on [DayType].DayTypeId=[TariffExtension].DayTypeId right join [Tariff] on  [Tariff].TariffId=[TariffExtension].TariffId where Allow=1 and TargetGoodId=@catId)
 				end
 			),@amount)
 		,3);
-    insert into Fwp.dbo.TransactionDetail (MasterTransactionId
+    insert into [TransactionDetail] (MasterTransactionId
 		,StockInfoIdFrom
 		,StockInfoIdTo
 		,Amount
 		,SuperAccountIdFrom
 		, SuperAccountIdTo)
-    values ((select MAX(MasterTransactionId) from Fwp.dbo.MasterTransaction)
+    values ((select MAX(MasterTransactionId) from [MasterTransaction])
 		,360757
-		,(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key)+1
+		,(select SuperAccountId from [AccountStock] where StockType=21 and Code=@key)+1
 		,isnull(  
 			(
 				select
-				case when exists(SELECT TOP 1 [Amount] FROM [Fwp].[dbo].[TariffExtension] left join Fwp.dbo.DayType on Fwp.dbo.DayType.DayTypeId=Fwp.dbo.TariffExtension.DayTypeId right join [Fwp].[dbo].[Tariff] on  [Fwp].[dbo].[Tariff].TariffId=[Fwp].[dbo].[TariffExtension].TariffId where Allow=1 and DayType.DayTypeId=(select case when DATEPART( dw, CAST(@date_start AS DATETIME) ) = 6 or DATEPART( dw, CAST(@date_start AS DATETIME) ) = 7 then 85 ELSE 84 end) and TargetGoodId=@catId)
-				then (SELECT TOP 1 [Amount] FROM [Fwp].[dbo].[TariffExtension] left join Fwp.dbo.DayType on Fwp.dbo.DayType.DayTypeId=Fwp.dbo.TariffExtension.DayTypeId right join [Fwp].[dbo].[Tariff] on  [Fwp].[dbo].[Tariff].TariffId=[Fwp].[dbo].[TariffExtension].TariffId where Allow=1 and DayType.DayTypeId=(select case when DATEPART( dw, CAST(@date_start AS DATETIME) ) = 6 or DATEPART( dw, CAST(@date_start AS DATETIME) ) = 7 then 85 ELSE 84 end) and TargetGoodId=@catId)
-				else (SELECT TOP 1 [Amount] FROM [Fwp].[dbo].[TariffExtension] left join Fwp.dbo.DayType on Fwp.dbo.DayType.DayTypeId=Fwp.dbo.TariffExtension.DayTypeId right join [Fwp].[dbo].[Tariff] on  [Fwp].[dbo].[Tariff].TariffId=[Fwp].[dbo].[TariffExtension].TariffId where Allow=1 and TargetGoodId=@catId)
+				case when exists(SELECT TOP 1 [Amount] FROM [TariffExtension] left join [DayType] on [DayType].DayTypeId=[TariffExtension].DayTypeId right join [Tariff] on  [Tariff].TariffId=[TariffExtension].TariffId where Allow=1 and DayType.DayTypeId=(select case when DATEPART( dw, CAST(@date_start AS DATETIME) ) = 6 or DATEPART( dw, CAST(@date_start AS DATETIME) ) = 7 then 85 ELSE 84 end) and TargetGoodId=@catId)
+				then (SELECT TOP 1 [Amount] FROM [TariffExtension] left join [DayType] on [DayType].DayTypeId=[TariffExtension].DayTypeId right join [Tariff] on [Tariff].TariffId=[TariffExtension].TariffId where Allow=1 and DayType.DayTypeId=(select case when DATEPART( dw, CAST(@date_start AS DATETIME) ) = 6 or DATEPART( dw, CAST(@date_start AS DATETIME) ) = 7 then 85 ELSE 84 end) and TargetGoodId=@catId)
+				else (SELECT TOP 1 [Amount] FROM [TariffExtension] left join [DayType] on [DayType].DayTypeId=[TariffExtension].DayTypeId right join [Tariff] on [Tariff].TariffId=[TariffExtension].TariffId where Allow=1 and TargetGoodId=@catId)
 				end
 			),@amount)
 		,3
-		,(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key));
+		,(select SuperAccountId from [AccountStock] where StockType=21 and Code=@key));
 
-	insert into Fwp.dbo.MasterTransaction (TransTime,SuperAccountFrom,SuperAccountTo,UserId,ServicePointId,ServerTime,IsOffline,CheckDetailId,Machine,SecSubjectId)
-    values (GETDATE(),3,(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key),'CASHDESK2@admin',7,GETDATE(),0,157862,'CASHDESK2@Bars.CashDesk',12);
+	insert into [MasterTransaction] (TransTime,SuperAccountFrom,SuperAccountTo,UserId,ServicePointId,ServerTime,IsOffline,CheckDetailId,Machine,SecSubjectId)
+    values (GETDATE(),3,(select SuperAccountId from [AccountStock] where StockType=21 and Code=@key),'CASHDESK2@admin',7,GETDATE(),0,157862,'CASHDESK2@Bars.CashDesk',12);
 
-    insert into Fwp.dbo.TransactionDetail (MasterTransactionId
+    insert into [TransactionDetail] (MasterTransactionId
 		,StockInfoIdFrom
 		,StockInfoIdTo
 		,Amount
 		,SuperAccountIdFrom
 		,SuperAccountIdTo)
-    values ((select MAX(MasterTransactionId) from Fwp.dbo.MasterTransaction)
-		,(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key)+1
+    values ((select MAX(MasterTransactionId) from [MasterTransaction])
+		,(select SuperAccountId from [AccountStock] where StockType=21 and Code=@key)+1
 		,360757
 		,isnull(
 			(
 				select
-				case when exists(SELECT TOP 1 [Amount] FROM [Fwp].[dbo].[TariffExtension] left join Fwp.dbo.DayType on Fwp.dbo.DayType.DayTypeId=Fwp.dbo.TariffExtension.DayTypeId right join [Fwp].[dbo].[Tariff] on  [Fwp].[dbo].[Tariff].TariffId=[Fwp].[dbo].[TariffExtension].TariffId where Allow=1 and DayType.DayTypeId=(select case when DATEPART( dw, CAST(@date_start AS DATETIME) ) = 6 or DATEPART( dw, CAST(@date_start AS DATETIME) ) = 7 then 85 ELSE 84 end) and TargetGoodId=@catId)
-				then (SELECT TOP 1 [Amount] FROM [Fwp].[dbo].[TariffExtension] left join Fwp.dbo.DayType on Fwp.dbo.DayType.DayTypeId=Fwp.dbo.TariffExtension.DayTypeId right join [Fwp].[dbo].[Tariff] on  [Fwp].[dbo].[Tariff].TariffId=[Fwp].[dbo].[TariffExtension].TariffId where Allow=1 and DayType.DayTypeId=(select case when DATEPART( dw, CAST(@date_start AS DATETIME) ) = 6 or DATEPART( dw, CAST(@date_start AS DATETIME) ) = 7 then 85 ELSE 84 end) and TargetGoodId=@catId)
-				else (SELECT TOP 1 [Amount] FROM [Fwp].[dbo].[TariffExtension] left join Fwp.dbo.DayType on Fwp.dbo.DayType.DayTypeId=Fwp.dbo.TariffExtension.DayTypeId right join [Fwp].[dbo].[Tariff] on  [Fwp].[dbo].[Tariff].TariffId=[Fwp].[dbo].[TariffExtension].TariffId where Allow=1 and TargetGoodId=@catId)
+				case when exists(SELECT TOP 1 [Amount] FROM [TariffExtension] left join [DayType] on [DayType].DayTypeId=[TariffExtension].DayTypeId right join [Tariff] on [Tariff].TariffId=[TariffExtension].TariffId where Allow=1 and DayType.DayTypeId=(select case when DATEPART( dw, CAST(@date_start AS DATETIME) ) = 6 or DATEPART( dw, CAST(@date_start AS DATETIME) ) = 7 then 85 ELSE 84 end) and TargetGoodId=@catId)
+				then (SELECT TOP 1 [Amount] FROM [TariffExtension] left join [DayType] on [DayType].DayTypeId=[TariffExtension].DayTypeId right join [Tariff] on [Tariff].TariffId=[TariffExtension].TariffId where Allow=1 and DayType.DayTypeId=(select case when DATEPART( dw, CAST(@date_start AS DATETIME) ) = 6 or DATEPART( dw, CAST(@date_start AS DATETIME) ) = 7 then 85 ELSE 84 end) and TargetGoodId=@catId)
+				else (SELECT TOP 1 [Amount] FROM [TariffExtension] left join [DayType] on [DayType].DayTypeId=[TariffExtension].DayTypeId right join [Tariff] on [Tariff].TariffId=[TariffExtension].TariffId where Allow=1 and TargetGoodId=@catId)
 				end
 			),@amount)
-		,(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key)
+		,(select SuperAccountId from [AccountStock] where StockType=21 and Code=@key)
 		,3);
-	insert into Fwp.dbo.TransactionDetail (MasterTransactionId
+	insert into [TransactionDetail] (MasterTransactionId
 		,StockInfoIdFrom
 		,StockInfoIdTo
 		,Amount
 		,SuperAccountIdFrom
 		,SuperAccountIdTo)
-    values ((select MAX(MasterTransactionId) from Fwp.dbo.MasterTransaction)
-		,(select MAX(AccountStockId) from Fwp.dbo.AccountStock)
-		,(select MAX(AccountStockId) from Fwp.dbo.AccountStock)
+    values ((select MAX(MasterTransactionId) from [MasterTransaction])
+		,(select MAX(AccountStockId) from [AccountStock])
+		,(select MAX(AccountStockId) from [AccountStock])
 		,@amount
 		,3
-		,(select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key));
+		,(select SuperAccountId from [AccountStock] where StockType=21 and Code=@key));
 
-	UPDATE [Fwp].[dbo].[SuperAccount] SET [LastTransactionTime] = GETDATE() WHERE [SuperAccountId] = 3;
-    UPDATE [Fwp].[dbo].[SuperAccount] SET [LastTransactionTime] = GETDATE() WHERE [SuperAccountId] = (select SuperAccountId from Fwp.dbo.AccountStock where StockType=21 and Code=@key);
-    INSERT INTO [Fwp].[dbo].[GlobalId] ([StockType]) VALUES (0);
-    INSERT INTO [Fwp].[dbo].[GlobalId] ([StockType]) VALUES (0);
-    SELECT MAX([AccountStockId]) FROM Fwp.dbo.AccountStock WHERE SuperAccountId=(select SuperAccountId from AccountStock where StockType=21 and Code=@key) AND CategoryId=@catid AND AMOUNT=@amount AND Start=@date_start AND [End]=@date_end";
+	UPDATE [SuperAccount] SET [LastTransactionTime] = GETDATE() WHERE [SuperAccountId] = 3;
+    UPDATE [SuperAccount] SET [LastTransactionTime] = GETDATE() WHERE [SuperAccountId] = (select SuperAccountId from [AccountStock] where StockType=21 and Code=@key);
+    INSERT INTO [GlobalId] ([StockType]) VALUES (0);
+    INSERT INTO [GlobalId] ([StockType]) VALUES (0);
+    SELECT MAX([AccountStockId]) FROM [AccountStock] WHERE SuperAccountId=(select SuperAccountId from AccountStock where StockType=21 and Code=@key) AND CategoryId=@catid AND AMOUNT=@amount AND Start=@date_start AND [End]=@date_end";
 
         public const string GetAddedAccountStockId = "SELECT [AccountStockId] FROM Fwp.dbo.AccountStock WHERE SuperAccountId=(select SuperAccountId from AccountStock where StockType=21 and Code=@key) AND CategoryId=@catid AND AMOUNT=@amount AND Start=@date_start AND End=@date_end";
 
