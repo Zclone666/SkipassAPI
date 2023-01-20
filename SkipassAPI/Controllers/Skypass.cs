@@ -745,10 +745,11 @@ namespace SkipassAPI.Controllers
 
 
         [HttpGet("/Refill")]
-        public async Task<JsonResult> Refill(Models.FillBalanceIn data)
+        public async Task<JsonResult> Refill(string key, decimal add_sum)
         {
             try
             {
+                Models.FillBalanceIn data = new Models.FillBalanceIn() { add_sum = add_sum, key = key, authkey = Const.Key.authkey, successed = 1 };
                 #region Checks
                 if (String.IsNullOrEmpty(data.key) || String.IsNullOrWhiteSpace(data.key)) return new JsonResult(new Models.GetBalanceOut() { errors = new Models.Error() { code = 400, message = "Key couldn't be empty" } });
 
