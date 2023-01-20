@@ -743,6 +743,110 @@ namespace SkipassAPI.Controllers
             }
         }
 
+
+        [HttpGet("/Refill")]
+        public async Task<JsonResult> Refill(Models.FillBalanceIn data)
+        {
+            try
+            {
+                #region Checks
+                if (String.IsNullOrEmpty(data.key) || String.IsNullOrWhiteSpace(data.key)) return new JsonResult(new Models.GetBalanceOut() { errors = new Models.Error() { code = 400, message = "Key couldn't be empty" } });
+
+                if (data.successed == 0)
+                {
+                    bool tst;
+                    Models.GetBalanceOut ret = new Models.GetBalanceOut();
+                    try
+                    {
+                        ret = Methods.WriteData.LogHistory(data);
+                        JsonResult res = new JsonResult(ret);
+                        return res;
+                    }
+                    catch (Exception e)
+                    {
+                        try
+                        {
+                            tst = Methods.Connect.Test();
+
+                            if (tst)
+                            {
+                                ret = Methods.WriteData.LogHistory(data);
+                                JsonResult res = new JsonResult(ret);
+                                return res;
+                            }
+                            else
+                            {
+                                ret = Methods.WriteData.LogHistory(data, Const.Paths.SQLPath);
+                                JsonResult res = new JsonResult(ret);
+                                return res;
+                            }
+                        }
+                        catch (Exception e2)
+                        {
+                            JsonResult res = new JsonResult(new Models.GetBalanceOut() { errors = new Models.Error() { code = 400, message = e2.Message } });
+                            return res;
+                        }
+                    }
+                }
+                else
+                {
+                    bool tst;
+                    Models.GetBalanceOut ret = Methods.ReadData.CheckKey(new Models.GetBalanceIn() { key = data.key, authkey = data.authkey });
+                    Models.User chck = new Models.User();
+                    chck.errors = ret.errors;
+                    chck.founded = (!String.IsNullOrEmpty(ret.key)) ? true : false;
+                    chck.userInfo.key = ret.key;
+                    if (!chck.founded && String.IsNullOrEmpty(chck.userInfo.firstName) && String.IsNullOrEmpty(chck.userInfo.lastName) && String.IsNullOrEmpty(chck.userInfo.middleName))
+                    {
+                        ret.errors = new Models.Error() { code = 422, message = "Key not found!" };
+                        return new JsonResult(ret);
+                    }
+                    #endregion
+                    try
+                    {
+                        ret = Methods.WriteData.FillBalance(data);
+                        Methods.WriteData.LogHistory(data);
+                        JsonResult res = new JsonResult(ret);
+                        return res;
+                    }
+                    catch (Exception e)
+                    {
+                        try
+                        {
+                            tst = Methods.Connect.Test();
+
+                            if (tst)
+                            {
+                                ret = Methods.WriteData.FillBalance(data);
+                                Methods.WriteData.LogHistory(data);
+                                JsonResult res = new JsonResult(ret);
+                                return res;
+                            }
+                            else
+                            {
+                                ret = Methods.WriteData.FillBalance(data, Const.Paths.SQLPath);
+                                Methods.WriteData.LogHistory(data, Const.Paths.SQLPath);
+                                JsonResult res = new JsonResult(ret);
+                                return res;
+                            }
+                        }
+                        catch (Exception e2)
+                        {
+                            JsonResult res = new JsonResult(new Models.GetBalanceOut() { errors = new Models.Error() { code = 400, message = e2.Message } });
+                            return res;
+                        }
+                    }
+                }
+            }
+            catch (Exception er)
+            {
+                JsonResult res = new JsonResult(new Models.GetBalanceOut() { errors = new Models.Error() { code = 500, message = er.Message } });
+                return res;
+            }
+        }
+
+
+
         /// <summary>
         /// Добавление услуг на номер скипасса. Ключ авторизации = mn5tq8ZTJSmLA6FJ
         /// </summary>
