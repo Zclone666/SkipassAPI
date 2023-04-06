@@ -43,60 +43,60 @@ FROM  (select Amount,code,Name,CategoryId,SuperAccountId,StockType,AccountStockI
         public const string UpdateBalance = @"update [AccountStock]
     set Amount=@add_sum+(select Amount from AccountStock where StockType=1 and SuperAccountId=(select SuperAccountId from AccountStock where StockType=21 and Code=@key))
     where StockType=1 and SuperAccountId=(select SuperAccountId from AccountStock where StockType=21 and Code=@key)
-insert into [Ski2Db_2015-2016].dbo.MasterTransaction (TransTime,SuperAccountFrom,SuperAccountTo,UserId,ServicePointId,ServerTime,IsOffline,CheckDetailId,Machine,SecSubjectId)
-    values (GETDATE(),3,(select SuperAccountId from [Ski2Db_2015-2016].dbo.AccountStock where StockType=21 and Code=@key),'CASHDESK2@admin',8,GETDATE(),0,NULL,'CASHDESK2@Bars.CashDesk',1);
+insert into [Fwp].dbo.MasterTransaction (TransTime,SuperAccountFrom,SuperAccountTo,UserId,ServicePointId,ServerTime,IsOffline,CheckDetailId,Machine,SecSubjectId)
+    values (GETDATE(),3,(select SuperAccountId from [Fwp].dbo.AccountStock where StockType=21 and Code=@key),'CASHDESK2@admin',8,GETDATE(),0,NULL,'CASHDESK2@Bars.CashDesk',1);
 
-    insert into [Ski2Db_2015-2016].dbo.TransactionDetail (MasterTransactionId, StockInfoIdFrom, StockInfoIdTo,Amount, SuperAccountIdTo)
-    values ((select MAX(MasterTransactionId) from [Ski2Db_2015-2016].dbo.MasterTransaction)
+    insert into [Fwp].dbo.TransactionDetail (MasterTransactionId, StockInfoIdFrom, StockInfoIdTo,Amount, SuperAccountIdTo)
+    values ((select MAX(MasterTransactionId) from [Fwp].dbo.MasterTransaction)
 		,NULL
 		,455
 		,@add_sum
 		,3);
-    insert into [Ski2Db_2015-2016].dbo.TransactionDetail (MasterTransactionId
+    insert into [Fwp].dbo.TransactionDetail (MasterTransactionId
 		,StockInfoIdFrom
 		,StockInfoIdTo
 		,Amount
 		,SuperAccountIdFrom
 		, SuperAccountIdTo)
-    values ((select MAX(MasterTransactionId) from [Ski2Db_2015-2016].dbo.MasterTransaction)
+    values ((select MAX(MasterTransactionId) from [Fwp].dbo.MasterTransaction)
 		,455
-		,(select SuperAccountId from [Ski2Db_2015-2016].dbo.AccountStock where StockType=21 and Code=@key)+1
+		,(select SuperAccountId from [Fwp].dbo.AccountStock where StockType=21 and Code=@key)+1
 		,@add_sum
 		,3
-		,(select SuperAccountId from [Ski2Db_2015-2016].dbo.AccountStock where StockType=21 and Code=@key));
+		,(select SuperAccountId from [Fwp].dbo.AccountStock where StockType=21 and Code=@key));
 
-	insert into [Ski2Db_2015-2016].dbo.MasterTransaction (TransTime,SuperAccountFrom,SuperAccountTo,UserId,ServicePointId,ServerTime,IsOffline,CheckDetailId,Machine,SecSubjectId)
-    values (GETDATE(),3,(select SuperAccountId from [Ski2Db_2015-2016].dbo.AccountStock where StockType=21 and Code=@key),'CASHDESK2@admin',8,GETDATE(),0,NULL,'CASHDESK2@Bars.CashDesk',1);
+	insert into [Fwp].dbo.MasterTransaction (TransTime,SuperAccountFrom,SuperAccountTo,UserId,ServicePointId,ServerTime,IsOffline,CheckDetailId,Machine,SecSubjectId)
+    values (GETDATE(),3,(select SuperAccountId from [Fwp].dbo.AccountStock where StockType=21 and Code=@key),'CASHDESK2@admin',8,GETDATE(),0,NULL,'CASHDESK2@Bars.CashDesk',1);
 
-    insert into [Ski2Db_2015-2016].dbo.TransactionDetail (MasterTransactionId
+    insert into [Fwp].dbo.TransactionDetail (MasterTransactionId
 		,StockInfoIdFrom
 		,StockInfoIdTo
 		,Amount
 		,SuperAccountIdFrom
 		,SuperAccountIdTo)
-    values ((select MAX(MasterTransactionId) from [Ski2Db_2015-2016].dbo.MasterTransaction)
-		,(select SuperAccountId from [Ski2Db_2015-2016].dbo.AccountStock where StockType=21 and Code=@key)+1
+    values ((select MAX(MasterTransactionId) from [Fwp].dbo.MasterTransaction)
+		,(select SuperAccountId from [Fwp].dbo.AccountStock where StockType=21 and Code=@key)+1
 		,455
 		,@add_sum
-		,(select SuperAccountId from [Ski2Db_2015-2016].dbo.AccountStock where StockType=21 and Code=@key)
+		,(select SuperAccountId from [Fwp].dbo.AccountStock where StockType=21 and Code=@key)
 		,3);
-	insert into [Ski2Db_2015-2016].dbo.TransactionDetail (MasterTransactionId
+	insert into [Fwp].dbo.TransactionDetail (MasterTransactionId
 		,StockInfoIdFrom
 		,StockInfoIdTo
 		,Amount
 		,SuperAccountIdFrom
 		,SuperAccountIdTo)
-    values ((select MAX(MasterTransactionId) from [Ski2Db_2015-2016].dbo.MasterTransaction)
-		,(select MAX(AccountStockId) from [Ski2Db_2015-2016].dbo.AccountStock where StockType=1 and SuperAccountId=(select SuperAccountId from AccountStock where StockType=21 and Code=@key))
-		,(select MAX(AccountStockId) from [Ski2Db_2015-2016].dbo.AccountStock where StockType=1 and SuperAccountId=(select SuperAccountId from AccountStock where StockType=21 and Code=@key))
+    values ((select MAX(MasterTransactionId) from [Fwp].dbo.MasterTransaction)
+		,(select MAX(AccountStockId) from [Fwp].dbo.AccountStock where StockType=1 and SuperAccountId=(select SuperAccountId from AccountStock where StockType=21 and Code=@key))
+		,(select MAX(AccountStockId) from [Fwp].dbo.AccountStock where StockType=1 and SuperAccountId=(select SuperAccountId from AccountStock where StockType=21 and Code=@key))
 		,@add_sum
 		,3
-		,(select SuperAccountId from [Ski2Db_2015-2016].dbo.AccountStock where StockType=21 and Code=@key));
+		,(select SuperAccountId from [Fwp].dbo.AccountStock where StockType=21 and Code=@key));
 
-	UPDATE [Ski2Db_2015-2016].[dbo].[SuperAccount] SET [LastTransactionTime] = GETDATE() WHERE [SuperAccountId] = 3;
-    UPDATE [Ski2Db_2015-2016].[dbo].[SuperAccount] SET [LastTransactionTime] = GETDATE() WHERE [SuperAccountId] = (select SuperAccountId from [Ski2Db_2015-2016].dbo.AccountStock where StockType=21 and Code=@key);
-    INSERT INTO [Ski2Db_2015-2016].[dbo].[GlobalId] ([StockType]) VALUES (0);
-    INSERT INTO [Ski2Db_2015-2016].[dbo].[GlobalId] ([StockType]) VALUES (0);
+	UPDATE [Fwp].[dbo].[SuperAccount] SET [LastTransactionTime] = GETDATE() WHERE [SuperAccountId] = 3;
+    UPDATE [Fwp].[dbo].[SuperAccount] SET [LastTransactionTime] = GETDATE() WHERE [SuperAccountId] = (select SuperAccountId from [Fwp].dbo.AccountStock where StockType=21 and Code=@key);
+    INSERT INTO [Fwp].[dbo].[GlobalId] ([StockType]) VALUES (0);
+    INSERT INTO [Fwp].[dbo].[GlobalId] ([StockType]) VALUES (0);
    select Amount from AccountStock where StockType = 1 and SuperAccountId=(select SuperAccountId from AccountStock where StockType=21 and Code=@key)";
         public const string AddAccountStock = @"insert into [AccountStock] (AccountStockId,SuperAccountId,StockType,IsActive,CategoryId,Amount,Start,[End],IsTimePatternApplied,PassesDone) 
     values (((select MAX(AccountStockId) from [AccountStock])+1), (select SuperAccountId from [AccountStock] where StockType=21 and Code=@key), (SELECT [StockType] FROM [Category] where CategoryId=@catId)-1, 1, @catId, @amount, @date_start, @date_end, (case when (SELECT top 1 [TimePatternId] FROM [Category] where CategoryId=@catId) is null then 1 else 0 end), 0);
