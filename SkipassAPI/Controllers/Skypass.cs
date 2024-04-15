@@ -11,7 +11,7 @@ namespace SkipassAPI.Controllers
     public class Skypass : ControllerBase
     {
         /// <summary>
-        /// Страница апи
+        /// Test page
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -21,7 +21,7 @@ namespace SkipassAPI.Controllers
         }
 
         /// <summary>
-        /// Контроллер перекэширования списка услуг и абонементов
+        /// Services and subscriptions cache refresh
         /// </summary>
         /// <returns></returns>
         [HttpPost("/RenewS")]
@@ -40,7 +40,7 @@ namespace SkipassAPI.Controllers
         }
 
         /// <summary>
-        /// Проверка скипасса
+        /// Check Skipass
         /// </summary>
         /// <remarks>
         /// Пример запроса:
@@ -98,7 +98,7 @@ namespace SkipassAPI.Controllers
         }
 
         /// <summary>
-        /// Проверка браслета
+        /// Bracelet check
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
@@ -191,12 +191,12 @@ namespace SkipassAPI.Controllers
 
 
         /// <summary>
-        /// Проверка скипасса с возвращением информации о пользователе (ФИО)
+        /// Check skipass id and return user info
         /// </summary>
         /// <remarks>
-        ///  Ключ авторизации = mn5tq8ZTJSmLA6FJ
+        ///  Authkey = mn5tq8ZTJSmLA6FJ
         ///  
-        ///  Пример запроса:
+        ///  Example:
         ///   {
         ///     "authkey": "mn5tq8ZTJSmLA6FJ",
         ///     "key": "09809809"
@@ -253,19 +253,19 @@ namespace SkipassAPI.Controllers
         }
 
         /// <summary>
-        /// Получение кода скипасса по телефону или email с возвращением информации о пользователе (ФИО)
-        /// Формат телефона: +79991234567
+        /// Get avaliable skipasses by user's phone or email
+        /// Phone number format: +XXXXXXXXXXX
         /// </summary>
         /// <remarks>
-        ///  Ключ авторизации = mn5tq8ZTJSmLA6FJ
+        ///  Authkey = mn5tq8ZTJSmLA6FJ
         ///  
-        ///  Пример запроса:
+        ///  Example:
         ///   {
         ///     "authkey": "mn5tq8ZTJSmLA6FJ",
         ///     "phone": "+79169444545"
         ///   }
         ///   
-        ///  Пример запроса:
+        ///  Example:
         ///   {
         ///     "authkey": "mn5tq8ZTJSmLA6FJ",
         ///     "email": "1@ya.ru"
@@ -323,12 +323,12 @@ namespace SkipassAPI.Controllers
         }
 
         /// <summary>
-        /// Получение списка услуг. Ключ авторизации = mn5tq8ZTJSmLA6FJ
+        /// Get list of services. Authkey = mn5tq8ZTJSmLA6FJ
         /// </summary>
         /// <remarks>
-        ///  Получение списка услуг. Ключ авторизации = mn5tq8ZTJSmLA6FJ
+        ///  Get list of services. Authkey = mn5tq8ZTJSmLA6FJ
         ///  
-        ///  Пример запроса:
+        ///  Example:
         ///   {
         ///     "authkey": "mn5tq8ZTJSmLA6FJ"
         ///   }
@@ -356,12 +356,12 @@ namespace SkipassAPI.Controllers
         }
 
         /// <summary>
-        /// Получение списка услуг с ценами. Ключ авторизации = mn5tq8ZTJSmLA6FJ
+        /// Get list of services w prices. Authkey = mn5tq8ZTJSmLA6FJ
         /// </summary>
         /// <remarks>
-        ///  Получение списка услуг с ценами. Ключ авторизации = mn5tq8ZTJSmLA6FJ
+        ///  Get list of services w prices. Authkey = mn5tq8ZTJSmLA6FJ
         ///  
-        ///  Пример запроса:
+        ///  Example:
         ///   {
         ///     "authkey": "mn5tq8ZTJSmLA6FJ"
         ///   }
@@ -421,24 +421,7 @@ namespace SkipassAPI.Controllers
             return res;
         }
 
-        /// <summary>
-        /// Получение списка АБОНЕМЕНТОВ с ценами. Ключ авторизации = mn5tq8ZTJSmLA6FJ
-        /// </summary>
-        /// <remarks>
-        ///  Получение списка АБОНЕМЕНТОВ с ценами. Ключ авторизации = mn5tq8ZTJSmLA6FJ
-        ///  
-        ///  Пример запроса:
-        ///   {
-        ///     "authkey": "mn5tq8ZTJSmLA6FJ"
-        ///   }
-        /// </remarks>
-        /// <example>
-        ///   {
-        ///     "authkey": "mn5tq8ZTJSmLA6FJ"
-        ///   }
-        /// </example>
-        /// <param name="data"></param>
-        /// <returns></returns>
+
         [HttpPost("/GetAbonWPrice")]
         public async Task<JsonResult> GetAbonWPrice(Models.GetBalanceIn data)
         {
@@ -454,26 +437,7 @@ namespace SkipassAPI.Controllers
             return res;
         }
 
-        /// <summary>
-        /// Получение списка услуг (абонементов)- пользователя по номеру скипасса (key) -testing
-        /// </summary>
-        /// <remarks>
-        ///  Получение списка услуг (абонементов)- пользователя по номеру скипасса (key). Ключ авторизации = mn5tq8ZTJSmLA6FJ
-        ///  
-        ///  Пример запроса:
-        ///   {
-        ///     "authkey": "mn5tq8ZTJSmLA6FJ",
-        ///     "key": "09809809"
-        ///   }
-        /// </remarks>
-        /// <example>
-        ///   {
-        ///     "authkey": "mn5tq8ZTJSmLA6FJ",
-        ///     "key": "09809809"
-        ///   }
-        /// </example>
-        /// <param name="data"></param>
-        /// <returns></returns>
+
         [HttpPost("/GetUsersAbonements")]
         public async Task<JsonResult> GetUserAbon(Models.UserServicesReq data)
         {
@@ -508,26 +472,6 @@ namespace SkipassAPI.Controllers
             return res;
         }
 
-        /// <summary>
-        /// Получение списка услуг (ВСЕХ)- пользователя по номеру скипасса (key) - testing
-        /// </summary>
-        /// <remarks>
-        ///  Получение списка услуг (ВСЕХ)- пользователя по номеру скипасса (key). Ключ авторизации = mn5tq8ZTJSmLA6FJ
-        ///  
-        ///  Пример запроса:
-        ///   {
-        ///     "authkey": "mn5tq8ZTJSmLA6FJ",
-        ///     "key": "09809809"
-        ///   }
-        /// </remarks>
-        /// <example>
-        ///   {
-        ///      "authkey": "mn5tq8ZTJSmLA6FJ",
-        ///      "key": "09809809"
-        ///   }
-        /// </example>
-        /// <param name="data"></param>
-        /// <returns></returns>
         [HttpPost("/GetUsersServices")]
         public async Task<JsonResult> GetUserSrv(Models.UserServicesReq data)
         {
@@ -563,22 +507,8 @@ namespace SkipassAPI.Controllers
             return res;
         }
 
-    /// <summary>
-    /// Получение баланса юзера (зима)
-    /// </summary>
-    /// <remarks>
-    /// Пример запрооса: 
-    /// 
-    /// {  
-    /// 
-    ///    "authkey": "mn5tq8ZTJSmLA6FJ",  
-    ///    "key": "B3A9D829"
-    ///    
-    /// }
-    /// </remarks>
-    /// <param name="data"></param>
-    /// <returns></returns>
-    [HttpPost("/GetBalance")]
+
+        [HttpPost("/GetBalance")]
         public async Task<JsonResult> GetBalance(Models.GetBalanceIn data)
         {
             #region Checks
@@ -632,18 +562,8 @@ namespace SkipassAPI.Controllers
         }
 
 
-        /// <summary>
-        /// Добавление денег на депозит (зима)
-        /// </summary>
-        /// <remarks>
-        /// Для добавления денег на баланс необходимо передать authkey, key (номер скипасса), add_sum и флаг успешности банковской операции - successed (1 для успеха)
-        /// Пример запроса:
-        /// 
-        /// {  "authkey": "mn5tq8ZTJSmLA6FJ",  "key": "B3A9D829",  "add_sum": 500, "successed": 1}
-    /// </remarks>
-    /// <param name="data"></param>
-    /// <returns></returns>
-    [HttpPost("/AddSum")]
+
+        [HttpPost("/AddSum")]
         public async Task<JsonResult> AddSum(Models.FillBalanceIn data)
         {
             try
@@ -848,34 +768,6 @@ namespace SkipassAPI.Controllers
 
 
 
-        /// <summary>
-        /// Добавление услуг на номер скипасса. Ключ авторизации = mn5tq8ZTJSmLA6FJ
-        /// </summary>
-        /// <remarks>
-        ///  Добавление услуг на номер скипасса. Ключ авторизации = mn5tq8ZTJSmLA6FJ
-        ///  
-        ///  Пример запроса:
-        ///   {
-        ///      "authkey": "mn5tq8ZTJSmLA6FJ",
-        ///      "categoryID": 361778,
-        ///      "amount": 2,
-        ///      "key": "09809809",
-        ///      "date_start": 1655009807,
-        ///      "date_end": 0
-        ///    }
-        /// </remarks>
-        /// <example>
-        ///   {
-        ///      "authkey": "mn5tq8ZTJSmLA6FJ",
-        ///      "categoryID": 361778,
-        ///      "amount": 2,
-        ///      "key": "09809809",
-        ///      "date_start": 1655009807,
-        ///      "date_end": 0
-        ///    }
-        /// </example>
-        /// <param name="data"></param>
-        /// <returns></returns>
         [HttpPost("/AddServiceToUser")]
         public async Task<JsonResult> AddService(Models.AddServiceReq data)
         {
@@ -909,27 +801,6 @@ namespace SkipassAPI.Controllers
             }
         }
 
-        /// <summary>
-        /// Отмена услуг на скипассе - testing
-        /// </summary>
-        /// <remarks>
-        ///  Отмена услуг на скипассе. Обязательные поля:
-        ///    key - номер скипасса
-        ///    date_start - дата начала действия услуги
-        ///    categoryId - ID услуги
-        ///    authkey - mn5tq8ZTJSmLA6FJ
-        ///    
-        ///   Пример запроса:
-        ///    {
-        ///       "authkey": "mn5tq8ZTJSmLA6FJ",
-        ///       "categoryID": 361778,
-        ///       "amount": 1,
-        ///       "key": "09809809",
-        ///       "date_start": 1652748960
-        ///    }
-        /// </remarks>
-        /// <param name="data"></param>
-        /// <returns></returns>
         [HttpPost("/CancelUserService")]
         public async Task<JsonResult> CancelService(Models.AddServiceReq data)
         {
@@ -953,7 +824,7 @@ namespace SkipassAPI.Controllers
         }
 
         /// <summary>
-        /// Понг
+        /// Pong
         /// </summary>
         /// <returns></returns>
         [HttpPost("/Ping")]
