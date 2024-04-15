@@ -9,7 +9,7 @@ namespace SkipassAPI.Methods
     public static class ReadData
     {
         /// <summary>
-        /// Получение баланса
+        /// Get balance
         /// </summary>
         /// <param name="data"></param>
         /// <param name="SQLPath"></param>
@@ -37,7 +37,6 @@ namespace SkipassAPI.Methods
                                 ret.balance = (decimal)reader[2];
                             }
                         }
-                        // if (res != "") ret = true;
                     }
                     catch (Exception e)
                     {
@@ -52,7 +51,7 @@ namespace SkipassAPI.Methods
         }
 
         /// <summary>
-        /// Получение всех услуг в базе
+    /// Caching services from MS SQL DB
         /// </summary>
         /// <param name="data"></param>
         /// <param name="SQLPath"></param>
@@ -94,32 +93,6 @@ namespace SkipassAPI.Methods
                 Models.ListServ ret = new Models.ListServ();
                 if (Methods.CheckAuthkey.CheckAuthKey(data.authkey))
                 {
-                    //using (SqlConnection conn = new SqlConnection(SQLPath))
-                    //{
-                    //    conn.Open();
-                    //    using (SqlCommand cmd = new SqlCommand(Const.SQLCommands.GetAbon, conn))
-                    //    {
-                    //        try
-                    //        {
-                    //            using (SqlDataReader reader = cmd.ExecuteReader())
-                    //            {
-                    //                while (reader.Read())
-                    //                {
-                    //                    Models.Services r = new Models.Services();
-                    //                    r.categoryID = int.TryParse(reader[0].ToString(), out int CatId) ? CatId : 0;
-                    //                    r.stockType = int.TryParse(reader[1].ToString(), out int StockType) ? StockType : 0;
-                    //                    r.name = reader[2].ToString();
-                    //                    ret.services.Add(r);
-                    //                }
-                    //            }
-                    //            return ret;
-                    //            // if (res != "") ret = true;
-                    //        }
-                    //        catch (Exception e)
-                    //        {
-                    //            Models.ListServ r = new Models.ListServ() { errors = new Models.Error() { code = 400, message = e.Message } };
-                    //            return r;
-                    //        }
                     ret.services = Cache.Static.ServiceCache.Abons;
                     return ret;
                 }
@@ -137,7 +110,7 @@ namespace SkipassAPI.Methods
 
 
         /// <summary>
-        /// Получение всех услуг с ценами
+        /// Caching services with prices
         /// </summary>
         /// <param name="data"></param>
         /// <param name="SQLPath"></param>
@@ -179,7 +152,7 @@ namespace SkipassAPI.Methods
 
 
         /// <summary>
-        /// Получение всех абонементов с ценами
+        /// Caching subscriptions with prices
         /// </summary>
         /// <param name="data"></param>
         /// <param name="SQLPath"></param>
@@ -221,7 +194,7 @@ namespace SkipassAPI.Methods
 
 
         /// <summary>
-        /// Получение списка абонементов юзера
+        /// Get user's subscribtions
         /// </summary>
         /// <param name="data"></param>
         /// <param name="SQLPath"></param>
@@ -257,7 +230,6 @@ namespace SkipassAPI.Methods
                                     }
                                 }
                                 return ret;
-                                // if (res != "") ret = true;
                             }
                             catch (Exception e)
                             {
@@ -281,7 +253,7 @@ namespace SkipassAPI.Methods
 
 
         /// <summary>
-        /// Получение услуг юзера (всех, кроме покупки скипасса)
+        /// Get all services attached to the user (except for Skipass card aquirement)
         /// </summary>
         /// <param name="data"></param>
         /// <param name="SQLPath"></param>
@@ -317,7 +289,6 @@ namespace SkipassAPI.Methods
                                     }
                                 }
                                 return ret;
-                                // if (res != "") ret = true;
                             }
                             catch (Exception e)
                             {
@@ -341,7 +312,7 @@ namespace SkipassAPI.Methods
 
 
         /// <summary>
-        /// Проверка ключа
+        /// Check skipass id
         /// </summary>
         /// <param name="data"></param>
         /// <param name="SQLPath"></param>
@@ -371,7 +342,6 @@ namespace SkipassAPI.Methods
                                     ret=r;
                                 }
                             }
-                            // if (res != "") ret = true;
                         }
                         catch (Exception e)
                         {
@@ -392,7 +362,7 @@ namespace SkipassAPI.Methods
         }
 
         /// <summary>
-        /// Проверка СКИПАССА и возвращение инфы о пользователе по нему
+        /// Check skipass id and return user info
         /// </summary>
         /// <param name="data"></param>
         /// <param name="SQLPath"></param>
@@ -429,7 +399,6 @@ namespace SkipassAPI.Methods
                                     ret.founded = true;
                                 }
                             }
-                            // if (res != "") ret = true;
                         }
                         catch (Exception e)
                         {
@@ -511,7 +480,6 @@ namespace SkipassAPI.Methods
                                     ret.founded = true;
                                 }
                             }
-                            // if (res != "") ret = true;
                         }
                         catch (Exception e)
                         {
@@ -554,7 +522,6 @@ namespace SkipassAPI.Methods
                         AccountStockId = (int)cmd.ExecuteScalar();
                         if (AccountStockId == data.accountStockId) return true;
                         else return false;
-                        // if (res != "") ret = true;
                     }
                     catch (Exception e)
                     {
